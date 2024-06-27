@@ -4,7 +4,7 @@ public class Victual {
     private Integer id;
     private String name;
     private double price;
-    private Integer quantity;
+    private int quantity;
 
     public Victual(Integer id, String name, double price, Integer quantity) {
         this.id = id;
@@ -37,11 +37,11 @@ public class Victual {
         this.price = price;
     }
 
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 }

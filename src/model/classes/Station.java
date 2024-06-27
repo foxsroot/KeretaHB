@@ -5,12 +5,12 @@ import java.util.ArrayList;
 public class Station {
     private ArrayList<Schedule> schedules;
     private String name;
-    private String id;
+    private Integer id;
     private String location;
     private ArrayList<String> trainList;
     private double income;
 
-    public Station(ArrayList<Schedule> schedules, String name, String id, String location, ArrayList<String> trainList, double income) {
+    public Station(ArrayList<Schedule> schedules, String name, Integer id, String location, ArrayList<String> trainList, double income) {
         this.schedules = schedules;
         this.name = name;
         this.id = id;
@@ -35,11 +35,11 @@ public class Station {
         this.name = name;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
