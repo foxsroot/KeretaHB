@@ -8,9 +8,9 @@ public class Station {
     private String id;
     private String location;
     private ArrayList<String> trainList;
-    private Double income;
+    private double income;
 
-    public Station(ArrayList<Schedule> schedules, String name, String id, String location, ArrayList<String> trainList, Double income) {
+    public Station(ArrayList<Schedule> schedules, String name, String id, String location, ArrayList<String> trainList, double income) {
         this.schedules = schedules;
         this.name = name;
         this.id = id;
@@ -59,11 +59,11 @@ public class Station {
         this.trainList = trainList;
     }
 
-    public Double getIncome() {
+    public double getIncome() {
         return income;
     }
 
-    public void setIncome(Double income) {
+    public void setIncome(double income) {
         this.income = income;
     }
 }

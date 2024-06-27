@@ -9,13 +9,13 @@ public class Passenger extends User{
     private HashMap<String, Transaction> transactions;
     private Wallet wallet;
     private LoyaltyEnum loyalty;
-    private Double totalPaid;
+    private double totalPaid;
     private ArrayList<Notification> notifications;
     private Cart cart;
 
     public Passenger(String name, String cellphone, String email, String password, Integer id,
                      HashMap<String, Transaction> transactions, Wallet wallet, LoyaltyEnum loyalty,
-                     Double totalPaid, ArrayList<Notification> notifications, Cart cart) {
+                     double totalPaid, ArrayList<Notification> notifications, Cart cart) {
         super(name, cellphone, email, password, id);
         this.transactions = transactions;
         this.wallet = wallet;
@@ -49,11 +49,11 @@ public class Passenger extends User{
         this.loyalty = loyalty;
     }
 
-    public Double getTotalPaid() {
+    public double getTotalPaid() {
         return totalPaid;
     }
 
-    public void setTotalPaid(Double totalPaid) {
+    public void setTotalPaid(double totalPaid) {
         this.totalPaid = totalPaid;
     }
 
