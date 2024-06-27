@@ -3,10 +3,9 @@ package model.classes;
 import model.enums.LoyaltyEnum;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Passenger extends User{
-    private HashMap<String, Transaction> transactions;
+    private ArrayList<Transaction> transactions;
     private Wallet wallet;
     private LoyaltyEnum loyalty;
     private double totalPaid;
@@ -14,7 +13,7 @@ public class Passenger extends User{
     private Cart cart;
 
     public Passenger(String name, String cellphone, String email, String password, Integer id,
-                     HashMap<String, Transaction> transactions, Wallet wallet, LoyaltyEnum loyalty,
+                     ArrayList<Transaction> transactions, Wallet wallet, LoyaltyEnum loyalty,
                      double totalPaid, ArrayList<Notification> notifications, Cart cart) {
         super(name, cellphone, email, password, id);
         this.transactions = transactions;
@@ -25,11 +24,11 @@ public class Passenger extends User{
         this.cart = cart;
     }
 
-    public HashMap<String, Transaction> getTransactions() {
+    public ArrayList<Transaction> getTransactions() {
         return transactions;
     }
 
-    public void setTransactions(HashMap<String, Transaction> transactions) {
+    public void setTransactions(ArrayList<Transaction> transactions) {
         this.transactions = transactions;
     }
 
