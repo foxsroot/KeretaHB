@@ -1,12 +1,12 @@
 package model.classes;
 
-import java.util.Calendar;
+import java.util.Date;
 
 public class VictualTransaction extends Transaction {
     Victual item;
     int quantity;
 
-    public VictualTransaction(Integer transactionID, Calendar datePurchase, Victual item, int quantity) {
+    public VictualTransaction(Integer transactionID, Date datePurchase, Victual item, int quantity) {
         super(transactionID, datePurchase);
         this.item = item;
         this.quantity = quantity;

@@ -1,12 +1,12 @@
 package model.classes;
 
-import java.util.Calendar;
+import java.util.Date;
 
 public abstract class Transaction {
     Integer transactionID;
-    Calendar datePurchase;
+    Date datePurchase;
 
-    public Transaction(Integer transactionID, Calendar datePurchase) {
+    public Transaction(Integer transactionID, Date datePurchase) {
         this.transactionID = transactionID;
         this.datePurchase = datePurchase;
     }
@@ -19,11 +19,11 @@ public abstract class Transaction {
         this.transactionID = transactionID;
     }
 
-    public Calendar getDatePurchase() {
+    public Date getDatePurchase() {
         return datePurchase;
     }
 
-    public void setDatePurchase(Calendar datePurchase) {
+    public void setDatePurchase(Date datePurchase) {
         this.datePurchase = datePurchase;
     }
 }

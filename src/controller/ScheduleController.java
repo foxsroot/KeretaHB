@@ -47,8 +47,10 @@ public class ScheduleController {
             if (rs.next()) {
                 Carriage[] carriages = getCarriage();
                 int speed = rs.getInt("speed");
+                String wifiName = rs.getString("wifi_name");
+                String wifiPassword = rs.getString("wifi_password");
 
-                train = new Train(carriages, speed);
+                train = new Train(train_id, carriages, speed, wifiName, wifiPassword);
             }
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -87,14 +89,14 @@ public class ScheduleController {
             ResultSet rs = st.executeQuery();
             int i = 0;
             while (rs.next()) {
-
+                Integer trainId = rs.getInt("train_id");
                 int carriageId = rs.getInt("carriage_id");
                 String carriageType = rs.getString("type");
                 int capacity = rs.getInt("capacity");
                 String carriageClass = rs.getString("class");
                 Integer baggage = rs.getInt("baggage_allowance");
 
-                carriages[i] = new Carriage(carriageId, CarriageType.valueOf(carriageType), capacity, baggage, ClassType.valueOf(carriageClass));
+                carriages[i] = new Carriage(trainId, carriageId, CarriageType.valueOf(carriageType), capacity, baggage, ClassType.valueOf(carriageClass));
                 i++;
             }
         } catch (Exception e) {
