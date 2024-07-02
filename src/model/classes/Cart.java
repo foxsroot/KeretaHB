@@ -11,6 +11,10 @@ public class Cart {
         this.totalPrice = totalPrice;
     }
 
+    public Cart(ArrayList<Victual> victuals) {
+        this.victuals = victuals;
+    }
+
     public ArrayList<Victual> getVictuals() {
         return victuals;
     }
