@@ -113,4 +113,46 @@ public class VictualController {
 
         return true;
     }
+
+    public int getStock(int victual_id, int station_id) {
+        conn.connect();
+
+        String query = "SELECT * FROM stock WHERE victual_id = ? AND station_id = ?";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, victual_id);
+            stmt.setInt(2, station_id);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                return rs.getInt("victual_id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conn.disconnect();
+        }
+
+        return -1;
+    }
+
+    public boolean updateStock(int victualId, int stationId, int stock) {
+        conn.connect();
+
+        String query = "UPDATE stock SET stock = ? WHERE victual_id = ? AND station_id = ?";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, stock);
+            stmt.setInt(2, victualId);
+            stmt.setInt(3, stationId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
 }
