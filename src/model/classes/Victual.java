@@ -4,13 +4,11 @@ public class Victual {
     private Integer id;
     private String name;
     private double price;
-    private int stock;
 
     public Victual(Integer id, String name, double price, Integer quantity) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.stock = quantity;
     }
 
     public Integer getId() {
@@ -35,13 +33,5 @@ public class Victual {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
     }
 }
