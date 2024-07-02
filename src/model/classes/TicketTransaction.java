@@ -1,6 +1,6 @@
 package model.classes;
 
-import java.util.Calendar;
+import java.util.Date;
 
 public class TicketTransaction extends Transaction {
     int passengers;
@@ -8,7 +8,7 @@ public class TicketTransaction extends Transaction {
     Integer schdeuleID;
     boolean rescheduled;
 
-    public TicketTransaction(Integer transactionID, Calendar datePurchase, int passengers, boolean commute, Integer schdeuleID, boolean rescheduled) {
+    public TicketTransaction(Integer transactionID, Date datePurchase, int passengers, boolean commute, Integer schdeuleID, boolean rescheduled) {
         super(transactionID, datePurchase);
         this.passengers = passengers;
         this.commute = commute;
