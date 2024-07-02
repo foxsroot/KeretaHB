@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class Station {
     private ArrayList<Schedule> schedules;
-    private HashMap<Integer, Integer> victualStock; //victual_id, stock
+    private HashMap<Integer, Integer> victual; //victual_id, stock
     private String name;
     private Integer id;
     private String location;

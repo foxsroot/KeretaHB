@@ -1,6 +1,5 @@
 package model.classes;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Cart {
@@ -10,6 +9,10 @@ public class Cart {
     public Cart(HashMap<Integer, Integer> victual, double totalPrice) {
         this.victual = victual;
         this.totalPrice = totalPrice;
+    }
+
+    public Cart(HashMap<Integer, Integer> victual) {
+        this.victual = victual;
     }
 
     public HashMap<Integer, Integer> getVictual() {
@@ -24,7 +27,11 @@ public class Cart {
         return totalPrice;
     }
 
-    public void calculateTotalPrice(double totalPrice) {
+    public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public double calculateTotalPrice() {
+        return 0d;
     }
 }

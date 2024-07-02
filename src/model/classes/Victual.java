@@ -5,7 +5,7 @@ public class Victual {
     private String name;
     private double price;
 
-    public Victual(Integer id, String name, double price, Integer quantity) {
+    public Victual(Integer id, String name, double price) {
         this.id = id;
         this.name = name;
         this.price = price;
