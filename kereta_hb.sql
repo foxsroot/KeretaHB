@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 25, 2024 at 10:56 AM
--- Server version: 11.2.1-MariaDB
+-- Generation Time: Jul 02, 2024 at 07:13 PM
+-- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -47,7 +47,7 @@ CREATE TABLE `carriage` (
   `type` enum('EATERY','TOILET','SEATING') DEFAULT NULL,
   `capacity` int(11) DEFAULT NULL,
   `class` enum('ECONOMY','BUSINESS','EXECUTIVE') DEFAULT NULL,
-  `number` varchar(50) DEFAULT NULL
+  `baggage_allowance` double UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -149,6 +149,19 @@ CREATE TABLE `station` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `stock`
+--
+
+CREATE TABLE `stock` (
+  `stock_id` int(11) NOT NULL,
+  `victual_id` int(11) DEFAULT NULL,
+  `station_id` int(11) DEFAULT NULL,
+  `stock` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `ticket_transaction`
 --
 
@@ -184,8 +197,7 @@ CREATE TABLE `victual` (
   `victual_id` int(11) NOT NULL,
   `picture` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `price` int(10) UNSIGNED DEFAULT NULL,
-  `stock` int(10) UNSIGNED DEFAULT NULL
+  `price` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -284,6 +296,14 @@ ALTER TABLE `station`
   ADD PRIMARY KEY (`station_id`);
 
 --
+-- Indexes for table `stock`
+--
+ALTER TABLE `stock`
+  ADD PRIMARY KEY (`stock_id`),
+  ADD KEY `victual_id` (`victual_id`),
+  ADD KEY `station_id` (`station_id`);
+
+--
 -- Indexes for table `ticket_transaction`
 --
 ALTER TABLE `ticket_transaction`
@@ -318,6 +338,16 @@ ALTER TABLE `victuals_transaction`
 ALTER TABLE `wallet`
   ADD PRIMARY KEY (`wallet_id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `stock`
+--
+ALTER TABLE `stock`
+  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -362,6 +392,13 @@ ALTER TABLE `schedule`
   ADD CONSTRAINT `schedule_ibfk_1` FOREIGN KEY (`train_id`) REFERENCES `train` (`train_id`),
   ADD CONSTRAINT `schedule_ibfk_2` FOREIGN KEY (`departure_station_id`) REFERENCES `station` (`station_id`),
   ADD CONSTRAINT `schedule_ibfk_3` FOREIGN KEY (`arrival_station_id`) REFERENCES `station` (`station_id`);
+
+--
+-- Constraints for table `stock`
+--
+ALTER TABLE `stock`
+  ADD CONSTRAINT `stock_ibfk_1` FOREIGN KEY (`victual_id`) REFERENCES `victual` (`victual_id`),
+  ADD CONSTRAINT `stock_ibfk_2` FOREIGN KEY (`station_id`) REFERENCES `station` (`station_id`);
 
 --
 -- Constraints for table `ticket_transaction`
