@@ -115,4 +115,89 @@ public class VictualController {
 
         return true;
     }
+
+    public boolean addToCart(int userId, int victualId, int amount) {
+        conn.connect();
+        String query = "INSERT INTO cart (user_id, victual_id, amount) VALUES (?, ?, ?)";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, userId);
+            stmt.setInt(2, victualId);
+            stmt.setInt(3, amount);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            conn.disconnect();
+        }
+        return true;
+    }
+
+    public boolean removeFromCart(int victualId, int user_id, int amount, int inCart) {
+        conn.connect();
+
+        if (amount >= inCart) {
+            String query = "DELETE FROM cart WHERE victual_id = ? AND user_id = ?";
+
+            try {
+                PreparedStatement stmt = conn.con.prepareStatement(query);
+                stmt.setInt(1, victualId);
+                stmt.setInt(2, user_id);
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            } finally {
+                conn.disconnect();
+            }
+
+            return true;
+        } else {
+            String query = "UPDATE cart SET amount = amount - ? WHERE victual_id = ? AND user_id = ?";
+
+            try {
+                PreparedStatement stmt = conn.con.prepareStatement(query);
+                stmt.setInt(1, amount);
+                stmt.setInt(1, victualId);
+                stmt.setInt(2, user_id);
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            } finally {
+                conn.disconnect();
+            }
+
+            return true;
+        }
+    }
+
+    public Cart getCart(int userId) {
+        conn.connect();
+        ArrayList<Victual> victuals = new ArrayList<>();
+
+        String query = "SELECT * FROM cart WHERE user_id=?";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Victual victual = getVictual(rs.getInt("victual_id"));
+                victuals.add(victual);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conn.disconnect();
+        }
+
+        Cart cart = new Cart(victuals);
+        cart.setTotalPrice(cart.getTotalPrice());
+
+        return cart;
+    }
 }

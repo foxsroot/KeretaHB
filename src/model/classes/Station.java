@@ -1,9 +1,11 @@
 package model.classes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Station {
     private ArrayList<Schedule> schedules;
+    private HashMap<Integer, Integer> victualStock; //victual_id, stock
     private String name;
     private Integer id;
     private String location;

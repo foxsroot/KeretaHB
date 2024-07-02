@@ -1,9 +1,12 @@
 package model.classes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Cart {
     private ArrayList<Victual> victuals;
+    private HashMap<Victual, Integer> counts;
+
     private double totalPrice;
 
     public Cart(ArrayList<Victual> victuals, Double totalPrice) {
