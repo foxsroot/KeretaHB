@@ -6,11 +6,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionHandler {
+    public Connection con;
     private String driver = "com.mysql.cj.jdbc.Driver";
-    private static String url = "jdbc:mysql://localhost/ktp_db";
-    private static String username = "root";
-    private static String password = "";
-    private static Connection con;
+    private String url = "jdbc:mysql://localhost/ktp_db";
+    private String username = "root";
+    private String password = "";
 
     private Connection logOn() {
         try {
