@@ -1,43 +1,50 @@
 package controller;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionHandler {
-    private static String server = "jdbc:mysql://localhost/ktp_db";
+    private String driver = "com.mysql.cj.jdbc.Driver";
+    private static String url = "jdbc:mysql://localhost/ktp_db";
     private static String username = "root";
     private static String password = "";
-    private static Connection connection;
+    private static Connection con;
 
-    public static Connection getConnection() {
-        if (connection == null) {
-            connection = logOn();
+    private Connection logOn() {
+        try {
+            Class.forName(driver).getDeclaredConstructor().newInstance();
+            con = DriverManager.getConnection(url, username, password);
+        } catch (Exception ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getLocalizedMessage());
+            JOptionPane.showMessageDialog(null, "Error Ocurred when login" + ex);
         }
-        return connection;
+        return con;
     }
 
-    private static Connection logOn() {
+    private void logOff() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("Connection Success");
-            return DriverManager.getConnection(server, username, password);
-        } catch (SQLException e) {
-            e.printStackTrace(System.err);
-            System.out.println("Connection Failed" + e.toString());
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace(System.err);
-            System.out.println("JDBC.ODBC driver not found");
+            con.close();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error Ocurred when login" + ex);
         }
-        return null;
     }
 
-    private static void logOff() {
+    public void connect() {
         try {
-            connection.close();
-            System.out.println("Connection Closed");
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
+            con = logOn();
+        } catch (Exception ex) {
+            System.out.println("Error occured when connecting to database");
+        }
+    }
+
+    public void disconnect() {
+        try {
+            logOff();
+        } catch (Exception ex) {
+            System.out.println("Error occured when connecting to database");
         }
     }
 }
