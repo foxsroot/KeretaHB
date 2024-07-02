@@ -1,14 +1,14 @@
 package model.classes;
 
-import java.util.Calendar;
+import java.util.Date;
 
 public class Notification {
     Integer notificationID;
     Integer recipientID;
     String message;
-    Calendar receivedDate;
+    Date receivedDate;
 
-    public Notification(Integer notificationID, Integer recipientID, String message, Calendar receivedDate) {
+    public Notification(Integer notificationID, Integer recipientID, String message, Date receivedDate) {
         this.notificationID = notificationID;
         this.recipientID = recipientID;
         this.message = message;
@@ -39,11 +39,11 @@ public class Notification {
         this.message = message;
     }
 
-    public Calendar getReceivedDate() {
+    public Date getReceivedDate() {
         return receivedDate;
     }
 
-    public void setReceivedDate(Calendar receivedDate) {
+    public void setReceivedDate(Date receivedDate) {
         this.receivedDate = receivedDate;
     }
 }

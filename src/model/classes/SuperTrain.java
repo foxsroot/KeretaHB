@@ -4,8 +4,8 @@ public class SuperTrain extends Train {
     private String wifiName;
     private String wifiPassword;
 
-    public SuperTrain(Carriage[] carriages, Integer speed, Victual victual, String wifiName, String wifiPassword) {
-        super(carriages, speed, victual);
+    public SuperTrain(Integer id, Carriage[] carriages, Integer speed, String wifiName, String wifiPassword) {
+        super(id, carriages, speed);
         this.wifiName = wifiName;
         this.wifiPassword = wifiPassword;
     }
