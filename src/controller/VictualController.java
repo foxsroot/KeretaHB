@@ -1,63 +1,118 @@
 package controller;
 
+import model.classes.Cart;
 import model.classes.Victual;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 public class VictualController {
     ConnectionHandler conn = new ConnectionHandler();
 
-    public List<Victual> getVictual() {
+    public List<Victual> listVictual() {
         conn.connect();
         List<Victual> victuals = new ArrayList<>();
         String query = "SELECT * FROM victual";
 
-//        try {
-//            PreparedStatement statement = conn.con.prepareStatement(query);
-//            statement.setString(1, nik);
-//
-//            ResultSet result = statement.executeQuery();
-//
-//            while (result.next()) {
-//                penduduk.setId(result.getInt("id"));
-//                penduduk.setNIK(result.getString("NIK"));
-//                penduduk.setNama(result.getString("nama"));
-//                penduduk.setTempatLahir(result.getString("tempatLahir"));
-//                penduduk.setTanggalLahir(result.getDate("tanggalLahir"));
-//                penduduk.setJenisKelamin(convertJenisKelamin(result.getString("jenisKelamin")));
-//                penduduk.setGolonganDarah(convertGolonganDarah(result.getString("golonganDarah")));
-//                penduduk.setAlamat(result.getString("alamat"));
-//                penduduk.setRtRw(result.getString("rtRw"));
-//                penduduk.setKelDesa(result.getString("kelDesa"));
-//                penduduk.setKecamatan(result.getString("kecamatan"));
-//                penduduk.setAgama(convertAgama(result.getString("agama")));
-//                penduduk.setStatusPerkawinan(convertStatusPerkawinan(result.getString("statusPerkawinan")));
-//                penduduk.setPekerjaan(result.getString("pekerjaan"));
-//                penduduk.setKewarganegaraan(result.getString("kewarganegaraan"));
-//                penduduk.setFoto(result.getString("foto"));
-//                penduduk.setTandaTangan(result.getString("tandaTangan"));
-//                penduduk.setBerlakuHingga(result.getString("berlakuHingga"));
-//                penduduk.setKotaPembuatan(result.getString("kotaPembuatan"));
-//                penduduk.setTanggalPembuatan(result.getDate("tanggalPembuatan"));
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        } finally {
-//            conn.disconnect();
-//        }
-//
+        try {
+            Statement stmt = conn.con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                Victual victual = new Victual(rs.getInt("victual_id"), rs.getString("name"), rs.getDouble("price"), rs.getInt("stock"));
+                victuals.add(victual);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conn.disconnect();
+        }
+
         return victuals;
     }
 
-    public Victual getVictuals(int id) {
+    public Victual getVictual(int victualId) {
+        conn.connect();
         Victual victual = null;
+        String query = "SELECT * FROM victual WHERE victual_id = ?";
 
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, victualId);
+            ResultSet rs = stmt.executeQuery(query);
 
+            while (rs.next()) {
+                victual = new Victual(rs.getInt("victual_id"), rs.getString("name"), rs.getDouble("price"), rs.getInt("stock"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conn.disconnect();
+        }
 
         return victual;
+    }
+
+    public boolean editVictual(Victual victual) {
+        conn.connect();
+
+        String query = "UPDATE victual SET name = ?, price = ?, stock = ? WHERE victual_id = ?";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setString(1, victual.getName());
+            stmt.setDouble(2, victual.getPrice());
+            stmt.setInt(3, victual.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            conn.disconnect();
+        }
+
+        return true;
+    }
+
+    public boolean addVictual(Victual victual) {
+        conn.connect();
+        String query = "INSERT INTO victual (name, price, stock) VALUES (?, ?, ?)";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setString(1, victual.getName());
+            stmt.setDouble(2, victual.getPrice());
+            stmt.setInt(3, victual.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            conn.disconnect();
+        }
+
+        return true;
+    }
+
+    public boolean removeVictual(int victualId) {
+        conn.connect();
+        String query = "DELETE FROM victual WHERE victual_id = ?";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, victualId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            conn.disconnect();
+        }
+
+        return true;
     }
 }

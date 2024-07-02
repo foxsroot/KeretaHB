@@ -4,11 +4,15 @@ import java.util.ArrayList;
 
 public class Cart {
     private ArrayList<Victual> victuals;
-    private Double totalPrice;
+    private double totalPrice;
 
     public Cart(ArrayList<Victual> victuals, Double totalPrice) {
         this.victuals = victuals;
         this.totalPrice = totalPrice;
+    }
+
+    public Cart(ArrayList<Victual> victuals) {
+        this.victuals = victuals;
     }
 
     public ArrayList<Victual> getVictuals() {
