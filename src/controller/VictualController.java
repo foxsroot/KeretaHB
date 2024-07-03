@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class VictualController {
@@ -55,22 +56,50 @@ public class VictualController {
         return victual;
     }
 
-    public boolean editVictual(Victual victual, File image) {
+//    public boolean editVictual(Victual victual, File image) {
+//        conn.connect();
+//
+//        String query = "UPDATE victual SET name = ?, price = ? WHERE victual_id = ?";
+//
+//        try {
+//            PreparedStatement stmt = conn.con.prepareStatement(query);
+//            stmt.setString(1, victual.getName());
+//            stmt.setDouble(2, victual.getPrice());
+//            stmt.setInt(3, victual.getId());
+//            stmt.executeUpdate();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return false;
+//        } finally {
+//            conn.disconnect();
+//        }
+//
+//        return true;
+//    }
+
+    public boolean editVictual(HashMap<String, Object > field, Victual oldVictual) {
+        File image = (File) field.get("image");
+
         conn.connect();
 
-        String query = "UPDATE victual SET name = ?, price = ? WHERE victual_id = ?";
+        if (oldVictual.getImage().equals(image.getName())) {
+            String query = "UPDATE victual SET name = ?, price = ? WHERE victual_id = ?";
 
-        try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
-            stmt.setString(1, victual.getName());
-            stmt.setDouble(2, victual.getPrice());
-            stmt.setInt(3, victual.getId());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            conn.disconnect();
+            try {
+                PreparedStatement stmt = conn.con.prepareStatement(query);
+                stmt.setString(1, (String) field.get("name"));
+                stmt.setDouble(2, (double) field.get("price"));
+                stmt.setInt(3, (int) field.get("victual_id"));
+
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            } finally {
+                conn.disconnect();
+            }
+        } else {
+            String fileName = ""; //Generate image name + pindahin ntar :)
         }
 
         return true;
