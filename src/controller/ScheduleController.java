@@ -13,10 +13,12 @@ import java.util.List;
 public class ScheduleController {
     public static List<Schedule> getSchedulesForStation() {
         List<Schedule> schedules = new ArrayList<>();
+        ConnectionHandler conn = new ConnectionHandler();
 
         String query = "SELECT * FROM schedule";
         try {
-            PreparedStatement st = ConnectionHandler.getConnection().prepareStatement(query);
+            conn.connect();
+            PreparedStatement st = conn.con.prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
@@ -38,9 +40,12 @@ public class ScheduleController {
 
     private static Train getTrainById(int train_id) {
         Train train = null;
+        ConnectionHandler conn = new ConnectionHandler();
+
         String query = "SELECT * FROM train WHERE train_id = '" + train_id + "'";
         try {
-            PreparedStatement st = ConnectionHandler.getConnection().prepareStatement(query);
+            conn.connect();
+            PreparedStatement st = conn.con.prepareStatement(query);
             st.executeQuery(query);
             ResultSet rs = st.executeQuery();
 
@@ -60,9 +65,11 @@ public class ScheduleController {
 
     private static Station getStationById(int station_id) {
         Station station = null;
+        ConnectionHandler conn = new ConnectionHandler();
         String query = "SELECT * FROM station WHERE station_id = '" + station_id + "'";
         try {
-            PreparedStatement st = ConnectionHandler.getConnection().prepareStatement(query);
+            conn.connect();
+            PreparedStatement st = conn.con.prepareStatement(query);
             st.executeQuery(query);
             ResultSet rs = st.executeQuery();
 
@@ -83,9 +90,11 @@ public class ScheduleController {
 
     public static Carriage[] getCarriage() {
         Carriage[] carriages = new Carriage[5];
+        ConnectionHandler conn = new ConnectionHandler();
         String query = "SELECT * FROM carriage";
         try {
-            PreparedStatement st = ConnectionHandler.getConnection().prepareStatement(query);
+            conn.connect();
+            PreparedStatement st = conn.con.prepareStatement(query);
             ResultSet rs = st.executeQuery();
             int i = 0;
             while (rs.next()) {
