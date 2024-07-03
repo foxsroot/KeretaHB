@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Station {
-    private ArrayList<Schedule> schedules;
+    private ArrayList<Integer> schedules_id;
     private HashMap<Integer, Integer> victual; //victual_id, stock
     private String name;
     private Integer id;
@@ -12,8 +12,8 @@ public class Station {
     private ArrayList<String> trainList;
     private double income;
 
-    public Station(ArrayList<Schedule> schedules, String name, Integer id, String location, ArrayList<String> trainList, double income) {
-        this.schedules = schedules;
+    public Station(ArrayList<Integer> schedules, String name, Integer id, String location, ArrayList<String> trainList, double income) {
+        this.schedules_id = schedules;
         this.name = name;
         this.id = id;
         this.location = location;
@@ -21,12 +21,12 @@ public class Station {
         this.income = income;
     }
 
-    public ArrayList<Schedule> getSchedules() {
-        return schedules;
+    public ArrayList<Integer> getSchedules() {
+        return schedules_id;
     }
 
-    public void setSchedules(ArrayList<Schedule> schedules) {
-        this.schedules = schedules;
+    public void setSchedules(ArrayList<Integer> schedules) {
+        this.schedules_id = schedules;
     }
 
     public String getName() {

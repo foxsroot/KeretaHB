@@ -4,15 +4,15 @@ import java.util.Date;
 
 public class Schedule {
     Integer scheduleID;
-    Train train;
-    Station departure;
-    Station arrival;
+    Integer Integer;
+    Integer departure;
+    Integer arrival;
     Date departureDate;
     double fee;
 
-    public Schedule(Integer scheduleID, Train train, Station departure, Station arrival, Date departureDate, double fee) {
+    public Schedule(Integer scheduleID, Integer Integer, Integer departure, Integer arrival, Date departureDate, double fee) {
         this.scheduleID = scheduleID;
-        this.train = train;
+        this.Integer = Integer;
         this.departure = departure;
         this.arrival = arrival;
         this.departureDate = departureDate;
@@ -27,12 +27,12 @@ public class Schedule {
         this.scheduleID = scheduleID;
     }
 
-    public Train getTrain() {
-        return train;
+    public Integer getInteger() {
+        return Integer;
     }
 
-    public void setTrain(Train train) {
-        this.train = train;
+    public void setInteger(Integer Integer) {
+        this.Integer = Integer;
     }
 
     public Date getDepartureDate() {
@@ -43,19 +43,19 @@ public class Schedule {
         this.departureDate = departureDate;
     }
 
-    public Station getArrival() {
+    public Integer getArrival() {
         return arrival;
     }
 
-    public void setArrival(Station arrival) {
+    public void setArrival(Integer arrival) {
         this.arrival = arrival;
     }
 
-    public Station getDeparture() {
+    public Integer getDeparture() {
         return departure;
     }
 
-    public void setDeparture(Station departure) {
+    public void setDeparture(Integer departure) {
         this.departure = departure;
     }
 
