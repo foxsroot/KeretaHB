@@ -21,7 +21,7 @@ public class TrainController {
                 Integer id = rs.getInt("train_id");
                 int speed = rs.getInt("speed");
 
-                Train train = new Train(id, ScheduleController.getCarriage(), speed);
+                Train train = new Train(id, ScheduleController.getCarriage(id), speed);
                 trains.add(train);
             }
         } catch (Exception e) {

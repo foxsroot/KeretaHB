@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class ConnectionHandler {
     public Connection con;
     private String driver = "com.mysql.cj.jdbc.Driver";
-    private String url = "jdbc:mysql://localhost/ktp_db";
+    private String url = "jdbc:mysql://localhost/kereta_hb";
     private String username = "root";
     private String password = "";
 
@@ -19,7 +19,7 @@ public class ConnectionHandler {
         } catch (Exception ex) {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getLocalizedMessage());
-            JOptionPane.showMessageDialog(null, "Error Ocurred when login" + ex);
+            JOptionPane.showMessageDialog(null, "Error Ocurred when login " + ex);
         }
         return con;
     }

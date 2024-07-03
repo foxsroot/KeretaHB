@@ -11,29 +11,32 @@ import java.util.Date;
 import java.util.List;
 
 public class ScheduleController {
-    public static List<Schedule> getSchedulesForStation() {
+    public static List<Schedule> getSchedulesForStation(int stationId) {
         List<Schedule> schedules = new ArrayList<>();
         ConnectionHandler conn = new ConnectionHandler();
 
-        String query = "SELECT * FROM schedule";
+        String query = "SELECT * FROM schedule WHERE departure_station_id = ?";
         try {
             conn.connect();
             PreparedStatement st = conn.con.prepareStatement(query);
+            st.setInt(1, stationId);
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
                 int scheduleId = rs.getInt("schedule_id");
-                int train = rs.getInt("train_id");
-                int departure = rs.getInt("departure_station_id");
-                int arrival = rs.getInt("arrival_station_id");
+                Integer train = rs.getInt("train_id");
+                Integer departure = rs.getInt("departure_station_id");
+                Integer arrival = rs.getInt("arrival_station_id");
                 Date departureDate = rs.getDate("departure_date");
                 double fee = rs.getDouble("fee");
 
-                Schedule schedule = new Schedule(scheduleId, getTrainById(train), getStationById(departure), getStationById(arrival), departureDate, fee);
+                Schedule schedule = new Schedule(scheduleId, train, departure, arrival, departureDate, fee);
                 schedules.add(schedule);
             }
         } catch (Exception e) {
             e.printStackTrace(System.err);
+        } finally {
+            conn.disconnect();
         }
         return schedules;
     }
@@ -50,12 +53,10 @@ public class ScheduleController {
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-                Carriage[] carriages = getCarriage();
+                Carriage[] carriages = getCarriage(train_id);
                 int speed = rs.getInt("speed");
-                String wifiName = rs.getString("wifi_name");
-                String wifiPassword = rs.getString("wifi_password");
 
-                train = new Train(train_id, carriages, speed, wifiName, wifiPassword);
+                train = new Train(train_id, carriages, speed);
             }
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -74,7 +75,7 @@ public class ScheduleController {
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
-                ArrayList<Schedule> schedules = null;
+                ArrayList<Integer> schedules = null;
                 String name = rs.getString("name");
                 String location = rs.getString("location");
                 ArrayList<String> trainList = null;
@@ -88,10 +89,10 @@ public class ScheduleController {
         return station;
     }
 
-    public static Carriage[] getCarriage() {
+    public static Carriage[] getCarriage(int train_id) {
         Carriage[] carriages = new Carriage[5];
         ConnectionHandler conn = new ConnectionHandler();
-        String query = "SELECT * FROM carriage";
+        String query = "SELECT * FROM carriage where train_id = '" + train_id + "'";
         try {
             conn.connect();
             PreparedStatement st = conn.con.prepareStatement(query);
