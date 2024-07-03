@@ -10,10 +10,11 @@ import java.util.List;
 public class TrainController {
     public List<Train> getSchedulesForStation() {
         List<Train> trains = new ArrayList<>();
-
+        ConnectionHandler conn = new ConnectionHandler();
         String query = "SELECT * FROM train";
         try {
-            PreparedStatement st = ConnectionHandler.getConnection().prepareStatement(query);
+            conn.connect();
+            PreparedStatement st = conn.con.prepareStatement(query);
             ResultSet rs = st.executeQuery();
 
             while (rs.next()) {
