@@ -1,5 +1,6 @@
 package controller;
 
+import config.DirectoryConfig;
 import model.classes.Victual;
 
 import java.io.File;
@@ -56,40 +57,20 @@ public class VictualController {
         return victual;
     }
 
-//    public boolean editVictual(Victual victual, File image) {
-//        conn.connect();
-//
-//        String query = "UPDATE victual SET name = ?, price = ? WHERE victual_id = ?";
-//
-//        try {
-//            PreparedStatement stmt = conn.con.prepareStatement(query);
-//            stmt.setString(1, victual.getName());
-//            stmt.setDouble(2, victual.getPrice());
-//            stmt.setInt(3, victual.getId());
-//            stmt.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return false;
-//        } finally {
-//            conn.disconnect();
-//        }
-//
-//        return true;
-//    }
-
-    public boolean editVictual(HashMap<String, Object > field, Victual oldVictual) {
-        File image = (File) field.get("image");
+    public boolean editVictual(HashMap<String, Object > field) {
+        File picture = (File) field.get("picture");
+        Victual oldVictual = (Victual) field.get("oldVictual");
 
         conn.connect();
 
-        if (oldVictual.getImage().equals(image.getName())) {
+        if (oldVictual.getImage().equals(picture.getName())) {
             String query = "UPDATE victual SET name = ?, price = ? WHERE victual_id = ?";
 
             try {
                 PreparedStatement stmt = conn.con.prepareStatement(query);
                 stmt.setString(1, (String) field.get("name"));
                 stmt.setDouble(2, (double) field.get("price"));
-                stmt.setInt(3, (int) field.get("victual_id"));
+                stmt.setInt(3, oldVictual.getId());
 
                 stmt.executeUpdate();
             } catch (SQLException e) {
@@ -99,30 +80,49 @@ public class VictualController {
                 conn.disconnect();
             }
         } else {
-            String fileName = ""; //Generate image name + pindahin ntar :)
+            if (ImageController.saveImage(picture, picture.getName(), DirectoryConfig.VICTUAL_IMAGES)) {
+                String query = "UPDATE victual SET name = ?, price = ?, picture = ? WHERE victual_id = ?";
+
+                try {
+                    PreparedStatement stmt = conn.con.prepareStatement(query);
+                    stmt.setString(1, (String) field.get("name"));
+                    stmt.setDouble(2, (double) field.get("price"));
+                    stmt.setString(3, picture.getName());
+                    stmt.setInt(4, oldVictual.getId());
+                    stmt.executeUpdate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
         }
 
         return true;
     }
 
-    public boolean addVictual(Victual victual, File image) {
+    public boolean addVictual(HashMap<String, Object> fields) {
+        File picture = (File) fields.get("picture");
         conn.connect();
-        String query = "INSERT INTO victual (name, price, picture) VALUES (?, ?, ?)";
 
-        try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
-            stmt.setString(1, victual.getName());
-            stmt.setDouble(2, victual.getPrice());
-//            stmt.setInt(3, generateUUID(image));
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            conn.disconnect();
+        if (ImageController.saveImage(picture, picture.getName(), DirectoryConfig.VICTUAL_IMAGES)) {
+            String query = "INSERT INTO victual (name, price, picture) VALUES (?, ?, ?)";
+
+            try {
+                PreparedStatement stmt = conn.con.prepareStatement(query);
+                stmt.setString(1, fields.get("name").toString());
+                stmt.setDouble(2, (double) fields.get("price"));
+                stmt.setString(3, picture.getName());
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                conn.disconnect();
+            }
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     public boolean removeVictual(int victualId) {

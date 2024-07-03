@@ -40,22 +40,25 @@ public class ImageController {
         }
     }
 
-    public static void saveImage(File image, String fileName, String path) {
-        File directory = new File(DirectoryConfig.VICTUAL_IMAGES);
+    public static boolean saveImage(File image, String fileName, String path) {
+        File directory = new File(path);
 
         if (!directory.exists()) {
             if (directory.mkdir()) {
                 System.out.println("Directory created successfully."); //buat logging :)
             } else {
                 System.out.println("Failed to create directory."); //buat logging :)
-                return;
+                return false;
             }
         }
 
         try {
-            Files.copy(image.toPath(), (new File(DirectoryConfig.VICTUAL_IMAGES + "\\" + fileName)).toPath());
+            Files.copy(image.toPath(), (new File(path + "\\" + fileName)).toPath());
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
+
+        return true;
     }
 }
