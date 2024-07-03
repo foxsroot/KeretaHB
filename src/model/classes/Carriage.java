@@ -4,13 +4,15 @@ import model.enums.CarriageType;
 import model.enums.ClassType;
 
 public class Carriage {
-    private Integer capacity;
+    private Integer train_id;
+    private int capacity;
     private CarriageType type;
-    private Integer maxWeight;
-    private Integer baggageAllowance;
+    private int maxWeight;
+    private int baggageAllowance;
     private ClassType carriageClass;
 
-    public Carriage(Integer capacity, CarriageType type, Integer maxWeight, Integer baggageAllowance, ClassType carriageClass) {
+    public Carriage(Integer train_id, int capacity, CarriageType type, int maxWeight, int baggageAllowance, ClassType carriageClass) {
+        this.train_id = train_id;
         this.capacity = capacity;
         this.type = type;
         this.maxWeight = maxWeight;
@@ -18,11 +20,19 @@ public class Carriage {
         this.carriageClass = carriageClass;
     }
 
-    public Integer getCapacity() {
+    public Integer getTrain_id() {
+        return train_id;
+    }
+
+    public void setTrain_id(Integer train_id) {
+        this.train_id = train_id;
+    }
+
+    public int getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(Integer capacity) {
+    public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
 
@@ -34,19 +44,19 @@ public class Carriage {
         this.type = type;
     }
 
-    public Integer getMaxWeight() {
+    public int getMaxWeight() {
         return maxWeight;
     }
 
-    public void setMaxWeight(Integer maxWeight) {
+    public void setMaxWeight(int maxWeight) {
         this.maxWeight = maxWeight;
     }
 
-    public Integer getBaggageAllowance() {
+    public int getBaggageAllowance() {
         return baggageAllowance;
     }
 
-    public void setBaggageAllowance(Integer baggageAllowance) {
+    public void setBaggageAllowance(int baggageAllowance) {
         this.baggageAllowance = baggageAllowance;
     }
 

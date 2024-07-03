@@ -6,6 +6,7 @@ public class Cart {
     private HashMap<Integer, Integer> victual; //victual_id, amount
     private double totalPrice;
 
+
     public Cart(HashMap<Integer, Integer> victual, double totalPrice) {
         this.victual = victual;
         this.totalPrice = totalPrice;

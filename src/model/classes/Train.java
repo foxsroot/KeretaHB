@@ -1,14 +1,26 @@
 package model.classes;
 
-public abstract class Train {
+public class Train {
+    private Integer id;
     private Carriage[] carriages;
     private Integer speed;
-    private Victual victual;
 
-    public Train(Carriage[] carriages, Integer speed, Victual victual) {
+    public Train(Integer id, Carriage[] carriages, Integer speed) {
+        this.id = id;
         this.carriages = carriages;
         this.speed = speed;
-        this.victual = victual;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setSpeed(Integer speed) {
+        this.speed = speed;
     }
 
     public Carriage[] getCarriages() {
@@ -25,13 +37,5 @@ public abstract class Train {
 
     public void setSpeed(int speed) {
         this.speed = speed;
-    }
-
-    public Victual getVictual() {
-        return victual;
-    }
-
-    public void setVictual(Victual victual) {
-        this.victual = victual;
     }
 }

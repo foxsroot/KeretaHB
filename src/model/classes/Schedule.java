@@ -1,16 +1,16 @@
 package model.classes;
 
-import java.util.Calendar;
+import java.util.Date;
 
 public class Schedule {
     Integer scheduleID;
     Train train;
     Station departure;
     Station arrival;
-    Calendar departureDate;
+    Date departureDate;
     double fee;
 
-    public Schedule(Integer scheduleID, Train train, Station departure, Station arrival, Calendar departureDate, double fee) {
+    public Schedule(Integer scheduleID, Train train, Station departure, Station arrival, Date departureDate, double fee) {
         this.scheduleID = scheduleID;
         this.train = train;
         this.departure = departure;
@@ -35,11 +35,11 @@ public class Schedule {
         this.train = train;
     }
 
-    public Calendar getDepartureDate() {
+    public Date getDepartureDate() {
         return departureDate;
     }
 
-    public void setDepartureDate(Calendar departureDate) {
+    public void setDepartureDate(Date departureDate) {
         this.departureDate = departureDate;
     }
 
