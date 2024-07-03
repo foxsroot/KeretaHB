@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 02, 2024 at 07:13 PM
+-- Generation Time: Jul 03, 2024 at 05:16 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -115,6 +115,7 @@ CREATE TABLE `passenger` (
 CREATE TABLE `reschedule_request` (
   `reschedule_id` int(11) NOT NULL,
   `transaction_id` int(11) DEFAULT NULL,
+  `admin_id` int(11) NOT NULL,
   `status` enum('SUCCESS','DENIED','PENDING') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -278,7 +279,8 @@ ALTER TABLE `passenger`
 --
 ALTER TABLE `reschedule_request`
   ADD PRIMARY KEY (`reschedule_id`),
-  ADD KEY `transaction_id` (`transaction_id`);
+  ADD KEY `transaction_id` (`transaction_id`),
+  ADD KEY `fk_admin` (`admin_id`);
 
 --
 -- Indexes for table `schedule`
@@ -383,6 +385,7 @@ ALTER TABLE `passenger`
 -- Constraints for table `reschedule_request`
 --
 ALTER TABLE `reschedule_request`
+  ADD CONSTRAINT `fk_admin` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`user_id`),
   ADD CONSTRAINT `reschedule_request_ibfk_1` FOREIGN KEY (`transaction_id`) REFERENCES `ticket_transaction` (`transaction_id`);
 
 --
