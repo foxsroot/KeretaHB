@@ -3,6 +3,7 @@ package model.classes;
 public class Victual {
     private Integer id;
     private String name;
+    private String image;
     private double price;
 
     public Victual(Integer id, String name, double price) {
@@ -33,5 +34,13 @@ public class Victual {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
