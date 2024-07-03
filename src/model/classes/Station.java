@@ -1,5 +1,8 @@
 package model.classes;
 
+import controller.ConnectionHandler;
+
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -67,5 +70,22 @@ public class Station {
 
     public void setIncome(double income) {
         this.income = income;
+    }
+
+    public String getStationNameById(Integer station_id){
+        String query = "SELECT * FROM station WHERE station_id = '" + station_id + "'";
+        try{
+            ConnectionHandler conn = new ConnectionHandler();
+            conn.connect();
+            java.sql.PreparedStatement st = conn.con.prepareStatement(query);
+            ResultSet rs = st.executeQuery();
+            if(rs.next()){
+                String name = rs.getString("name");
+            }
+            return name;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 }

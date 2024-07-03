@@ -19,7 +19,7 @@ public class ConnectionHandler {
         } catch (Exception ex) {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getLocalizedMessage());
-            JOptionPane.showMessageDialog(null, "Error Ocurred when login" + ex);
+            JOptionPane.showMessageDialog(null, "Error Ocurred when login " + ex);
         }
         return con;
     }
