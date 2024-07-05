@@ -27,7 +27,7 @@ public class ScheduleDetailScreen extends JFrame {
         mainPanel.add(createLabel(": " + schedule.getScheduleID().toString()));
 
         mainPanel.add(createLabel("Train ID:"));
-        mainPanel.add(createLabel(": " +schedule.getTrainID().toString()));
+        mainPanel.add(createLabel(": " + schedule.getTrainID().toString()));
 
         int capacity = trainController.totalTrainCapacity(schedule.getTrainID());
         mainPanel.add(createLabel("Seat Capacity"));
@@ -35,36 +35,32 @@ public class ScheduleDetailScreen extends JFrame {
 
         String departure = stController.getStationNameById(schedule.getDeparture());
         mainPanel.add(createLabel("Departure Station"));
-        mainPanel.add(createLabel(": " +departure));
+        mainPanel.add(createLabel(": " + departure));
 
         String arrival = stController.getStationNameById(schedule.getArrival());
         mainPanel.add(createLabel("Arrival Station"));
         mainPanel.add(createLabel(": " + arrival));
 
-
         String departureDate = new SimpleDateFormat("dd-MM-yyyy").format(schedule.getDepartureDate());
         mainPanel.add(createLabel("Departure Date"));
-        mainPanel.add(createLabel(": " +departureDate));
+        mainPanel.add(createLabel(": " + departureDate));
 
         mainPanel.add(createLabel("Fee"));
         mainPanel.add(createLabel(": $" + schedule.getFee()));
 
-        JButton bookTicketButton = new JButton("Book Ticket");
-        bookTicketButton.setBounds(450, 600, 250, 30);
-        bookTicketButton.setFont(new Font("Arial", Font.BOLD, 16));
-        bookTicketButton.setPreferredSize(new Dimension(100, 29));
-
-//        JButton backButton = new JButton("Back to Station Schedule");
-//        backButton.setBounds(50, 600, 250, 30);
-//        backButton.setFont(new Font("Arial", Font.BOLD, 16));
-//        backButton.addActionListener(e -> {
-//            StationScheduleSelection selectStation = new StationScheduleSelection();
-//            this.dispose();
-//            selectStation.setVisible(true);
-//        });
-
         JScrollPane mainScrollPane = new JScrollPane(mainPanel);
-        this.add(mainScrollPane);
+
+        JButton bookTicketButton = new JButton("Book Ticket");
+        bookTicketButton.setFont(new Font("Arial", Font.BOLD, 16));
+        bookTicketButton.setPreferredSize(new Dimension(150, 29));
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 10));
+        buttonPanel.add(bookTicketButton);
+
+        this.setLayout(new BorderLayout());
+        this.add(mainScrollPane, BorderLayout.CENTER);
+        this.add(buttonPanel, BorderLayout.SOUTH);
     }
 
     private JLabel createLabel(String text) {
