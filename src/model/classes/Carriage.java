@@ -7,15 +7,13 @@ public class Carriage {
     private Integer train_id;
     private int capacity;
     private CarriageType type;
-    private int maxWeight;
     private int baggageAllowance;
     private ClassType carriageClass;
 
-    public Carriage(Integer train_id, int capacity, CarriageType type, int maxWeight, int baggageAllowance, ClassType carriageClass) {
+    public Carriage(Integer train_id, int capacity, CarriageType type, int baggageAllowance, ClassType carriageClass) {
         this.train_id = train_id;
         this.capacity = capacity;
         this.type = type;
-        this.maxWeight = maxWeight;
         this.baggageAllowance = baggageAllowance;
         this.carriageClass = carriageClass;
     }
@@ -42,14 +40,6 @@ public class Carriage {
 
     public void setType(CarriageType type) {
         this.type = type;
-    }
-
-    public int getMaxWeight() {
-        return maxWeight;
-    }
-
-    public void setMaxWeight(int maxWeight) {
-        this.maxWeight = maxWeight;
     }
 
     public int getBaggageAllowance() {
