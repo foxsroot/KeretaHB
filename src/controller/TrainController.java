@@ -83,7 +83,6 @@ public class TrainController {
                 String carriageClass = rs.getString("class");
                 Integer baggage = rs.getInt("baggage_allowance");
 
-//                (Integer train_id, int capacity, CarriageType type, int maxWeight, int baggageAllowance, ClassType carriageClass)
                 carriages[i] = new Carriage(trainId, capacity, CarriageType.valueOf(carriageType), baggage, ClassType.valueOf(carriageClass));
                 i++;
             }
