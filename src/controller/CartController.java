@@ -12,7 +12,7 @@ public class CartController {
 
     public boolean addToCart(int userId, int victualId, int amount) {
         conn.connect();
-        String query = "INSERT INTO cart (user_id, victual_id, amount) VALUES (?, ?, ?)";
+        String query = "INSERT INTO cart_item (user_id, victual_id, amount) VALUES (?, ?, ?)";
 
         try {
             PreparedStatement stmt = conn.con.prepareStatement(query);
@@ -29,10 +29,10 @@ public class CartController {
         return true;
     }
 
-    public boolean removeFromCart(int victualId, int user_id, int amount, Cart cart) {
+    public boolean editCart(int victualId, int user_id, int amount, Cart cart) {
         conn.connect();
 
-        if (amount >= cart.getVictual().get(victualId)) {
+        if (amount <= 0) {
             String query = "DELETE FROM cart WHERE victual_id = ? AND user_id = ?";
 
             try {
@@ -47,12 +47,11 @@ public class CartController {
                 conn.disconnect();
             }
         } else {
-            int finalAmount = cart.getVictual().get(victualId) - amount;
             String query = "UPDATE cart SET amount = ? WHERE victual_id = ? AND user_id = ?";
 
             try {
                 PreparedStatement stmt = conn.con.prepareStatement(query);
-                stmt.setInt(1, finalAmount);
+                stmt.setInt(1, amount);
                 stmt.setInt(1, victualId);
                 stmt.setInt(2, user_id);
                 stmt.executeUpdate();
@@ -71,7 +70,7 @@ public class CartController {
         conn.connect();
         HashMap<Integer, Integer> victuals = new HashMap<>();
 
-        String query = "SELECT * FROM cart WHERE user_id=?";
+        String query = "SELECT * FROM cart_item WHERE user_id=?";
 
         try {
             PreparedStatement stmt = conn.con.prepareStatement(query);
