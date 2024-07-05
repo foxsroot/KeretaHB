@@ -1,19 +1,23 @@
 package model.classes;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Notification {
-    Integer notificationID;
-    Integer recipientID;
-    String message;
-    Date receivedDate;
+    private Integer notificationID;
+    private Integer recipientID;
+    private String title;
+    private String message;
+    private Timestamp receivedDate;
 
-    public Notification(Integer notificationID, Integer recipientID, String message, Date receivedDate) {
+    public Notification(Integer notificationID, Integer recipientID, String title, String message, Timestamp receivedDate) {
         this.notificationID = notificationID;
         this.recipientID = recipientID;
+        this.title = title;
         this.message = message;
         this.receivedDate = receivedDate;
     }
+
+    public Notification() {}
 
     public Integer getNotificationID() {
         return notificationID;
@@ -31,6 +35,14 @@ public class Notification {
         this.recipientID = recipientID;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getMessage() {
         return message;
     }
@@ -39,11 +51,11 @@ public class Notification {
         this.message = message;
     }
 
-    public Date getReceivedDate() {
+    public Timestamp getReceivedDate() {
         return receivedDate;
     }
 
-    public void setReceivedDate(Date receivedDate) {
+    public void setReceivedDate(Timestamp receivedDate) {
         this.receivedDate = receivedDate;
     }
 }
