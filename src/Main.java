@@ -1,4 +1,4 @@
-import view.ListScheduleScreen;
+import view.Schedule.StationScheduleSelection;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -7,7 +7,9 @@ public class Main {
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
 
-        ListScheduleScreen.test();
+//        ListScheduleScreen.test();
+        StationScheduleSelection test = new StationScheduleSelection();
+        test.setVisible(true);
         System.out.printf("Hello and welcome!");
 
         for (int i = 1; i <= 5; i++) {

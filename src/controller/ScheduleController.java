@@ -1,8 +1,6 @@
 package controller;
 
 import model.classes.*;
-import model.enums.CarriageType;
-import model.enums.ClassType;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,10 +39,10 @@ public class ScheduleController {
         return schedules;
     }
 
-    public static Schedule getSchedulesById(int stationId) {
+    public Schedule getSchedulesById(int stationId) {
         ConnectionHandler conn = new ConnectionHandler();
 
-        String query = "SELECT * FROM schedule WHERE departure_station_id = ?";
+        String query = "SELECT * FROM schedule WHERE schedule_id = ?";
         try {
             conn.connect();
             PreparedStatement st = conn.con.prepareStatement(query);
@@ -117,29 +115,4 @@ public class ScheduleController {
 //        return station;
 //    }
 //
-    public static Carriage[] getCarriage(int train_id) {
-        Carriage[] carriages = new Carriage[5];
-        ConnectionHandler conn = new ConnectionHandler();
-        String query = "SELECT * FROM carriage where train_id = '" + train_id + "'";
-        try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
-            ResultSet rs = st.executeQuery();
-            int i = 0;
-            while (rs.next()) {
-                Integer trainId = rs.getInt("train_id");
-                int carriageId = rs.getInt("carriage_id");
-                String carriageType = rs.getString("type");
-                int capacity = rs.getInt("capacity");
-                String carriageClass = rs.getString("class");
-                Integer baggage = rs.getInt("baggage_allowance");
-
-                carriages[i] = new Carriage(trainId, carriageId, CarriageType.valueOf(carriageType), capacity, baggage, ClassType.valueOf(carriageClass));
-                i++;
-            }
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-        }
-        return carriages;
-    }
 }

@@ -1,4 +1,4 @@
-package view;
+package view.Schedule;
 
 import controller.ScheduleController;
 import controller.StationController;
@@ -19,44 +19,24 @@ public class ListScheduleScreen extends JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    public void displayBandungSchedule() {
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+    public void displayBandungSchedule(JPanel mainPanel) {
         addBandungTable(mainPanel);
-        JScrollPane mainScrollPane = new JScrollPane(mainPanel);
-        this.add(mainScrollPane);
     }
 
-    public void displayBekasiSchedule() {
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+    public void displayBekasiSchedule(JPanel mainPanel) {
         addBekasiTable(mainPanel);
-        JScrollPane mainScrollPane = new JScrollPane(mainPanel);
-        this.add(mainScrollPane);
     }
 
-    public void displayBogorSchedule() {
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+    public void displayBogorSchedule(JPanel mainPanel) {
         addBogorTable(mainPanel);
-        JScrollPane mainScrollPane = new JScrollPane(mainPanel);
-        this.add(mainScrollPane);
     }
 
-    public void displayCirebonSchedule() {
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+    public void displayCirebonSchedule(JPanel mainPanel) {
         addCirebonTable(mainPanel);
-        JScrollPane mainScrollPane = new JScrollPane(mainPanel);
-        this.add(mainScrollPane);
     }
 
-    public void displayDepokSchedule() {
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+    public void displayDepokSchedule(JPanel mainPanel) {
         addDepokTable(mainPanel);
-        JScrollPane mainScrollPane = new JScrollPane(mainPanel);
-        this.add(mainScrollPane);
     }
 
     private void addBandungTable(JPanel panel) {
@@ -173,11 +153,21 @@ public class ListScheduleScreen extends JFrame {
     // Testing
     public static void test() {
         ListScheduleScreen listScheduleScreen = new ListScheduleScreen();
-        listScheduleScreen.displayBandungSchedule();
-        listScheduleScreen.displayBekasiSchedule();
-        listScheduleScreen.displayBogorSchedule();
-        listScheduleScreen.displayCirebonSchedule();
-        listScheduleScreen.displayDepokSchedule();
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+
+        listScheduleScreen.displayBandungSchedule(mainPanel);
+        listScheduleScreen.displayBekasiSchedule(mainPanel);
+        listScheduleScreen.displayBogorSchedule(mainPanel);
+        listScheduleScreen.displayCirebonSchedule(mainPanel);
+        listScheduleScreen.displayDepokSchedule(mainPanel);
+
+        JScrollPane mainScrollPane = new JScrollPane(mainPanel);
+        listScheduleScreen.add(mainScrollPane);
+        JScrollBar verticalScrollBar = mainScrollPane.getVerticalScrollBar();
+        verticalScrollBar.setUnitIncrement(16);
+        verticalScrollBar.setBlockIncrement(75);
+
         listScheduleScreen.setVisible(true);
     }
 }
