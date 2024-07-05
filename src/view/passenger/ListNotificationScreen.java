@@ -1,4 +1,4 @@
-package view;
+package view.passenger;
 
 import controller.NotificationController;
 import model.classes.Notification;

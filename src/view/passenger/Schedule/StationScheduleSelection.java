@@ -1,4 +1,4 @@
-package view.Schedule;
+package view.passenger.Schedule;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,11 +53,5 @@ public class StationScheduleSelection extends JFrame {
         this.dispose();
         StationScheduleListScreen scheduleDetailScreen = new StationScheduleListScreen(scheduleScreen, station);
         scheduleDetailScreen.setVisible(true);
-    }
-
-    // Testing
-    public static void main(String[] args) {
-        StationScheduleSelection screen = new StationScheduleSelection();
-        screen.setVisible(true);
     }
 }

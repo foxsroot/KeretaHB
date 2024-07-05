@@ -1,4 +1,4 @@
-package view;
+package view.passenger;
 
 import javax.swing.*;
 import java.awt.*;

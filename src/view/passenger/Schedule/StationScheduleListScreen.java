@@ -1,4 +1,4 @@
-package view.Schedule;
+package view.passenger.Schedule;
 
 import controller.ScheduleController;
 import model.classes.Schedule;
@@ -92,10 +92,4 @@ public class StationScheduleListScreen extends JFrame {
         return label;
     }
 
-    // Testing
-    public static void main(String[] args) {
-        ListScheduleScreen scheduleScreen = new ListScheduleScreen();
-        StationScheduleListScreen detailScreen = new StationScheduleListScreen(scheduleScreen, "Bandung");
-        detailScreen.setVisible(true);
-    }
 }
