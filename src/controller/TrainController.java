@@ -44,7 +44,7 @@ public class TrainController {
         return trains;
     }
 
-    private static Train getTrainById(int train_id) {
+    private Train getTrainById(int train_id) {
         Train train = null;
         ConnectionHandler conn = new ConnectionHandler();
 
