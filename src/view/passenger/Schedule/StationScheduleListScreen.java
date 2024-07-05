@@ -16,6 +16,7 @@ public class StationScheduleListScreen extends JFrame {
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBounds(20, 70, 850, 300);
 
         switch (station) {
             case "Bandung":

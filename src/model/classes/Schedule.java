@@ -10,14 +10,18 @@ public class Schedule {
     Date departureDate;
     double fee;
 
-    public Schedule(Integer scheduleID, Integer train_id, Integer departure, Integer arrival, Date departureDate, double fee) {
-        this.scheduleID = scheduleID;
+    public Schedule(Integer train_id, Integer departure, Integer arrival, Date departureDate, double fee) {
         this.train_id = train_id;
         this.departure = departure;
         this.arrival = arrival;
         this.departureDate = departureDate;
         this.fee = fee;
     }
+    public Schedule addScheduleID(Integer scheduleID) {
+        this.scheduleID = scheduleID;
+        return this;
+    }
+
 
     public Integer getScheduleID() {
         return scheduleID;

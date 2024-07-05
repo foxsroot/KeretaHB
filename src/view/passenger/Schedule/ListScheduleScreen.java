@@ -155,6 +155,7 @@ public class ListScheduleScreen extends JFrame {
         ListScheduleScreen listScheduleScreen = new ListScheduleScreen();
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBounds(20, 70, 850, 300);
 
         listScheduleScreen.displayBandungSchedule(mainPanel);
         listScheduleScreen.displayBekasiSchedule(mainPanel);

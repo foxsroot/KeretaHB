@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TrainController {
-    public int totalTrainCapacity(int train_id){
+    public int totalTrainCapacity(int train_id) {
         Carriage[] carriages = getCarriage(train_id);
         System.out.println(carriages.length);
         int totalCapacity = 0;
@@ -22,17 +22,28 @@ public class TrainController {
         return totalCapacity;
     }
 
+    public List<Train> getTrainByStationId(Integer station_id) {
+        List<Train> trains = new ArrayList<>();
+        ConnectionHandler conn = new ConnectionHandler();
+        String query = "SELECT * FROM train WHERE station_id ='" + station_id + "'";
+        return getTrains(trains, conn, query);
+    }
+
     public List<Train> getTrainList() {
         List<Train> trains = new ArrayList<>();
         ConnectionHandler conn = new ConnectionHandler();
         String query = "SELECT * FROM train";
+        return getTrains(trains, conn, query);
+    }
+
+    private List<Train> getTrains(List<Train> trains, ConnectionHandler conn, String query) {
         try {
             conn.connect();
             PreparedStatement st = conn.con.prepareStatement(query);
             ResultSet rs = st.executeQuery();
-
             while (rs.next()) {
                 Integer id = rs.getInt("train_id");
+                Integer station_id = rs.getInt("station_id");
                 int speed = rs.getInt("speed");
 
                 Train train = new Train(id, getCarriage(id), speed);
@@ -43,6 +54,7 @@ public class TrainController {
         }
         return trains;
     }
+
 
     private Train getTrainById(int train_id) {
         Train train = null;

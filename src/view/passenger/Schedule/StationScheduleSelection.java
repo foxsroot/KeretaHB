@@ -13,6 +13,7 @@ public class StationScheduleSelection extends JFrame {
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBounds(20, 70, 850, 300);
 
         JLabel viewScheduleDetail = createLabel("View Schedule Detail");
         mainPanel.add(viewScheduleDetail);

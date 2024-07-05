@@ -22,6 +22,7 @@ public class ScheduleDetailScreen extends JFrame {
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(10, 2, 5, 10));
+        mainPanel.setBounds(20, 70, 850, 300);
 
         mainPanel.add(createLabel("Schedule ID"));
         mainPanel.add(createLabel(": " + schedule.getScheduleID().toString()));
