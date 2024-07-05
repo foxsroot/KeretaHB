@@ -51,7 +51,7 @@ public class ScheduleDetailScreen extends JFrame {
         JScrollPane mainScrollPane = new JScrollPane(mainPanel);
 
         JButton bookTicketButton = new JButton("Book Ticket");
-        bookTicketButton.setFont(new Font("Arial", Font.BOLD, 16));
+        bookTicketButton.setFont(new Font("Calibri", Font.BOLD, 16));
         bookTicketButton.setPreferredSize(new Dimension(150, 29));
 
         JPanel buttonPanel = new JPanel();
@@ -65,7 +65,7 @@ public class ScheduleDetailScreen extends JFrame {
 
     private JLabel createLabel(String text) {
         JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", Font.BOLD, 16));
+        label.setFont(new Font("Calibri", Font.BOLD, 16));
         label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         return label;
     }

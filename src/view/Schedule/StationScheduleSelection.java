@@ -34,7 +34,7 @@ public class StationScheduleSelection extends JFrame {
 
     private JLabel createLabel(String text) {
         JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", Font.BOLD, 16));
+        label.setFont(new Font("Calibri", Font.BOLD, 16));
         label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         return label;
     }

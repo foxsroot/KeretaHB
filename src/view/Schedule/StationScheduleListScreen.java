@@ -42,16 +42,16 @@ public class StationScheduleListScreen extends JFrame {
         searchPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 
         JTextField showScheduleByIdField = new JTextField();
-        showScheduleByIdField.setFont(new Font("Arial", Font.BOLD, 16));
+        showScheduleByIdField.setFont(new Font("Calibri", Font.BOLD, 16));
         showScheduleByIdField.setPreferredSize(new Dimension(600, 30));
 
         JButton searchButton = new JButton("Search");
-        searchButton.setFont(new Font("Arial", Font.BOLD, 16));
+        searchButton.setFont(new Font("Calibri", Font.BOLD, 16));
         searchButton.setPreferredSize(new Dimension(100, 29));
 
         JButton backButton = new JButton("Back to Schedule Selection");
         backButton.setBounds(50, 600, 250, 30);
-        backButton.setFont(new Font("Arial", Font.BOLD, 16));
+        backButton.setFont(new Font("Calibri", Font.BOLD, 16));
         backButton.addActionListener(e -> {
             StationScheduleSelection selectStation = new StationScheduleSelection();
             this.dispose();
@@ -87,7 +87,7 @@ public class StationScheduleListScreen extends JFrame {
 
     private JLabel createLabel(String text) {
         JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", Font.BOLD, 16));
+        label.setFont(new Font("Calibri", Font.BOLD, 16));
         label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         return label;
     }

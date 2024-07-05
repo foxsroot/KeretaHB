@@ -96,7 +96,7 @@ public class ListScheduleScreen extends JFrame {
 
     private JLabel createLabel(String text) {
         JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", Font.BOLD, 16));
+        label.setFont(new Font("Calibri", Font.BOLD, 16));
         label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         return label;
     }
@@ -106,8 +106,8 @@ public class ListScheduleScreen extends JFrame {
         table.setPreferredScrollableViewportSize(new Dimension(850, 100));
         table.setFillsViewportHeight(true);
         table.setRowHeight(25);
-        table.setFont(new Font("Arial", Font.PLAIN, 14));
-        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+        table.setFont(new Font("Calibri", Font.PLAIN, 14));
+        table.getTableHeader().setFont(new Font("Calibri", Font.BOLD, 14));
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
         // Center align the table header
