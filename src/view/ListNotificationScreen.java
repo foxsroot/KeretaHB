@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -84,7 +86,14 @@ public class ListNotificationScreen extends JFrame {
         notificationPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                new ViewNotificationScreen(notification);
+                setVisible(false);
+                JFrame notificationFrame = new ViewNotificationScreen(notification);
+                notificationFrame.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent e) {
+                        setVisible(true);
+                    }
+                });
             }
 
             @Override
