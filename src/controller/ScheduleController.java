@@ -68,55 +68,55 @@ public class ScheduleController {
         }
         return null;
     }
-
-    private static Train getTrainById(int train_id) {
-        Train train = null;
-        ConnectionHandler conn = new ConnectionHandler();
-
-        String query = "SELECT * FROM train WHERE train_id = '" + train_id + "'";
-        try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
-            st.executeQuery(query);
-            ResultSet rs = st.executeQuery();
-
-            if (rs.next()) {
-                Carriage[] carriages = getCarriage(train_id);
-                int speed = rs.getInt("speed");
-
-                train = new Train(train_id, carriages, speed);
-            }
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-        }
-        return train;
-    }
-
-    private static Station getStationById(int station_id) {
-        Station station = null;
-        ConnectionHandler conn = new ConnectionHandler();
-        String query = "SELECT * FROM station WHERE station_id = '" + station_id + "'";
-        try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
-            st.executeQuery(query);
-            ResultSet rs = st.executeQuery();
-
-            if (rs.next()) {
-                ArrayList<Integer> schedules = null;
-                String name = rs.getString("name");
-                String location = rs.getString("location");
-                ArrayList<String> trainList = null;
-                double income = rs.getDouble("income");
-
-                station = new Station(schedules, name, station_id, location, trainList, income);
-            }
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-        }
-        return station;
-    }
-
+//
+//    private static Train getTrainById(int train_id) {
+//        Train train = null;
+//        ConnectionHandler conn = new ConnectionHandler();
+//
+//        String query = "SELECT * FROM train WHERE train_id = '" + train_id + "'";
+//        try {
+//            conn.connect();
+//            PreparedStatement st = conn.con.prepareStatement(query);
+//            st.executeQuery(query);
+//            ResultSet rs = st.executeQuery();
+//
+//            if (rs.next()) {
+//                Carriage[] carriages = getCarriage(train_id);
+//                int speed = rs.getInt("speed");
+//
+//                train = new Train(train_id, carriages, speed);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace(System.err);
+//        }
+//        return train;
+//    }
+//
+//    private static Station getStationById(int station_id) {
+//        Station station = null;
+//        ConnectionHandler conn = new ConnectionHandler();
+//        String query = "SELECT * FROM station WHERE station_id = '" + station_id + "'";
+//        try {
+//            conn.connect();
+//            PreparedStatement st = conn.con.prepareStatement(query);
+//            st.executeQuery(query);
+//            ResultSet rs = st.executeQuery();
+//
+//            if (rs.next()) {
+//                ArrayList<Integer> schedules = null;
+//                String name = rs.getString("name");
+//                String location = rs.getString("location");
+//                ArrayList<String> trainList = null;
+//                double income = rs.getDouble("income");
+//
+//                station = new Station(schedules, name, station_id, location, trainList, income);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace(System.err);
+//        }
+//        return station;
+//    }
+//
     public static Carriage[] getCarriage(int train_id) {
         Carriage[] carriages = new Carriage[5];
         ConnectionHandler conn = new ConnectionHandler();

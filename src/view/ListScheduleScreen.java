@@ -17,59 +17,101 @@ public class ListScheduleScreen extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
+    }
 
-        // Main panel with vertical layout
+    public void displayBandungSchedule() {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-
-        // Create tables and labels
-        JTable stationBandung = createTable();
-        JTable stationBekasi = createTable();
-        JTable stationBogor = createTable();
-        JTable stationCirebon = createTable();
-        JTable stationDepok = createTable();
-
-        JLabel labelBandung = createLabel("Bandung Station Schedule");
-        JLabel labelBekasi = createLabel("Bekasi Station Schedule");
-        JLabel labelBogor = createLabel("Bogor Station Schedule");
-        JLabel labelCirebon = createLabel("Cirebon Station Schedule");
-        JLabel labelDepok = createLabel("Depok Station Schedule");
-
-        DefaultTableModel modelBandung = createTableModel();
-        DefaultTableModel modelBekasi = createTableModel();
-        DefaultTableModel modelBogor = createTableModel();
-        DefaultTableModel modelCirebon = createTableModel();
-        DefaultTableModel modelDepok = createTableModel();
-
-        // Set models to tables
-        stationBandung.setModel(modelBandung);
-        stationBekasi.setModel(modelBekasi);
-        stationBogor.setModel(modelBogor);
-        stationCirebon.setModel(modelCirebon);
-        stationDepok.setModel(modelDepok);
-
-        // Add data to the models
-        populateTable(modelBandung, 1);
-        populateTable(modelBekasi, 2);
-        populateTable(modelBogor, 3);
-        populateTable(modelCirebon, 4);
-        populateTable(modelDepok, 5);
-
-        // Add labels and tables to the main panel
-        mainPanel.add(labelBandung);
-        mainPanel.add(new JScrollPane(stationBandung));
-        mainPanel.add(labelBekasi);
-        mainPanel.add(new JScrollPane(stationBekasi));
-        mainPanel.add(labelBogor);
-        mainPanel.add(new JScrollPane(stationBogor));
-        mainPanel.add(labelCirebon);
-        mainPanel.add(new JScrollPane(stationCirebon));
-        mainPanel.add(labelDepok);
-        mainPanel.add(new JScrollPane(stationDepok));
-
-        // Make the main panel scrollable
+        addBandungTable(mainPanel);
         JScrollPane mainScrollPane = new JScrollPane(mainPanel);
         this.add(mainScrollPane);
+    }
+
+    public void displayBekasiSchedule() {
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        addBekasiTable(mainPanel);
+        JScrollPane mainScrollPane = new JScrollPane(mainPanel);
+        this.add(mainScrollPane);
+    }
+
+    public void displayBogorSchedule() {
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        addBogorTable(mainPanel);
+        JScrollPane mainScrollPane = new JScrollPane(mainPanel);
+        this.add(mainScrollPane);
+    }
+
+    public void displayCirebonSchedule() {
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        addCirebonTable(mainPanel);
+        JScrollPane mainScrollPane = new JScrollPane(mainPanel);
+        this.add(mainScrollPane);
+    }
+
+    public void displayDepokSchedule() {
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        addDepokTable(mainPanel);
+        JScrollPane mainScrollPane = new JScrollPane(mainPanel);
+        this.add(mainScrollPane);
+    }
+
+    private void addBandungTable(JPanel panel) {
+        JLabel label = createLabel("Bandung Station Schedule");
+        JTable table = createTable();
+        DefaultTableModel model = createTableModel();
+        table.setModel(model);
+        populateTable(model, 1);
+
+        panel.add(label);
+        panel.add(new JScrollPane(table));
+    }
+
+    private void addBekasiTable(JPanel panel) {
+        JLabel label = createLabel("Bekasi Station Schedule");
+        JTable table = createTable();
+        DefaultTableModel model = createTableModel();
+        table.setModel(model);
+        populateTable(model, 2);
+
+        panel.add(label);
+        panel.add(new JScrollPane(table));
+    }
+
+    private void addBogorTable(JPanel panel) {
+        JLabel label = createLabel("Bogor Station Schedule");
+        JTable table = createTable();
+        DefaultTableModel model = createTableModel();
+        table.setModel(model);
+        populateTable(model, 3);
+
+        panel.add(label);
+        panel.add(new JScrollPane(table));
+    }
+
+    private void addCirebonTable(JPanel panel) {
+        JLabel label = createLabel("Cirebon Station Schedule");
+        JTable table = createTable();
+        DefaultTableModel model = createTableModel();
+        table.setModel(model);
+        populateTable(model, 4);
+
+        panel.add(label);
+        panel.add(new JScrollPane(table));
+    }
+
+    private void addDepokTable(JPanel panel) {
+        JLabel label = createLabel("Depok Station Schedule");
+        JTable table = createTable();
+        DefaultTableModel model = createTableModel();
+        table.setModel(model);
+        populateTable(model, 5);
+
+        panel.add(label);
+        panel.add(new JScrollPane(table));
     }
 
     private JLabel createLabel(String text) {
@@ -122,15 +164,20 @@ public class ListScheduleScreen extends JFrame {
                     schedule.getTrainID(),
                     stationController.getStationNameById(schedule.getDeparture()),
                     stationController.getStationNameById(schedule.getArrival()),
-                    schedule.getArrival(),
                     schedule.getDepartureDate(),
                     schedule.getFee()
             });
         }
     }
 
-    public static void main(String[] args) {
+    // Testing
+    public static void test() {
         ListScheduleScreen listScheduleScreen = new ListScheduleScreen();
+        listScheduleScreen.displayBandungSchedule();
+        listScheduleScreen.displayBekasiSchedule();
+        listScheduleScreen.displayBogorSchedule();
+        listScheduleScreen.displayCirebonSchedule();
+        listScheduleScreen.displayDepokSchedule();
         listScheduleScreen.setVisible(true);
     }
 }
