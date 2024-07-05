@@ -44,6 +44,29 @@ public class TrainController {
         return trains;
     }
 
+    private static Train getTrainById(int train_id) {
+        Train train = null;
+        ConnectionHandler conn = new ConnectionHandler();
+
+        String query = "SELECT * FROM train WHERE train_id = '" + train_id + "'";
+        try {
+            conn.connect();
+            PreparedStatement st = conn.con.prepareStatement(query);
+            st.executeQuery(query);
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                Carriage[] carriages = getCarriage(train_id);
+                int speed = rs.getInt("speed");
+
+                train = new Train(train_id, carriages, speed);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
+        return train;
+    }
+
     public Carriage[] getCarriage(int train_id) {
         Carriage[] carriages = new Carriage[5];
         ConnectionHandler conn = new ConnectionHandler();

@@ -1,6 +1,5 @@
 package view.Schedule;
 
-import controller.ScheduleController;
 import controller.StationController;
 import controller.TrainController;
 import model.classes.Schedule;
@@ -8,7 +7,6 @@ import model.classes.Schedule;
 import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class ScheduleDetailScreen extends JFrame {
 
