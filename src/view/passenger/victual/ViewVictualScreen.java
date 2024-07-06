@@ -1,4 +1,4 @@
-package view.passenger;
+package view.passenger.victual;
 
 import controller.CartController;
 import controller.ImageController;

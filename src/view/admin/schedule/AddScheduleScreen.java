@@ -1,4 +1,4 @@
-package view.admin;
+package view.admin.schedule;
 
 import com.toedter.calendar.JDateChooser;
 import controller.ScheduleController;
@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class AddScheduleScreen extends JFrame {
-    private final TrainController trainController = new TrainController();
     private final StationController stationController = new StationController();
     private final ScheduleController schController = new ScheduleController();
     private final JComboBox<Integer> trainList = new JComboBox<>();
