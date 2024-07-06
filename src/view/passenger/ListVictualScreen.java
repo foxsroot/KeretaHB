@@ -1,18 +1,13 @@
 package view.passenger;
 
-import config.DirectoryConfig;
 import controller.ImageController;
 import controller.VictualController;
-import model.classes.Notification;
 import model.classes.Victual;
-import view.ViewVictualScreen;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.HashMap;
 
 public class ListVictualScreen extends JFrame {
