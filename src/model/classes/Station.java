@@ -1,22 +1,19 @@
 package model.classes;
 
-import controller.ConnectionHandler;
-
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Station {
-    private ArrayList<Integer> schedules_id;
+    private ArrayList<Schedule> schedules;
     private HashMap<Integer, Integer> victual; //victual_id, stock
     private String name;
     private Integer id;
     private String location;
-    private ArrayList<String> trainList;
+    private ArrayList<Train> trainList;
     private double income;
 
-    public Station(ArrayList<Integer> schedules, String name, Integer id, String location, ArrayList<String> trainList, double income) {
-        this.schedules_id = schedules;
+    public Station(ArrayList<Schedule> schedules, String name, Integer id, String location, ArrayList<Train> trainList, double income) {
+        this.schedules = schedules;
         this.name = name;
         this.id = id;
         this.location = location;
@@ -24,12 +21,12 @@ public class Station {
         this.income = income;
     }
 
-    public ArrayList<Integer> getSchedules() {
-        return schedules_id;
+    public ArrayList<Schedule> getSchedules() {
+        return schedules;
     }
 
-    public void setSchedules(ArrayList<Integer> schedules) {
-        this.schedules_id = schedules;
+    public void setSchedules(ArrayList<Schedule> schedules) {
+        this.schedules = schedules;
     }
 
     public String getName() {
@@ -56,11 +53,11 @@ public class Station {
         this.location = location;
     }
 
-    public ArrayList<String> getTrainList() {
+    public ArrayList<Train> getTrainList() {
         return trainList;
     }
 
-    public void setTrainList(ArrayList<String> trainList) {
+    public void setTrainList(ArrayList<Train> trainList) {
         this.trainList = trainList;
     }
 
@@ -70,22 +67,5 @@ public class Station {
 
     public void setIncome(double income) {
         this.income = income;
-    }
-
-    public String getStationNameById(Integer station_id){
-        String query = "SELECT * FROM station WHERE station_id = '" + station_id + "'";
-        try{
-            ConnectionHandler conn = new ConnectionHandler();
-            conn.connect();
-            java.sql.PreparedStatement st = conn.con.prepareStatement(query);
-            ResultSet rs = st.executeQuery();
-            if(rs.next()){
-                String name = rs.getString("name");
-            }
-            return name;
-        }catch(Exception e){
-            e.printStackTrace();
-            return null;
-        }
     }
 }

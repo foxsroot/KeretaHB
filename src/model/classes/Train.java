@@ -19,6 +19,7 @@ public class Train {
         this.id = id;
     }
 
+
     public void setSpeed(Integer speed) {
         this.speed = speed;
     }

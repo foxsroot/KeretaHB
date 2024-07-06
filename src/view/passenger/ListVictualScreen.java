@@ -1,4 +1,4 @@
-package view;
+package view.passenger;
 
 import config.DirectoryConfig;
 import controller.ImageController;
