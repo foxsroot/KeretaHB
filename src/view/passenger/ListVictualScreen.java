@@ -123,7 +123,7 @@ public class ListVictualScreen extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 dispose();
-                new ViewVictualScreen(victual, controller.getStock(victual.getId(), selectedStation));
+                new ViewVictualScreen(victual, selectedStation);
             }
 
             @Override

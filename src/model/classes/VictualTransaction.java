@@ -1,30 +1,31 @@
 package model.classes;
 
 import java.util.Date;
+import java.util.HashMap;
 
 public class VictualTransaction extends Transaction {
-    Integer victual_id;
-    int quantity;
+    HashMap<Integer, Integer> items; //id, quantity
+    Integer station_id;
 
-    public VictualTransaction(Integer transactionID, Date datePurchase, Integer item, int quantity) {
+    public VictualTransaction(Integer transactionID, Date datePurchase, HashMap<Integer, Integer> items, Integer station_id) {
         super(transactionID, datePurchase);
-        this.victual_id = item;
-        this.quantity = quantity;
+        this.items = items;
+        this.station_id = station_id;
     }
 
-    public Integer getVictual_id() {
-        return victual_id;
+    public HashMap<Integer, Integer> getItems() {
+        return items;
     }
 
-    public void setVictual_id(Integer victual_id) {
-        this.victual_id = victual_id;
+    public void setItems(HashMap<Integer, Integer> items) {
+        this.items = items;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public Integer getStation_id() {
+        return station_id;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setStation_id(Integer station_id) {
+        this.station_id = station_id;
     }
 }

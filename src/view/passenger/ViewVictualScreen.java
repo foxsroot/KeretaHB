@@ -2,8 +2,9 @@ package view.passenger;
 
 import controller.CartController;
 import controller.ImageController;
+import controller.VictualController;
 import model.classes.Victual;
-import view.passenger.transaction.VictualCheckoutScreen;
+import view.passenger.transaction.CartCheckoutScreen;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -12,11 +13,11 @@ import java.text.NumberFormat;
 
 public class ViewVictualScreen extends JFrame {
     Victual victual;
-    int stock;
+    int stationId;
 
-    public ViewVictualScreen(Victual victual, int stock) {
+    public ViewVictualScreen(Victual victual, int stationId) {
         this.victual = victual;
-        this.stock = stock;
+        this.stationId = stationId;
         initComponents();
         this.setVisible(true);
     }
@@ -55,6 +56,9 @@ public class ViewVictualScreen extends JFrame {
         itemPrice.setFont(new Font("calibri", Font.PLAIN, 27));
         itemPrice.setBounds(300, 70, 250, 30);
         itemPanel.add(itemPrice);
+
+        VictualController controller = new VictualController();
+        int stock = controller.getStock(victual.getId(), stationId);
 
         NumberFormat format = NumberFormat.getIntegerInstance();
         NumberFormatter numberFormatter = new NumberFormatter(format);
@@ -110,8 +114,8 @@ public class ViewVictualScreen extends JFrame {
             int confirm = JOptionPane.showConfirmDialog(null, "Add " + victual.getName() + " to Cart?", "Add to Cart", JOptionPane.YES_NO_OPTION);
 
             if (confirm == JOptionPane.YES_OPTION) {
-                CartController controller = new CartController();
-                if (controller.addToCart(2, victual.getId(), Integer.parseInt(quantityField.getText()))) {
+                CartController cartController = new CartController();
+                if (cartController.addToCart(2, victual.getId(), Integer.parseInt(quantityField.getText()), stationId)) {
                     JOptionPane.showMessageDialog(null, "Successfully added " + victual.getName() + " to Cart!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(null, "Failed to add item to the cart", "Error", JOptionPane.ERROR_MESSAGE);
@@ -124,8 +128,15 @@ public class ViewVictualScreen extends JFrame {
         purchasePanel.add(checkoutButton);
 
         checkoutButton.addActionListener(e -> {
-            dispose();
-            new VictualCheckoutScreen(victual, Integer.parseInt(quantityField.getText()));
+            int confirm = JOptionPane.showConfirmDialog(null, "Add " + victual.getName() + " to Cart and Checkout?", "Checkout", JOptionPane.YES_NO_OPTION);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                CartController cartController = new CartController();
+                if (cartController.addToCart(2, victual.getId(), Integer.parseInt(quantityField.getText()), stationId)) {
+                    dispose();
+                    new CartCheckoutScreen(stationId);
+                }
+            }
         });
 
         itemPanel.add(purchasePanel);

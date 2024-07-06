@@ -3,7 +3,7 @@ package model.classes;
 import java.util.HashMap;
 
 public class Cart {
-    private HashMap<Integer, Integer> victual; //victual_id, amount
+    private HashMap<Integer, Integer> victual; //victual_id, qty
     private double totalPrice;
 
 
