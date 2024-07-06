@@ -5,6 +5,7 @@ import controller.ImageController;
 import controller.VictualController;
 import model.classes.Notification;
 import model.classes.Victual;
+import view.ViewVictualScreen;
 
 import javax.swing.*;
 import java.awt.*;
