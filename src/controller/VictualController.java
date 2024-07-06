@@ -7,24 +7,30 @@ import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class VictualController {
     ConnectionHandler conn = new ConnectionHandler();
 
-    public List<Victual> listVictual(int stationId) {
+    public HashMap<Victual, Integer> listVictual(int stationId) {
         conn.connect();
-        List<Victual> victuals = new ArrayList<>();
-        String query = "SELECT * FROM stock WHERE station_id = ?";
+
+        HashMap<Victual, Integer> victuals = new HashMap<>();
+        String query = "SELECT vict.*, stck.stock FROM victual vict JOIN stock stck ON vict.victual_id = stck.victual_id WHERE station_id = ?";
 
         try {
             PreparedStatement stmt = conn.con.prepareStatement(query);
             stmt.setInt(1, stationId);
             ResultSet rs = stmt.executeQuery();
+
             while (rs.next()) {
-                victuals.add(getVictual(rs.getInt("victual_id")));
+                Victual victual = new Victual();
+                victual.setId(rs.getInt("victual_id"));
+                victual.setName(rs.getString("name"));
+                victual.setImage(rs.getString("picture"));
+                victual.setPrice(rs.getDouble("price"));
+
+                victuals.put(victual, rs.getInt("stock"));
             }
         } catch (SQLException e) {
             e.printStackTrace();

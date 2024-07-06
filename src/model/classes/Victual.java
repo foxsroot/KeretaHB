@@ -12,6 +12,8 @@ public class Victual {
         this.price = price;
     }
 
+    public Victual() {}
+
     public Integer getId() {
         return id;
     }
