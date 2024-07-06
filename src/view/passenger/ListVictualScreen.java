@@ -122,6 +122,7 @@ public class ListVictualScreen extends JFrame {
         victualPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                dispose();
                 new ViewVictualScreen(victual, controller.getStock(victual.getId(), selectedStation));
             }
 

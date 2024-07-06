@@ -1,7 +1,9 @@
 package view.passenger;
 
+import controller.CartController;
 import controller.ImageController;
 import model.classes.Victual;
+import view.passenger.transaction.VictualCheckoutScreen;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -29,6 +31,11 @@ public class ViewVictualScreen extends JFrame {
 
         JButton exitButton = new JButton("Back to victual list");
         exitButton.setBounds(10, 10, 150, 20);
+
+        exitButton.addActionListener(e -> {
+            dispose();
+            new ListVictualScreen();
+        });
 
         JPanel itemPanel = new JPanel();
         itemPanel.setBackground(Color.WHITE);
@@ -59,7 +66,7 @@ public class ViewVictualScreen extends JFrame {
         JPanel qtyPanel = new JPanel();
         qtyPanel.setLayout(null);
         qtyPanel.setBackground(null);
-        qtyPanel.setBounds(300, 120, 200, 50);
+        qtyPanel.setBounds(300, 120, 120, 50);
 
         JFormattedTextField quantityField = new JFormattedTextField(numberFormatter);
         quantityField.setFont(new Font("calibri", Font.BOLD, 30));
@@ -90,6 +97,39 @@ public class ViewVictualScreen extends JFrame {
 
         itemPanel.add(qtyPanel);
 
+        JPanel purchasePanel = new JPanel();
+        purchasePanel.setLayout(null);
+        purchasePanel.setBackground(null);
+        purchasePanel.setBounds(440, 125, 400, 50);
+
+        JButton addToCartButton = new JButton("Add to Cart");
+        addToCartButton.setBounds(0, 0, 100, 40);
+        purchasePanel.add(addToCartButton);
+
+        addToCartButton.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(null, "Add " + victual.getName() + " to Cart?", "Add to Cart", JOptionPane.YES_NO_OPTION);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                CartController controller = new CartController();
+                if (controller.addToCart(2, victual.getId(), Integer.parseInt(quantityField.getText()))) {
+                    JOptionPane.showMessageDialog(null, "Successfully added " + victual.getName() + " to Cart!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to add item to the cart", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        JButton checkoutButton = new JButton("Checkout");
+        checkoutButton.setBounds(115, 0, 100, 40);
+        purchasePanel.add(checkoutButton);
+
+        checkoutButton.addActionListener(e -> {
+            dispose();
+            new VictualCheckoutScreen(victual, Integer.parseInt(quantityField.getText()));
+        });
+
+        itemPanel.add(purchasePanel);
+
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
         separator.setBounds(300, 185, 540, 10);
         itemPanel.add(separator);
@@ -104,7 +144,7 @@ public class ViewVictualScreen extends JFrame {
         description.setText(victual.getDescription());
         description.setLineWrap(true);
         description.setFont(new Font("calibri", Font.PLAIN, 20));
-        description.setBounds(300, 240, 500, 500);
+        description.setBounds(300, 240, 540, 500);
         itemPanel.add(description);
 
         JScrollPane scrollPane = new JScrollPane(itemPanel);
