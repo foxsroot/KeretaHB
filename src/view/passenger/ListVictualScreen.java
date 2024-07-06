@@ -14,10 +14,10 @@ public class ListVictualScreen extends JFrame {
     HashMap<Victual, Integer> victuals;
     JPanel victualPanel;
     JScrollPane scrollPane;
+    VictualController controller = new VictualController();
+    int selectedStation;
 
     public ListVictualScreen() {
-        VictualController controller = new VictualController();
-        victuals = controller.listVictual(1);
         initComponents();
         this.setVisible(true);
     }
@@ -42,14 +42,16 @@ public class ListVictualScreen extends JFrame {
         stationSelection.setBounds(120, 40, 150, 20);
 
         stationSelection.addActionListener(e -> {
-            VictualController controller = new VictualController();
-            int selectedStation = stationSelection.getSelectedIndex(); //Nanti diubah, harus ambil key nya hehe
+            selectedStation = stationSelection.getSelectedIndex(); //Nanti diubah, harus ambil key nya hehe
             victuals = controller.listVictual(selectedStation);
             loadVictuals();
         });
 
+        selectedStation = stationSelection.getSelectedIndex();
+        victuals = controller.listVictual(selectedStation);
         victualPanel = new JPanel();
         victualPanel.setLayout(null);
+
         scrollPane = new JScrollPane(victualPanel);
         loadVictuals();
 
@@ -120,7 +122,7 @@ public class ListVictualScreen extends JFrame {
         victualPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                new ViewVictualScreen(victual);
+                new ViewVictualScreen(victual, controller.getStock(victual.getId(), selectedStation));
             }
 
             @Override
