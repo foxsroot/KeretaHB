@@ -1,4 +1,4 @@
-package view.passenger.Schedule;
+package view.passenger.schedule;
 
 import controller.StationController;
 import controller.TrainController;

@@ -1,4 +1,4 @@
-package view.admin;
+package view.admin.notification;
 
 import controller.NotificationController;
 
