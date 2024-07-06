@@ -50,7 +50,7 @@ public class VictualController {
         try {
             PreparedStatement stmt = conn.con.prepareStatement(query);
             stmt.setInt(1, victualId);
-            ResultSet rs = stmt.executeQuery(query);
+            ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 victual = new Victual(rs.getInt("victual_id"), rs.getString("name"), rs.getDouble("price"), rs.getString("description"));

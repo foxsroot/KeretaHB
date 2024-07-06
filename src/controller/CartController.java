@@ -6,6 +6,7 @@ import model.classes.Passenger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.HashMap;
 
 public class CartController {
@@ -13,15 +14,42 @@ public class CartController {
 
     public boolean addToCart(int userId, int victualId, int amount, int station_id) {
         conn.connect();
-        String query = "INSERT INTO cart_item (user_id, victual_id, station_id, amount) VALUES (?, ?, ?, ?)";
+
+        String checkQuery = "SELECT * FROM cart_item WHERE user_id = ? AND victual_id = ? AND station_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = conn.con.prepareStatement(checkQuery);
             stmt.setInt(1, userId);
             stmt.setInt(2, victualId);
             stmt.setInt(3, station_id);
-            stmt.setInt(4, amount);
-            stmt.executeUpdate();
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int currentAmount = rs.getInt("amount");
+
+                String updateQuery = "UPDATE cart_item SET amount = ? WHERE user_id = ? AND victual_id = ? AND station_id = ?";
+                PreparedStatement updateStmt = conn.con.prepareStatement(updateQuery);
+                updateStmt.setInt(1, currentAmount + amount);
+                updateStmt.setInt(2, userId);
+                updateStmt.setInt(3, victualId);
+                updateStmt.setInt(4, station_id);
+
+                updateStmt.executeUpdate();
+                updateStmt.close();
+            } else {
+                String insertQuery = "INSERT INTO cart_item (user_id, victual_id, station_id, amount) VALUES (?, ?, ?, ?)";
+                PreparedStatement insertStmt = conn.con.prepareStatement(insertQuery);
+                insertStmt.setInt(1, userId);
+                insertStmt.setInt(2, victualId);
+                insertStmt.setInt(3, station_id);
+                insertStmt.setInt(4, amount);
+
+                insertStmt.executeUpdate();
+                insertStmt.close();
+            }
+
+            rs.close();
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -69,12 +97,14 @@ public class CartController {
     }
 
     public boolean checkout(Passenger passenger, int station_id, double total) {
-        conn.connect();
         int transaction_id = -1;
 
         if (!deductBalance(passenger, total)) {
+            System.out.println("Balance ga cukup ngab");
             return false;
         }
+
+        conn.connect();
 
         String query = "INSERT INTO victuals_transaction(user_id, station_id, date) VALUES(?, ?, ?)";
 
@@ -82,7 +112,7 @@ public class CartController {
             PreparedStatement stmt = conn.con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, passenger.getId());
             stmt.setInt(2, station_id);
-            stmt.setDate(3, new java.sql.Date(System.currentTimeMillis()));
+            stmt.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
 
             stmt.executeUpdate();
 
@@ -92,13 +122,23 @@ public class CartController {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            System.out.println("Gagal add ke victuals_transaction");
             return false;
+        } finally {
+            conn.disconnect();
         }
 
         Cart cart = getCart(passenger.getId());
 
         if (transaction_id != -1) {
             for (Integer victual_id : cart.getVictual().keySet()) {
+                StockController stockController = new StockController();
+
+                if (!stockController.deductStock(cart.getVictual().get(victual_id), victual_id, station_id)) {
+                    return false;
+                }
+
+                conn.connect();
                 String itemQuery = "INSERT INTO transaction_item(transaction_id, victual_id, quantity) VALUES(?, ?, ?)";
 
                 try {
@@ -110,19 +150,22 @@ public class CartController {
                     stmt.executeUpdate();
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    System.out.println("Gagal add ke transaction_item");
                     conn.disconnect();
                     return false;
+                } finally {
+                    conn.disconnect();
                 }
             }
         }
 
-        conn.disconnect();
         clearCart(passenger.getId());
         return true;
     }
 
     private boolean deductBalance(Passenger passenger, double amount) {
         if (passenger.getWallet().getBalance() < amount) {
+            System.out.println("weitss kurang beneran");
             return false;
         }
 
@@ -135,6 +178,7 @@ public class CartController {
             stmt.setInt(2, passenger.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
+            System.out.println("Hayolo error");
             e.printStackTrace();
             return false;
         } finally {
