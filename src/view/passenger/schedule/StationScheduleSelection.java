@@ -1,4 +1,4 @@
-package view.passenger.Schedule;
+package view.passenger.schedule;
 
 import javax.swing.*;
 import java.awt.*;

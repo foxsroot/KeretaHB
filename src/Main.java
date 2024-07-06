@@ -1,9 +1,13 @@
-import view.passenger.Schedule.ListScheduleScreen;
+import view.passenger.schedule.ListScheduleScreen;
+import view.passenger.station.StationListScreen;
 
 public class Main {
     public static void main(String[] args) {
 
-        ListScheduleScreen.test();
+//        ListScheduleScreen.test();
+
+        StationListScreen screen = new StationListScreen();
+        screen.setVisible(true);
 
 //        StationScheduleSelection test = new StationScheduleSelection();
 //        test.setVisible(true);

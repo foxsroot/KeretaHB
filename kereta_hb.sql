@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 06, 2024 at 07:17 AM
+-- Generation Time: Jul 06, 2024 at 09:39 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -49,6 +49,72 @@ CREATE TABLE `carriage` (
   `class` enum('ECONOMY','BUSINESS','EXECUTIVE') DEFAULT NULL,
   `baggage_allowance` double UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `carriage`
+--
+
+INSERT INTO `carriage` (`carriage_id`, `train_id`, `type`, `capacity`, `class`, `baggage_allowance`) VALUES
+(1, 1, 'TOILET', 0, 'ECONOMY', 0),
+(2, 1, 'EATERY', 50, 'ECONOMY', 10),
+(3, 1, 'SEATING', 100, 'ECONOMY', 20),
+(4, 1, 'SEATING', 80, 'BUSINESS', 30),
+(5, 1, 'SEATING', 70, 'EXECUTIVE', 40),
+(6, 2, 'TOILET', 0, 'ECONOMY', 0),
+(7, 2, 'EATERY', 50, 'BUSINESS', 10),
+(8, 2, 'SEATING', 100, 'BUSINESS', 20),
+(9, 2, 'SEATING', 80, 'EXECUTIVE', 30),
+(10, 2, 'SEATING', 70, 'ECONOMY', 40),
+(11, 3, 'TOILET', 0, 'ECONOMY', 0),
+(12, 3, 'EATERY', 50, 'EXECUTIVE', 10),
+(13, 3, 'SEATING', 100, 'EXECUTIVE', 20),
+(14, 3, 'SEATING', 80, 'ECONOMY', 30),
+(15, 3, 'SEATING', 70, 'BUSINESS', 40),
+(16, 4, 'TOILET', 0, 'ECONOMY', 0),
+(17, 4, 'EATERY', 50, 'ECONOMY', 10),
+(18, 4, 'SEATING', 100, 'ECONOMY', 20),
+(19, 4, 'SEATING', 80, 'BUSINESS', 30),
+(20, 4, 'SEATING', 70, 'EXECUTIVE', 40),
+(21, 5, 'TOILET', 0, 'ECONOMY', 0),
+(22, 5, 'EATERY', 50, 'BUSINESS', 10),
+(23, 5, 'SEATING', 100, 'BUSINESS', 20),
+(24, 5, 'SEATING', 80, 'EXECUTIVE', 30),
+(25, 5, 'SEATING', 70, 'ECONOMY', 40),
+(26, 6, 'TOILET', 0, 'ECONOMY', 0),
+(27, 6, 'EATERY', 50, 'ECONOMY', 10),
+(28, 6, 'SEATING', 100, 'ECONOMY', 20),
+(29, 6, 'SEATING', 80, 'BUSINESS', 30),
+(30, 6, 'SEATING', 70, 'EXECUTIVE', 40),
+(31, 7, 'TOILET', 0, 'ECONOMY', 0),
+(32, 7, 'EATERY', 50, 'ECONOMY', 10),
+(33, 7, 'SEATING', 100, 'ECONOMY', 20),
+(34, 7, 'SEATING', 80, 'BUSINESS', 30),
+(35, 7, 'SEATING', 70, 'EXECUTIVE', 40),
+(36, 8, 'TOILET', 0, 'ECONOMY', 0),
+(37, 8, 'EATERY', 50, 'ECONOMY', 10),
+(38, 8, 'SEATING', 100, 'ECONOMY', 20),
+(39, 8, 'SEATING', 80, 'BUSINESS', 30),
+(40, 8, 'SEATING', 70, 'EXECUTIVE', 40),
+(41, 9, 'TOILET', 0, 'ECONOMY', 0),
+(42, 9, 'EATERY', 50, 'ECONOMY', 10),
+(43, 9, 'SEATING', 100, 'ECONOMY', 20),
+(44, 9, 'SEATING', 80, 'BUSINESS', 30),
+(45, 9, 'SEATING', 70, 'EXECUTIVE', 40),
+(46, 10, 'TOILET', 0, 'ECONOMY', 0),
+(47, 10, 'EATERY', 50, 'ECONOMY', 10),
+(48, 10, 'SEATING', 100, 'ECONOMY', 20),
+(49, 10, 'SEATING', 80, 'BUSINESS', 30),
+(50, 10, 'SEATING', 70, 'EXECUTIVE', 40),
+(51, 11, 'TOILET', 0, 'ECONOMY', 0),
+(52, 11, 'EATERY', 50, 'ECONOMY', 10),
+(53, 11, 'SEATING', 100, 'ECONOMY', 20),
+(54, 11, 'SEATING', 80, 'BUSINESS', 30),
+(55, 11, 'SEATING', 70, 'EXECUTIVE', 40),
+(56, 12, 'TOILET', 0, 'ECONOMY', 0),
+(57, 12, 'EATERY', 50, 'ECONOMY', 10),
+(58, 12, 'SEATING', 100, 'ECONOMY', 20),
+(59, 12, 'SEATING', 80, 'BUSINESS', 30),
+(60, 12, 'SEATING', 70, 'EXECUTIVE', 40);
 
 -- --------------------------------------------------------
 
@@ -205,6 +271,27 @@ CREATE TABLE `schedule` (
   `fee` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Dumping data for table `schedule`
+--
+
+INSERT INTO `schedule` (`schedule_id`, `train_id`, `departure_station_id`, `arrival_station_id`, `departure_date`, `fee`) VALUES
+(1, 1, 1, 2, '2024-07-10', 50),
+(2, 2, 1, 3, '2024-07-11', 55),
+(3, 3, 1, 4, '2024-07-12', 60),
+(4, 4, 2, 1, '2024-07-10', 45),
+(5, 5, 2, 3, '2024-07-11', 55),
+(6, 6, 2, 4, '2024-07-12', 65),
+(7, 7, 3, 1, '2024-07-10', 55),
+(8, 8, 3, 2, '2024-07-11', 50),
+(9, 9, 3, 4, '2024-07-12', 70),
+(10, 10, 4, 1, '2024-07-10', 60),
+(11, 11, 4, 2, '2024-07-11', 65),
+(12, 12, 4, 3, '2024-07-12', 75),
+(13, 13, 5, 1, '2024-07-10', 70),
+(14, 14, 5, 2, '2024-07-11', 75),
+(15, 15, 5, 3, '2024-07-12', 80);
+
 -- --------------------------------------------------------
 
 --
@@ -223,9 +310,11 @@ CREATE TABLE `station` (
 --
 
 INSERT INTO `station` (`station_id`, `name`, `location`, `income`) VALUES
-(1, 'GAMBIR STATION', 'Gambir Road, 15-20', 190000000),
-(2, 'HALIM STATION', 'Padalarang Road, 12-17', 220000000),
-(3, 'TEGALLUAR STATION', 'Tegalluar Road, 30-40', 300000000);
+(1, 'Bandung Station', 'Bandung, West Java', 50000),
+(2, 'Bekasi Station', 'Bekasi, West Java', 45000),
+(3, 'Bogor Station', 'Bogor, West Java', 47000),
+(4, 'Cirebon Station', 'Cirebon, West Java', 48000),
+(5, 'Depok Station', 'Depok, West Java', 46000);
 
 -- --------------------------------------------------------
 
@@ -276,9 +365,30 @@ CREATE TABLE `ticket_transaction` (
 
 CREATE TABLE `train` (
   `train_id` int(11) NOT NULL,
-  `station_id` int(11) DEFAULT NULL,
-  `type` enum('TRAIN','SUPER_TRAIN') DEFAULT NULL
+  `station_id` int(11) NOT NULL,
+  `speed` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `train`
+--
+
+INSERT INTO `train` (`train_id`, `station_id`, `speed`) VALUES
+(1, 1, 100),
+(2, 2, 105),
+(3, 3, 110),
+(4, 4, 115),
+(5, 5, 120),
+(6, 1, 95),
+(7, 2, 100),
+(8, 3, 105),
+(9, 4, 110),
+(10, 5, 115),
+(11, 1, 120),
+(12, 2, 125),
+(13, 3, 130),
+(14, 4, 135),
+(15, 5, 140);
 
 -- --------------------------------------------------------
 
@@ -463,10 +573,16 @@ ALTER TABLE `passenger`
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `schedule`
+--
+ALTER TABLE `schedule`
+  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
 -- AUTO_INCREMENT for table `station`
 --
 ALTER TABLE `station`
-  MODIFY `station_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `station_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `stock`

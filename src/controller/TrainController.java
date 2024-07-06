@@ -103,4 +103,26 @@ public class TrainController {
         }
         return carriages;
     }
+
+    public List<Train> getTrainsByStationId(int stationId) {
+        List<Train> trains = new ArrayList<>();
+        String query = "SELECT * FROM train WHERE station_id = ?";
+        try {
+            ConnectionHandler conn = new ConnectionHandler();
+            conn.connect();
+            PreparedStatement st = conn.con.prepareStatement(query);
+            st.setInt(1, stationId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                int trainId = rs.getInt("train_id");
+                int speed = rs.getInt("speed");
+                Carriage[] carriages = getCarriage(trainId);
+
+                trains.add(new Train(trainId, carriages, speed));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return trains;
+    }
 }

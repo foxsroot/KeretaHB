@@ -1,4 +1,4 @@
-package view.passenger;
+package view.passenger.victual;
 
 import controller.ImageController;
 import model.classes.Victual;
