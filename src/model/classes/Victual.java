@@ -5,11 +5,13 @@ public class Victual {
     private String name;
     private String image;
     private double price;
+    private String description;
 
-    public Victual(Integer id, String name, double price) {
+    public Victual(Integer id, String name, double price, String description) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.description = description;
     }
 
     public Victual() {}
@@ -44,5 +46,13 @@ public class Victual {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

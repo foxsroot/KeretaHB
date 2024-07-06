@@ -29,6 +29,7 @@ public class VictualController {
                 victual.setName(rs.getString("name"));
                 victual.setImage(rs.getString("picture"));
                 victual.setPrice(rs.getDouble("price"));
+                victual.setDescription(rs.getString("description"));
 
                 victuals.put(victual, rs.getInt("stock"));
             }
@@ -52,7 +53,7 @@ public class VictualController {
             ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()) {
-                victual = new Victual(rs.getInt("victual_id"), rs.getString("name"), rs.getDouble("price"));
+                victual = new Victual(rs.getInt("victual_id"), rs.getString("name"), rs.getDouble("price"), rs.getString("description"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -161,7 +162,7 @@ public class VictualController {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                return rs.getInt("victual_id");
+                return rs.getInt("stock");
             }
         } catch (SQLException e) {
             e.printStackTrace();
