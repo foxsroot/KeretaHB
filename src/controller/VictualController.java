@@ -7,10 +7,37 @@ import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class VictualController {
     ConnectionHandler conn = new ConnectionHandler();
+
+    public List<Victual> getVictualList() {
+        conn.connect();
+
+        List<Victual> victualList = new ArrayList<>();
+        String query = "SELECT * FROM victual";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Victual victual = new Victual();
+                victual.setId(rs.getInt("victual_id"));
+                victual.setPrice(rs.getDouble("price"));
+                victual.setImage(rs.getString("picture"));
+                victual.setName(rs.getString("name"));
+                victual.setDescription(rs.getString("description"));
+                victualList.add(victual);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return victualList;
+    }
 
     public boolean verifyForm(String name, String price, String description, File photo) {
         if (name != null && price != null && description != null && photo != null) {
@@ -74,20 +101,28 @@ public class VictualController {
         return victual;
     }
 
-    public boolean editVictual(HashMap<String, Object > field) {
-        File picture = (File) field.get("picture");
-        Victual oldVictual = (Victual) field.get("oldVictual");
+    public boolean editVictual(Victual oldVictual, String name, String price, String description, File picture) {
+        price = price.replaceAll(",", "");
+
+        double priceValue = 0;
+
+        try {
+            priceValue = Double.parseDouble(price);
+        } catch (NumberFormatException e) {
+            return false;
+        }
 
         conn.connect();
 
         if (oldVictual.getImage().equals(picture.getName())) {
-            String query = "UPDATE victual SET name = ?, price = ? WHERE victual_id = ?";
+            String query = "UPDATE victual SET name = ?, price = ?, description = ? WHERE victual_id = ?";
 
             try {
                 PreparedStatement stmt = conn.con.prepareStatement(query);
-                stmt.setString(1, (String) field.get("name"));
-                stmt.setDouble(2, (double) field.get("price"));
-                stmt.setInt(3, oldVictual.getId());
+                stmt.setString(1, name);
+                stmt.setDouble(2, priceValue);
+                stmt.setString(3, description);
+                stmt.setInt(4, oldVictual.getId());
 
                 stmt.executeUpdate();
             } catch (SQLException e) {
@@ -97,19 +132,26 @@ public class VictualController {
                 conn.disconnect();
             }
         } else {
-            if (ImageController.saveImage(picture, picture.getName(), DirectoryConfig.VICTUAL_IMAGES)) {
-                String query = "UPDATE victual SET name = ?, price = ?, picture = ? WHERE victual_id = ?";
+            ImageController.deleteImage(DirectoryConfig.VICTUAL_IMAGES + oldVictual.getImage());
+
+            String fileName = ImageController.generateName(picture);
+
+            if (ImageController.saveImage(picture, fileName, DirectoryConfig.VICTUAL_IMAGES)) {
+                String query = "UPDATE victual SET name = ?, price = ?, description = ?, picture = ? WHERE victual_id = ?";
 
                 try {
                     PreparedStatement stmt = conn.con.prepareStatement(query);
-                    stmt.setString(1, (String) field.get("name"));
-                    stmt.setDouble(2, (double) field.get("price"));
-                    stmt.setString(3, picture.getName());
-                    stmt.setInt(4, oldVictual.getId());
+                    stmt.setString(1, name);
+                    stmt.setDouble(2, priceValue);
+                    stmt.setString(3, description);
+                    stmt.setString(4, fileName);
+                    stmt.setInt(5, oldVictual.getId());
                     stmt.executeUpdate();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     return false;
+                } finally {
+                    conn.disconnect();
                 }
             }
         }
@@ -208,6 +250,47 @@ public class VictualController {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+
+        return true;
+    }
+
+    public boolean insertNewStock(int victualId, int stationId, int initialStock) {
+        conn.connect();
+
+        String query = "INSERT INTO stock(victual_id, station_id, stock) VALUES (?, ?, ?) ";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, victualId);
+            stmt.setInt(2, stationId);
+            stmt.setInt(3, initialStock);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            conn.disconnect();
+        }
+
+        return true;
+    }
+
+    public boolean removeFromStation(int victualId, int stationId) {
+        conn.connect();
+
+        String query = "DELETE FROM stock WHERE victual_id = ? AND station_id = ?";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, victualId);
+            stmt.setInt(2, stationId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            conn.disconnect();
         }
 
         return true;
