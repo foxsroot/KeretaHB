@@ -5,6 +5,7 @@ import model.classes.Train;
 import model.enums.CarriageType;
 import model.enums.ClassType;
 
+import javax.swing.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class TrainController {
                 Integer station_id = rs.getInt("station_id");
                 int speed = rs.getInt("speed");
 
-                Train train = new Train(id, getCarriage(id), speed);
+                Train train = new Train(station_id, getCarriage(id), speed).addId(id);
                 trains.add(train);
             }
         } catch (Exception e) {
@@ -68,10 +69,11 @@ public class TrainController {
             ResultSet rs = st.executeQuery();
 
             if (rs.next()) {
+                Integer station_id = rs.getInt("station_id");
                 Carriage[] carriages = getCarriage(train_id);
                 int speed = rs.getInt("speed");
 
-                train = new Train(train_id, carriages, speed);
+                train = new Train(station_id, carriages, speed).addId(train_id);
             }
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -114,15 +116,50 @@ public class TrainController {
             st.setInt(1, stationId);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
-                int trainId = rs.getInt("train_id");
+                Integer id = rs.getInt("train_id");
+                Integer station_id = rs.getInt("station_id");
                 int speed = rs.getInt("speed");
-                Carriage[] carriages = getCarriage(trainId);
+                Carriage[] carriages = getCarriage(id);
 
-                trains.add(new Train(trainId, carriages, speed));
+                trains.add(new Train(station_id, carriages, speed).addId(id));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return trains;
+    }
+
+    public boolean validateTrainForm(Integer stationId, int speed) {
+        boolean valid = true;
+        if (stationId == null) {
+            JOptionPane.showMessageDialog(null, "Please insert Station ID.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            valid = false;
+        }
+        if (speed < 0) {
+            JOptionPane.showMessageDialog(null, "Please insert the correct Train Speed.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            valid = false;
+        }
+        return valid;
+    }
+
+    public boolean addTrain(Train newTrain, boolean add) {
+        String query = "";
+        if (add) {
+            query = "INSERT INTO train(station_id, speed) VALUES(?,?)";
+        } else {
+            query = "UPDATE train SET station_id =?, speed =? WHERE train_id =?";
+        }
+        ConnectionHandler conn = new ConnectionHandler();
+        try {
+            conn.connect();
+            PreparedStatement st = conn.con.prepareStatement(query);
+            st.setInt(1, newTrain.getStationId());
+            st.setInt(2, newTrain.getSpeed());
+            st.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

@@ -2,13 +2,19 @@ package model.classes;
 
 public class Train {
     private Integer id;
+    private Integer stationId;
     private Carriage[] carriages;
     private Integer speed;
 
-    public Train(Integer id, Carriage[] carriages, Integer speed) {
-        this.id = id;
+    public Train( Integer stationId, Carriage[] carriages, Integer speed) {
+        this.stationId = stationId;
         this.carriages = carriages;
         this.speed = speed;
+    }
+
+    public Train addId(Integer id){
+        this.id = id;
+        return this;
     }
 
     public Integer getId() {
@@ -19,6 +25,13 @@ public class Train {
         this.id = id;
     }
 
+    public Integer getStationId() {
+        return stationId;
+    }
+
+    public void setStationId(Integer stationId) {
+        this.stationId = stationId;
+    }
 
     public void setSpeed(Integer speed) {
         this.speed = speed;
