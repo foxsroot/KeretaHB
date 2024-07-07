@@ -1,13 +1,16 @@
 package view.passenger.victual;
 
 import controller.ImageController;
+import controller.StationController;
 import controller.VictualController;
+import model.classes.Station;
 import model.classes.Victual;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ListVictualScreen extends JFrame {
@@ -15,7 +18,7 @@ public class ListVictualScreen extends JFrame {
     JPanel victualPanel;
     JScrollPane scrollPane;
     VictualController controller = new VictualController();
-    int selectedStation;
+    int selectedStationId;
 
     public ListVictualScreen() {
         initComponents();
@@ -37,18 +40,28 @@ public class ListVictualScreen extends JFrame {
         JLabel stationList = new JLabel("Choose a Station :");
         stationList.setBounds(10, 40, 120, 20);
 
-        String[] stations = { "GAMBIR STATION", "HALIM STATION", "TEGALLUAR STATION" }; //Nanti harus diubah buat ambil dr db :)
-        JComboBox<String> stationSelection = new JComboBox<>(stations);
+        StationController stationController = new StationController();
+        ArrayList<Station> stations = (ArrayList<Station>) stationController.getlistStations();
+
+        String[] stationNames = new String[stations.size()];
+
+        for (int i = 0; i < stations.size(); i++) {
+            stationNames[i] = stations.get(i).getName();
+        }
+
+        JComboBox<String> stationSelection = new JComboBox<>(stationNames);
         stationSelection.setBounds(120, 40, 150, 20);
 
         stationSelection.addActionListener(e -> {
-            selectedStation = stationSelection.getSelectedIndex(); //Nanti diubah, harus ambil key nya hehe
-            victuals = controller.listVictual(selectedStation);
+            int selectedIndex = stationSelection.getSelectedIndex();
+            Station selectedStation = stations.get(selectedIndex);
+            selectedStationId = selectedStation.getId();
+            victuals = controller.listVictual(selectedStationId);
             loadVictuals();
         });
 
-        selectedStation = stationSelection.getSelectedIndex();
-        victuals = controller.listVictual(selectedStation);
+        selectedStationId = stations.get(0).getId();
+        victuals = controller.listVictual(selectedStationId);
         victualPanel = new JPanel();
         victualPanel.setLayout(null);
 
@@ -122,7 +135,8 @@ public class ListVictualScreen extends JFrame {
         victualPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                new ViewVictualScreen(victual, controller.getStock(victual.getId(), selectedStation));
+                dispose();
+                new ViewVictualScreen(victual, selectedStationId);
             }
 
             @Override

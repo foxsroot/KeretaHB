@@ -1,12 +1,22 @@
 package model.classes;
 
 public class Wallet {
+    private Integer wallet_id;
     private Double balance;
     private String pin;
 
-    public Wallet(String pin) {
-        this.balance = 0.0;
+    public Wallet(Integer wallet_id, Double balance, String pin) {
+        this.wallet_id = wallet_id;
+        this.balance = balance;
         this.pin = pin;
+    }
+
+    public Integer getWallet_id() {
+        return wallet_id;
+    }
+
+    public void setWallet_id(Integer wallet_id) {
+        this.wallet_id = wallet_id;
     }
 
     public Double getBalance() {
