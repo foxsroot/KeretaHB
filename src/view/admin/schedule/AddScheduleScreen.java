@@ -18,6 +18,7 @@ public class AddScheduleScreen extends JFrame {
     private final StationController stationController = new StationController();
     private final ScheduleController schController = new ScheduleController();
     private final JComboBox<Integer> trainList = new JComboBox<>();
+    private final TrainController trainController = new TrainController();
 
     public AddScheduleScreen(Schedule schedule) {
         this.setSize(900, 700);
@@ -78,7 +79,7 @@ public class AddScheduleScreen extends JFrame {
         departureDate.setBounds(0, 100, 130, 30);
         formPanel.add(departureDate);
 
-        JDateChooser departureDateChooser = new JDateChooser();
+        JDateChooser departureDateChooser = new JDateChooser(schedule.getDepartureDate());
         departureDateChooser.setFont(new Font("Calibri", Font.PLAIN, 17));
         departureDateChooser.setBounds(200, 100, 300, 30);
         formPanel.add(departureDateChooser);
@@ -88,9 +89,15 @@ public class AddScheduleScreen extends JFrame {
         trainChooser.setBounds(0, 150, 130, 30);
         formPanel.add(trainChooser);
 
-
         trainList.setBounds(200, 150, 300, 30);
+        if (schedule.getDeparture() != null) {
+            loadTrainList(schedule.getDeparture());
+            if (schedule.getTrainID() != null) {
+                trainList.setSelectedItem(schedule.getTrainID());
+            }
+        }
         formPanel.add(trainList);
+
 
         JLabel fee = new JLabel("Set Fee");
         fee.setFont(new Font("Calibri", Font.PLAIN, 17));
