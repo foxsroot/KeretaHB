@@ -47,7 +47,7 @@ public class TrainController {
                 Integer station_id = rs.getInt("station_id");
                 int speed = rs.getInt("speed");
 
-                Train train = new Train(id, station_id, getCarriage(id), speed);
+                Train train = new Train(station_id, getCarriage(id), speed).addId(id);
                 trains.add(train);
             }
         } catch (Exception e) {
@@ -73,7 +73,7 @@ public class TrainController {
                 Carriage[] carriages = getCarriage(train_id);
                 int speed = rs.getInt("speed");
 
-                train = new Train(train_id, station_id, carriages, speed);
+                train = new Train(station_id, carriages, speed).addId(train_id);
             }
         } catch (Exception e) {
             e.printStackTrace(System.err);
@@ -121,7 +121,7 @@ public class TrainController {
                 int speed = rs.getInt("speed");
                 Carriage[] carriages = getCarriage(id);
 
-                trains.add(new Train(id, station_id, carriages, speed));
+                trains.add(new Train(station_id, carriages, speed).addId(id));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,27 +129,32 @@ public class TrainController {
         return trains;
     }
 
-    public boolean validateTrainForm(Integer stationId, int speed){
+    public boolean validateTrainForm(Integer stationId, int speed) {
         boolean valid = true;
         if (stationId == null) {
             JOptionPane.showMessageDialog(null, "Please insert Station ID.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             valid = false;
         }
-        if (speed < 0){
+        if (speed < 0) {
             JOptionPane.showMessageDialog(null, "Please insert the correct Train Speed.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             valid = false;
         }
         return valid;
     }
 
-    public boolean addTrain(Integer stationId, int speed) {
-        String query = "INSERT INTO train(station_id, speed) VALUES(?,?)";
+    public boolean addTrain(Train newTrain, boolean add) {
+        String query = "";
+        if (add) {
+            query = "INSERT INTO train(station_id, speed) VALUES(?,?)";
+        } else {
+            query = "UPDATE train SET station_id =?, speed =? WHERE train_id =?";
+        }
         ConnectionHandler conn = new ConnectionHandler();
         try {
             conn.connect();
             PreparedStatement st = conn.con.prepareStatement(query);
-            st.setInt(1, stationId);
-            st.setInt(2, speed);
+            st.setInt(1, newTrain.getStationId());
+            st.setInt(2, newTrain.getSpeed());
             st.executeUpdate();
             return true;
         } catch (Exception e) {

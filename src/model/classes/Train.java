@@ -6,11 +6,15 @@ public class Train {
     private Carriage[] carriages;
     private Integer speed;
 
-    public Train(Integer id, Integer stationId, Carriage[] carriages, Integer speed) {
-        this.id = id;
+    public Train( Integer stationId, Carriage[] carriages, Integer speed) {
         this.stationId = stationId;
         this.carriages = carriages;
         this.speed = speed;
+    }
+
+    public Train addId(Integer id){
+        this.id = id;
+        return this;
     }
 
     public Integer getId() {

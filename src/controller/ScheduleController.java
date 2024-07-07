@@ -10,6 +10,24 @@ import java.util.Date;
 import java.util.List;
 
 public class ScheduleController {
+    public boolean deleteScheduleById(Integer scheduleId) {
+        ConnectionHandler conn = new ConnectionHandler();
+        String query = "DELETE FROM schedule WHERE schedule_id = ?";
+
+        try {
+            conn.connect();
+            PreparedStatement st = conn.con.prepareStatement(query);
+            st.setInt(1, scheduleId);
+            st.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+            return false;
+        } finally {
+            conn.disconnect();
+        }
+    }
+
     public List<Schedule> getListSchedules(int stationId) {
         List<Schedule> schedules = new ArrayList<>();
         ConnectionHandler conn = new ConnectionHandler();
@@ -122,11 +140,16 @@ public class ScheduleController {
         return valid;
     }
 
-    public void addSchedule(Schedule schedule) {
+    public boolean addSchedule(Schedule schedule, boolean add) {
         ConnectionHandler conn = new ConnectionHandler();
-
-        String query = "INSERT INTO schedule (train_id, departure_station_id, arrival_station_id, departure_date, fee)" +
-                " VALUES (?,?,?,?,?)";
+        String query = "";
+        if (add) {
+            query = "INSERT INTO schedule (train_id, departure_station_id, arrival_station_id, departure_date, fee)" +
+                    " VALUES (?,?,?,?,?)";
+        }else{
+            query = "UPDATE schedule SET train_id =?, departure_station_id =?, arrival_station_id =?, departure_date =?, fee =?" +
+                    " WHERE schedule_id = '" + schedule.getScheduleID() + "'";
+        }
         try {
             conn.connect();
             PreparedStatement st = conn.con.prepareStatement(query);
@@ -136,59 +159,12 @@ public class ScheduleController {
             st.setDate(4, new java.sql.Date(schedule.getDepartureDate().getTime()));
             st.setDouble(5, schedule.getFee());
             st.executeUpdate();
+            return true;
         } catch (Exception e) {
             e.printStackTrace(System.err);
         } finally {
             conn.disconnect();
         }
+        return false;
     }
-
-//    private static Train getTrainById(int train_id) {
-//        Train train = null;
-//        ConnectionHandler conn = new ConnectionHandler();
-//
-//        String query = "SELECT * FROM train WHERE train_id = '" + train_id + "'";
-//        try {
-//            conn.connect();
-//            PreparedStatement st = conn.con.prepareStatement(query);
-//            st.executeQuery(query);
-//            ResultSet rs = st.executeQuery();
-//
-//            if (rs.next()) {
-//                Carriage[] carriages = getCarriage(train_id);
-//                int speed = rs.getInt("speed");
-//
-//                train = new Train(train_id, carriages, speed);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace(System.err);
-//        }
-//        return train;
-//    }
-//
-//    private static Station getStationById(int station_id) {
-//        Station station = null;
-//        ConnectionHandler conn = new ConnectionHandler();
-//        String query = "SELECT * FROM station WHERE station_id = '" + station_id + "'";
-//        try {
-//            conn.connect();
-//            PreparedStatement st = conn.con.prepareStatement(query);
-//            st.executeQuery(query);
-//            ResultSet rs = st.executeQuery();
-//
-//            if (rs.next()) {
-//                ArrayList<Integer> schedules = null;
-//                String name = rs.getString("name");
-//                String location = rs.getString("location");
-//                ArrayList<String> trainList = null;
-//                double income = rs.getDouble("income");
-//
-//                station = new Station(schedules, name, station_id, location, trainList, income);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace(System.err);
-//        }
-//        return station;
-//    }
-//
 }

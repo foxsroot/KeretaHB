@@ -52,19 +52,37 @@ public class AddTrainScreen extends JFrame {
         buttonPanel.setBounds(50, 400, 800, 50);
         add(buttonPanel);
 
-        JButton addButton = new JButton("Add Train");
-        addButton.setBounds(510, 0, 150, 40);
-        buttonPanel.add(addButton);
+        JButton submitButton = new JButton("Add Train");
+        submitButton.setBounds(510, 0, 150, 40);
+        buttonPanel.add(submitButton);
 
-        addButton.addActionListener(e -> {
-            Integer stationId = Integer.parseInt(trainStationIdField.getText());
-            Integer speed = Integer.parseInt(trainSpeedField.getText());
-            if (trainController.validateTrainForm(stationId, speed)) {
-                if (trainController.addTrain(stationId, speed)) {
-                    JOptionPane.showMessageDialog(null, "Train Added Successfully!", "Success!", JOptionPane.INFORMATION_MESSAGE);
+        submitButton.addActionListener(e -> {
+            try {
+                Integer stationId = Integer.parseInt(trainStationIdField.getText());
+                Integer speed = Integer.parseInt(trainSpeedField.getText());
+                Train newTrain = null;
+
+                if (trainController.validateTrainForm(stationId, speed)) {
+                    if (train.getId() != null) {
+                        newTrain = new Train(stationId, train.getCarriages(), speed);
+                        if (trainController.addTrain(newTrain, false)) {
+                            JOptionPane.showMessageDialog(null, "Train Edited Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "All Fields Must Be Filled!", "Input Error!", JOptionPane.WARNING_MESSAGE);
+                        }
+                    } else {
+                        newTrain = new Train(stationId, null, speed);
+                        if (trainController.addTrain(newTrain, true)) {
+                            JOptionPane.showMessageDialog(null, "Train Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "All Fields Must Be Filled!", "Input Error!", JOptionPane.WARNING_MESSAGE);
+                        }
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Add Train Failed!", "Error!", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Invalid Input!", "Input Error!", JOptionPane.WARNING_MESSAGE);
                 }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Invalid Input!", "Input Error!", JOptionPane.WARNING_MESSAGE);
             }
         });
 
@@ -72,19 +90,12 @@ public class AddTrainScreen extends JFrame {
         exitButton.setBounds(110, 0, 150, 40);
         buttonPanel.add(exitButton);
 
-        exitButton.addActionListener(e ->
-
-                dispose());
+        exitButton.addActionListener(e -> dispose());
 
         JLabel warningLabel = new JLabel("*Note: All fields must be filled!");
-        warningLabel.setFont(new
-
-                Font("Calibri", Font.BOLD, 13));
-        warningLabel.setForeground(new
-
-                Color(255, 0, 10));
+        warningLabel.setFont(new Font("Calibri", Font.BOLD, 13));
+        warningLabel.setForeground(new Color(255, 0, 10));
         warningLabel.setBounds(50, 500, 170, 30);
-
         add(warningLabel);
     }
 }

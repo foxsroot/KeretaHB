@@ -113,11 +113,11 @@ public class AddScheduleScreen extends JFrame {
         buttonPanel.setLayout(null);
         buttonPanel.setBounds(50, 400, 800, 50);
 
-        JButton addButton = new JButton("Add Schedule");
-        addButton.setBounds(510, 0, 150, 40);
-        buttonPanel.add(addButton);
+        JButton submitButton = new JButton("Submit Schedule");
+        submitButton.setBounds(510, 0, 150, 40);
+        buttonPanel.add(submitButton);
 
-        addButton.addActionListener(e -> {
+        submitButton.addActionListener(e -> {
             try {
                 Integer departureStationID = Integer.parseInt(departureStationField.getText());
                 Integer arrivalStationID = Integer.parseInt(arrivalStationField.getText());
@@ -127,8 +127,21 @@ public class AddScheduleScreen extends JFrame {
 
                 if (schController.validateScheduleForm(selectedTrainID, departureStationID, arrivalStationID, departureDateForm, Double.parseDouble(feeField.getText()))) {
                     Schedule newSchedule = new Schedule(selectedTrainID, departureStationID, arrivalStationID, departureDateForm, Double.parseDouble(feeField.getText()));
-                    schController.addSchedule(newSchedule);
-                    JOptionPane.showMessageDialog(null, "Schedule Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                    //Update
+                    if (schedule.getScheduleID() != null) {
+                        if (schController.addSchedule(newSchedule, false)) {
+                            JOptionPane.showMessageDialog(null, "Schedule Edited Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Failed to Edit Schedule!", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }else{
+                        if (schController.addSchedule(newSchedule, true)) {
+                            JOptionPane.showMessageDialog(null, "New Schedule Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Failed to Add Schedule!", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "All Fields Must Be Filled!", "Input Error!", JOptionPane.WARNING_MESSAGE);
                 }
