@@ -116,6 +116,16 @@ public class AddVictualScreen extends JFrame {
                 if (controller.verifyForm(victualNameField.getText(), victualPriceField.getText(), victualDescriptionArea.getText(), imageFile)) {
                     if (controller.addVictual(victualNameField.getText(), victualPriceField.getText(), victualDescriptionArea.getText(), imageFile)) {
                         JOptionPane.showMessageDialog(null, "Victual Added Successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                        victualNameField.setText(null);
+                        victualPriceField.setText("1");
+                        victualDescriptionArea.setText(null);
+                        imageFile = null;
+                        chooseImageButton.setText("Choose Image");
+                        chooseImageButton.setBounds(210, 300, 120, 25);
+                        image.setVisible(false);
+                        revalidate();
+                        repaint();
                     } else {
                         System.out.println("Gagal masukin :(");
                     }

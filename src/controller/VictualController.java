@@ -121,7 +121,6 @@ public class VictualController {
         price = price.replaceAll(",", "");
 
         double priceValue = 0;
-        System.out.println(price);
 
         try {
             priceValue = Double.parseDouble(price);
@@ -130,7 +129,6 @@ public class VictualController {
         }
 
         String fileName = ImageController.generateName(image);
-        System.out.println("file name : " + fileName);
         conn.connect();
 
         if (ImageController.saveImage(image, fileName, DirectoryConfig.VICTUAL_IMAGES)) {
