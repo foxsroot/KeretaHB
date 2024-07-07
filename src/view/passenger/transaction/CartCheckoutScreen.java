@@ -69,10 +69,10 @@ public class CartCheckoutScreen extends JFrame {
         totalPriceLabel.setBounds(600, yOffset + 30, 350, 30);
         itemPanel.add(totalPriceLabel);
 
-        JButton checkoutButton = new JButton("Checkout");
-        checkoutButton.setBounds(700, 630, 100, 30);
+        JButton purchaseButton = new JButton("Purchase");
+        purchaseButton.setBounds(700, 630, 100, 30);
 
-        checkoutButton.addActionListener(e -> {
+        purchaseButton.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(null, "Rp " + total + " will be deducted from balance, proceed?", "Purchase Confirmation", JOptionPane.YES_NO_OPTION);
 
             if (confirm == JOptionPane.YES_OPTION) {
@@ -87,7 +87,7 @@ public class CartCheckoutScreen extends JFrame {
         });
 
         JButton exitButton = new JButton("Back to Main Menu");
-        exitButton.setBounds(30, 630, 100, 30);
+        exitButton.setBounds(30, 630, 150, 30);
 
         exitButton.addActionListener(e -> {
             dispose();
@@ -96,7 +96,7 @@ public class CartCheckoutScreen extends JFrame {
 
         add(screenTitle);
         add(scrollPane);
-        add(checkoutButton);
+        add(purchaseButton);
         add(exitButton);
     }
 
