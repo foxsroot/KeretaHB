@@ -71,7 +71,27 @@ public class CartController {
         return true;
     }
 
-    public boolean editCart(int victualId, int user_id, int amount, Cart cart) {
+    public boolean removeFromCart(int victualId, int userId) {
+        conn.connect();
+
+        String query = "DELETE FROM cart_item WHERE user_id = ? AND victual_id = ?";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, userId);
+            stmt.setInt(2, victualId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            conn.disconnect();
+        }
+
+        return true;
+    }
+
+    public boolean editCart(int victualId, int user_id, int amount) {
         conn.connect();
 
         if (amount <= 0) {
@@ -94,8 +114,8 @@ public class CartController {
             try {
                 PreparedStatement stmt = conn.con.prepareStatement(query);
                 stmt.setInt(1, amount);
-                stmt.setInt(1, victualId);
-                stmt.setInt(2, user_id);
+                stmt.setInt(2, victualId);
+                stmt.setInt(3, user_id);
                 stmt.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();

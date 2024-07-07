@@ -5,6 +5,7 @@ import controller.ImageController;
 import controller.VictualController;
 import model.classes.Victual;
 import view.passenger.transaction.CartCheckoutScreen;
+import view.passenger.transaction.ViewCartScreen;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -134,7 +135,7 @@ public class ViewVictualScreen extends JFrame {
                 CartController cartController = new CartController();
                 if (cartController.addToCart(2, victual.getId(), Integer.parseInt(quantityField.getText()), stationId)) {
                     dispose();
-                    new CartCheckoutScreen();
+                    new ViewCartScreen();
                 }
             }
         });
