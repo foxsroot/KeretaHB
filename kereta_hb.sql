@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 06, 2024 at 09:39 AM
+-- Generation Time: Jul 07, 2024 at 11:41 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -126,6 +126,7 @@ CREATE TABLE `cart_item` (
   `item_id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `victual_id` int(11) DEFAULT NULL,
+  `station_id` int(11) DEFAULT NULL,
   `amount` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -329,18 +330,6 @@ CREATE TABLE `stock` (
   `stock` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `stock`
---
-
-INSERT INTO `stock` (`stock_id`, `victual_id`, `station_id`, `stock`) VALUES
-(7, 1, 1, 500),
-(8, 2, 1, 480),
-(9, 3, 1, 400),
-(10, 4, 1, 430),
-(11, 5, 1, 150),
-(12, 6, 1, 250);
-
 -- --------------------------------------------------------
 
 --
@@ -393,6 +382,19 @@ INSERT INTO `train` (`train_id`, `station_id`, `speed`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `transaction_item`
+--
+
+CREATE TABLE `transaction_item` (
+  `transaction_item_id` int(11) NOT NULL,
+  `transaction_id` int(11) NOT NULL,
+  `victual_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `victual`
 --
 
@@ -409,12 +411,13 @@ CREATE TABLE `victual` (
 --
 
 INSERT INTO `victual` (`victual_id`, `picture`, `name`, `price`, `description`) VALUES
-(1, NULL, 'AQUA', 10000, 'AQUA comes from selected spring water sources with all the purity and natural mineral content that is maintained through good processes, ensuring that hygiene is maintained and AQUA is packaged using a hygienic process in several sizes.\n'),
-(2, NULL, 'CHEETOS', 15000, ''),
-(3, NULL, 'MILO', 12000, ' In a box of Milo served every day, there are:  Malt Extract: Good source of energy Cocoa Powder: Enriches the taste of chocolate that children like Milk: Source of Protein and Calcium Boxed Milo is a source of Vitamins B1, B2, B6, as well as Calcium and Phosphorus'),
-(4, NULL, 'COFFEE', 15000, ''),
-(5, NULL, 'CHICKEN GEPREK', 20000, ''),
-(6, NULL, 'FRIED RICE', 17000, '');
+(8, '86ed4429-8323-488d-a660-47b693617f25.jpg', 'ICHI OCHA', 5000, 'Ichi Ocha is a tea from Indonesia'),
+(9, '7cd287f1-6856-4a20-bc27-ba8fac24e413.jpg', 'AQUA', 10000, 'AQUA comes from selected spring water sources with all the purity and natural mineral content that is maintained through good processes, ensuring that hygiene is maintained and AQUA is packaged using a hygienic process in several sizes.\n'),
+(10, '9bd248d0-a9d2-45b4-a3af-e7f88ae1e3e6.jpeg', 'MILO', 12000, 'In a box of Milo served every day, there are:  \nMalt Extract: Good source of energy \nCocoa Powder: Enriches the taste of chocolate that children like\nMilk: Source of Protein and Calcium \nBoxed Milo is a source of Vitamins B1, B2, B6, as well as Calcium and Phosphorus'),
+(11, 'e6286cd6-cc31-4307-ac34-ea8fc8131b3d.jpg', 'CHEETOS', 20000, 'Bring a cheesy, delicious crunch to snack time with a bag of CHEETOS® Crunchy Cheese-Flavored Snacks. Made with real cheese for maximum flavor.'),
+(12, 'aebe687a-f3ed-4115-9842-5c7003b6c72e.jpg', 'NESCAFE ICE BLACK', 6000, 'Nescafe Ice Black is ready-to-drink coffee made from a mixture of selected Arabica and Robusta coffee beans with a strong coffee taste. This coffee is ground and processed using the best techniques and technology to produce a distinctive taste. Nescafe Ice Black is available in practical can packaging and you can take it anywhere.\n'),
+(13, '40dff1cd-c713-42b0-9a5b-745706ccc896.jpg', 'CHICKEN GEPREK', 20000, 'Chicken geprek is a typical Indonesian fried chicken dish with flour that is smashed with chili sauce.'),
+(14, 'f66ec1d1-50c1-451d-ac39-690751e3642e.jpg', 'FRIED RICE', 17000, 'Fried rice is a dish of cooked rice that has been stir-fried in a wok or a frying pan and is usually mixed with other ingredients such as eggs, vegetables, seafood, or meat. It is often eaten by itself or as an accompaniment to another dish.');
 
 -- --------------------------------------------------------
 
@@ -425,9 +428,8 @@ INSERT INTO `victual` (`victual_id`, `picture`, `name`, `price`, `description`) 
 CREATE TABLE `victuals_transaction` (
   `transaction_id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `victual_id` int(11) DEFAULT NULL,
-  `date` date DEFAULT NULL,
-  `quantity` int(10) UNSIGNED DEFAULT NULL
+  `station_id` int(11) NOT NULL,
+  `date` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -442,6 +444,13 @@ CREATE TABLE `wallet` (
   `balance` double DEFAULT NULL,
   `pin` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `wallet`
+--
+
+INSERT INTO `wallet` (`wallet_id`, `user_id`, `balance`, `pin`) VALUES
+(1, 2, 8000, 0);
 
 --
 -- Indexes for dumped tables
@@ -466,7 +475,8 @@ ALTER TABLE `carriage`
 ALTER TABLE `cart_item`
   ADD PRIMARY KEY (`item_id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `victual_id` (`victual_id`);
+  ADD KEY `victual_id` (`victual_id`),
+  ADD KEY `fk_cart_item_station_id` (`station_id`);
 
 --
 -- Indexes for table `loyalty`
@@ -536,6 +546,14 @@ ALTER TABLE `train`
   ADD KEY `station_id` (`station_id`);
 
 --
+-- Indexes for table `transaction_item`
+--
+ALTER TABLE `transaction_item`
+  ADD PRIMARY KEY (`transaction_item_id`),
+  ADD KEY `transaction_id` (`transaction_id`),
+  ADD KEY `victual_id` (`victual_id`);
+
+--
 -- Indexes for table `victual`
 --
 ALTER TABLE `victual`
@@ -547,7 +565,7 @@ ALTER TABLE `victual`
 ALTER TABLE `victuals_transaction`
   ADD PRIMARY KEY (`transaction_id`),
   ADD KEY `user_id` (`user_id`),
-  ADD KEY `victual_id` (`victual_id`);
+  ADD KEY `fk_station_id` (`station_id`);
 
 --
 -- Indexes for table `wallet`
@@ -559,6 +577,18 @@ ALTER TABLE `wallet`
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `cart_item`
+--
+ALTER TABLE `cart_item`
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+
+--
+-- AUTO_INCREMENT for table `loyalty`
+--
+ALTER TABLE `loyalty`
+  MODIFY `loyalty_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `notification`
@@ -591,10 +621,28 @@ ALTER TABLE `stock`
   MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
+-- AUTO_INCREMENT for table `transaction_item`
+--
+ALTER TABLE `transaction_item`
+  MODIFY `transaction_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT for table `victual`
 --
 ALTER TABLE `victual`
-  MODIFY `victual_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `victual_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `victuals_transaction`
+--
+ALTER TABLE `victuals_transaction`
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `wallet`
+--
+ALTER TABLE `wallet`
+  MODIFY `wallet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
@@ -611,7 +659,8 @@ ALTER TABLE `carriage`
 --
 ALTER TABLE `cart_item`
   ADD CONSTRAINT `cart_item_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `passenger` (`user_id`),
-  ADD CONSTRAINT `cart_item_ibfk_2` FOREIGN KEY (`victual_id`) REFERENCES `victual` (`victual_id`);
+  ADD CONSTRAINT `cart_item_ibfk_2` FOREIGN KEY (`victual_id`) REFERENCES `victual` (`victual_id`),
+  ADD CONSTRAINT `fk_cart_item_station_id` FOREIGN KEY (`station_id`) REFERENCES `station` (`station_id`);
 
 --
 -- Constraints for table `notification`
@@ -662,11 +711,18 @@ ALTER TABLE `train`
   ADD CONSTRAINT `train_ibfk_1` FOREIGN KEY (`station_id`) REFERENCES `station` (`station_id`);
 
 --
+-- Constraints for table `transaction_item`
+--
+ALTER TABLE `transaction_item`
+  ADD CONSTRAINT `transaction_item_ibfk_1` FOREIGN KEY (`transaction_id`) REFERENCES `victuals_transaction` (`transaction_id`),
+  ADD CONSTRAINT `transaction_item_ibfk_2` FOREIGN KEY (`victual_id`) REFERENCES `victual` (`victual_id`);
+
+--
 -- Constraints for table `victuals_transaction`
 --
 ALTER TABLE `victuals_transaction`
-  ADD CONSTRAINT `victuals_transaction_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `passenger` (`user_id`),
-  ADD CONSTRAINT `victuals_transaction_ibfk_2` FOREIGN KEY (`victual_id`) REFERENCES `victual` (`victual_id`);
+  ADD CONSTRAINT `fk_station_id` FOREIGN KEY (`station_id`) REFERENCES `station` (`station_id`),
+  ADD CONSTRAINT `victuals_transaction_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `passenger` (`user_id`);
 
 --
 -- Constraints for table `wallet`
