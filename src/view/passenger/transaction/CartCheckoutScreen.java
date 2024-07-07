@@ -1,5 +1,6 @@
 package view.passenger.transaction;
 
+import config.DirectoryConfig;
 import controller.CartController;
 import controller.ImageController;
 import controller.VictualController;
@@ -111,7 +112,7 @@ public class CartCheckoutScreen extends JFrame {
 
         JLabel victualImage = new JLabel();
         victualImage.setBounds(7, 7, 70, 85);
-        victualImage.setIcon(new ImageIcon(ImageController.resizeImage("D:\\College\\Semester\\SP_2-3\\PBO\\KeretaHB\\assets\\dummy\\images.png", 70, 85)));
+        victualImage.setIcon(new ImageIcon(ImageController.resizeImage(DirectoryConfig.VICTUAL_IMAGES + victual.getImage(), 70, 85)));
         victualPanel.add(victualImage);
 
         JLabel victualName = new JLabel(victual.getName());
