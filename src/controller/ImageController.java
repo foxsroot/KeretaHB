@@ -1,7 +1,5 @@
 package controller;
 
-import config.DirectoryConfig;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -11,8 +9,14 @@ import java.nio.file.Files;
 import java.util.UUID;
 
 public class ImageController {
-    private String generateName(String ext) {
+    private static String getImageExtension(File image) {
+        return image.getName().substring(image.getName().lastIndexOf("."));
+    }
+
+    public static String generateName(File image) {
         UUID uuid = UUID.randomUUID();
+
+        String ext = getImageExtension(image);
 
         return String.format("%s%s", uuid, ext);
     }
@@ -41,19 +45,14 @@ public class ImageController {
     }
 
     public static boolean saveImage(File image, String fileName, String path) {
-        File directory = new File(path);
+        File dir = new File(path);
 
-        if (!directory.exists()) {
-            if (directory.mkdir()) {
-                System.out.println("Directory created successfully."); //buat logging :)
-            } else {
-                System.out.println("Failed to create directory."); //buat logging :)
-                return false;
-            }
+        if (!dir.exists()) {
+            dir.mkdir();
         }
 
         try {
-            Files.copy(image.toPath(), (new File(path + "\\" + fileName)).toPath());
+            Files.copy(image.toPath(), (new File(path + fileName)).toPath());
         } catch (IOException e) {
             e.printStackTrace();
             return false;
