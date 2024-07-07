@@ -12,6 +12,16 @@ import java.util.HashMap;
 public class VictualController {
     ConnectionHandler conn = new ConnectionHandler();
 
+    public boolean verifyForm(String name, String price, String description, File photo) {
+        if (name != null && price != null && description != null && photo != null) {
+            if (!name.isEmpty() && !price.isEmpty() && !description.isEmpty()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public HashMap<Victual, Integer> listVictual(int stationId) {
         conn.connect();
 
@@ -53,7 +63,7 @@ public class VictualController {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                victual = new Victual(rs.getInt("victual_id"), rs.getString("name"), rs.getDouble("price"), rs.getString("description"));
+                victual = new Victual(rs.getInt("victual_id"), rs.getString("name"), rs.getString("picture"), rs.getDouble("price"), rs.getString("description"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -107,26 +117,39 @@ public class VictualController {
         return true;
     }
 
-    public boolean addVictual(HashMap<String, Object> fields) {
-        File picture = (File) fields.get("picture");
+    public boolean addVictual(String name, String price, String description, File image) {
+        price = price.replaceAll(",", "");
+
+        double priceValue = 0;
+        System.out.println(price);
+
+        try {
+            priceValue = Double.parseDouble(price);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+        String fileName = ImageController.generateName(image);
+        System.out.println("file name : " + fileName);
         conn.connect();
 
-        if (ImageController.saveImage(picture, picture.getName(), DirectoryConfig.VICTUAL_IMAGES)) {
-            String query = "INSERT INTO victual (name, price, picture) VALUES (?, ?, ?)";
+        if (ImageController.saveImage(image, fileName, DirectoryConfig.VICTUAL_IMAGES)) {
+            String query = "INSERT INTO victual (name, price, picture, description) VALUES (?, ?, ?, ?)";
 
             try {
                 PreparedStatement stmt = conn.con.prepareStatement(query);
-                stmt.setString(1, fields.get("name").toString());
-                stmt.setDouble(2, (double) fields.get("price"));
-                stmt.setString(3, picture.getName());
+                stmt.setString(1, name.toUpperCase());
+                stmt.setDouble(2, priceValue);
+                stmt.setString(3, fileName);
+                stmt.setString(4, description);
                 stmt.executeUpdate();
+                return true;
             } catch (SQLException e) {
                 e.printStackTrace();
+                return false;
             } finally {
                 conn.disconnect();
             }
-
-            return true;
         }
 
         return false;

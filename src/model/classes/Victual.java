@@ -7,9 +7,10 @@ public class Victual {
     private double price;
     private String description;
 
-    public Victual(Integer id, String name, double price, String description) {
+    public Victual(Integer id, String name, String image, double price, String description) {
         this.id = id;
         this.name = name;
+        this.image = image;
         this.price = price;
         this.description = description;
     }
