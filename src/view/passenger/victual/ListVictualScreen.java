@@ -1,5 +1,6 @@
 package view.passenger.victual;
 
+import config.DirectoryConfig;
 import controller.ImageController;
 import controller.StationController;
 import controller.VictualController;
@@ -119,7 +120,7 @@ public class ListVictualScreen extends JFrame {
 
         JLabel victualImage = new JLabel();
         victualImage.setBounds(10, 10, 180, 240);
-        victualImage.setIcon(new ImageIcon(ImageController.resizeImage("D:\\College\\Semester\\SP_2-3\\PBO\\KeretaHB\\assets\\dummy\\images.png", 180, 240)));
+        victualImage.setIcon(new ImageIcon(ImageController.resizeImage(DirectoryConfig.VICTUAL_IMAGES + victual.getImage(), 180, 240)));
         victualPanel.add(victualImage);
 
         JLabel victualName = new JLabel(victual.getName());
