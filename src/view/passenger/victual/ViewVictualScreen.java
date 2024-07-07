@@ -134,7 +134,7 @@ public class ViewVictualScreen extends JFrame {
                 CartController cartController = new CartController();
                 if (cartController.addToCart(2, victual.getId(), Integer.parseInt(quantityField.getText()), stationId)) {
                     dispose();
-                    new CartCheckoutScreen(stationId);
+                    new CartCheckoutScreen();
                 }
             }
         });

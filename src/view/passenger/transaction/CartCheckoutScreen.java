@@ -14,13 +14,11 @@ import java.util.ArrayList;
 public class CartCheckoutScreen extends JFrame {
     Passenger passenger;
     double total = 0;
-    int stationId;
 
-    public CartCheckoutScreen(int stationId) {
+    public CartCheckoutScreen() {
         CartController controller = new CartController();
         WalletController walletController = new WalletController();
-
-        this.stationId = stationId;
+        //ambil passenger yg lg login
         passenger = new Passenger("John Doe", "1234567890", "john.doe@example.com", "password123", 2, new ArrayList<>(), walletController.getWallet(2), LoyaltyEnum.CLASSIC, 0, new ArrayList<>(), controller.getCart(2));
         initComponents();
         this.setVisible(true);
@@ -79,7 +77,7 @@ public class CartCheckoutScreen extends JFrame {
 
             if (confirm == JOptionPane.YES_OPTION) {
                 CartController controller = new CartController();
-                if (controller.checkout(passenger, stationId, total)) {
+                if (controller.checkout(passenger, total)) {
                     JOptionPane.showMessageDialog(null, "Purchase Completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
                     dispose();
                 } else {
