@@ -10,14 +10,14 @@ import java.util.Date;
 import java.util.List;
 
 public class ScheduleController {
-    public boolean deleteScheduleById(Integer scheduleId) {
+    public boolean deleteSchedule(Schedule schedule) {
         ConnectionHandler conn = new ConnectionHandler();
         String query = "DELETE FROM schedule WHERE schedule_id = ?";
 
         try {
             conn.connect();
             PreparedStatement st = conn.con.prepareStatement(query);
-            st.setInt(1, scheduleId);
+            st.setInt(1, schedule.getScheduleID());
             st.executeUpdate();
             return true;
         } catch (Exception e) {
