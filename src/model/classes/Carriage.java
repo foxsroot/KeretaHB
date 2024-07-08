@@ -4,6 +4,7 @@ import model.enums.CarriageType;
 import model.enums.ClassType;
 
 public class Carriage {
+    private Integer id;
     private Integer train_id;
     private int capacity;
     private CarriageType type;
@@ -16,6 +17,19 @@ public class Carriage {
         this.type = type;
         this.baggageAllowance = baggageAllowance;
         this.carriageClass = carriageClass;
+    }
+
+    public Carriage addId(Integer id){
+        this.id = id;
+        return this;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getTrain_id() {
