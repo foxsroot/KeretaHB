@@ -55,4 +55,5 @@ public class StationScheduleSelection extends JFrame {
         StationScheduleListScreen scheduleDetailScreen = new StationScheduleListScreen(scheduleScreen, station);
         scheduleDetailScreen.setVisible(true);
     }
+
 }

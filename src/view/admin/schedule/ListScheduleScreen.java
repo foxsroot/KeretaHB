@@ -171,4 +171,5 @@ public class ListScheduleScreen extends JFrame {
 
         listScheduleScreen.setVisible(true);
     }
+
 }

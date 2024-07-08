@@ -6,6 +6,7 @@ import controller.StationController;
 import controller.TrainController;
 import model.classes.Schedule;
 import model.classes.Train;
+import view.admin.AdminMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,13 +15,13 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AddScheduleScreen extends JFrame {
+public class AddEditScheduleScreen extends JFrame {
     private final StationController stationController = new StationController();
     private final ScheduleController schController = new ScheduleController();
     private final JComboBox<Integer> trainList = new JComboBox<>();
     private final TrainController trainController = new TrainController();
 
-    public AddScheduleScreen(Schedule schedule) {
+    public AddEditScheduleScreen(Schedule schedule) {
         this.setSize(900, 700);
         this.setResizable(false);
         this.setLayout(null);
@@ -96,6 +97,13 @@ public class AddScheduleScreen extends JFrame {
                 trainList.setSelectedItem(schedule.getTrainID());
             }
         }
+
+        trainList.addActionListener(e -> {
+            if(trainController.totalTrainCapacity((Integer) trainList.getSelectedItem()) == 0){
+                JOptionPane.showMessageDialog(this, "This train did not have any carriages. Please choose another train.");
+                trainList.setSelectedIndex(-1);
+            }
+        });
         formPanel.add(trainList);
 
 
@@ -104,7 +112,7 @@ public class AddScheduleScreen extends JFrame {
         fee.setBounds(0, 200, 130, 30);
         formPanel.add(fee);
 
-        JTextField feeField = new JTextField(String.valueOf(schedule.getFee() < 0 ? schedule.getFee() : ""));
+        JTextField feeField = new JTextField(String.valueOf(schedule.getFee() != 0 ? schedule.getFee() : ""));
         feeField.setFont(new Font("Calibri", Font.PLAIN, 15));
         feeField.setBounds(200, 200, 300, 30);
         formPanel.add(feeField);
@@ -122,22 +130,28 @@ public class AddScheduleScreen extends JFrame {
                 Integer departureStationID = Integer.parseInt(departureStationField.getText());
                 Integer arrivalStationID = Integer.parseInt(arrivalStationField.getText());
                 Date departureDateForm = departureDateChooser.getDate();
-                Train selectedTrain = (Train) trainList.getSelectedItem();
-                Integer selectedTrainID = selectedTrain.getId();
+                Integer selectedTrainID = (Integer) trainList.getSelectedItem();
 
                 if (schController.validateScheduleForm(selectedTrainID, departureStationID, arrivalStationID, departureDateForm, Double.parseDouble(feeField.getText()))) {
-                    Schedule newSchedule = new Schedule(selectedTrainID, departureStationID, arrivalStationID, departureDateForm, Double.parseDouble(feeField.getText()));
 
                     //Update
                     if (schedule.getScheduleID() != null) {
+                        Schedule newSchedule = new Schedule(selectedTrainID, departureStationID, arrivalStationID, departureDateForm, Double.parseDouble(feeField.getText())).addScheduleID(schedule.getScheduleID());
                         if (schController.addSchedule(newSchedule, false)) {
                             JOptionPane.showMessageDialog(null, "Schedule Edited Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                            AdminMenu backToAdminMain = new AdminMenu();
+                            this.dispose();
+                            backToAdminMain.setVisible(true);
                         } else {
                             JOptionPane.showMessageDialog(null, "Failed to Edit Schedule!", "Error", JOptionPane.ERROR_MESSAGE);
                         }
-                    }else{
+                    } else {
+                        Schedule newSchedule = new Schedule(selectedTrainID, departureStationID, arrivalStationID, departureDateForm, Double.parseDouble(feeField.getText()));
                         if (schController.addSchedule(newSchedule, true)) {
                             JOptionPane.showMessageDialog(null, "New Schedule Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                            AdminMenu backToAdminMain = new AdminMenu();
+                            this.dispose();
+                            backToAdminMain.setVisible(true);
                         } else {
                             JOptionPane.showMessageDialog(null, "Failed to Add Schedule!", "Error", JOptionPane.ERROR_MESSAGE);
                         }
@@ -175,4 +189,5 @@ public class AddScheduleScreen extends JFrame {
             trainList.addItem(train.getId());
         }
     }
+
 }
