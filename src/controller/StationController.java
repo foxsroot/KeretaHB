@@ -13,19 +13,19 @@ import java.util.List;
 
 public class StationController {
 
-    public List<Station> getlistStations(){
+    public List<Station> getlistStations() {
         List<Station> stations = new ArrayList<>();
         ScheduleController scheduleController = new ScheduleController();
         TrainController trainController = new TrainController();
         VictualController victualController = new VictualController();
 
         String query = "SELECT * FROM station";
-        try{
-            ConnectionHandler conn = new ConnectionHandler();
+        ConnectionHandler conn = new ConnectionHandler();
+        try {
             conn.connect();
             java.sql.PreparedStatement st = conn.con.prepareStatement(query);
             ResultSet rs = st.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Integer id = rs.getInt("station_id");
                 ArrayList<Schedule> schedules = (ArrayList<Schedule>) scheduleController.getListSchedules(id);
                 HashMap<Victual, Integer> victual = victualController.listVictual(id);
@@ -37,27 +37,31 @@ public class StationController {
                 stations.add(station);
             }
             return stations;
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            return null;
+        } finally {
+            conn.disconnect();
         }
+        return null;
     }
 
-    public String getStationNameById(Integer station_id){
+    public String getStationNameById(Integer station_id) {
         String query = "SELECT * FROM station WHERE station_id = '" + station_id + "'";
         String name = "";
-        try{
-            ConnectionHandler conn = new ConnectionHandler();
+        ConnectionHandler conn = new ConnectionHandler();
+        try {
             conn.connect();
             java.sql.PreparedStatement st = conn.con.prepareStatement(query);
             ResultSet rs = st.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 name = rs.getString("name");
             }
             return name;
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
+        } finally {
+            conn.disconnect();
         }
     }
 
@@ -88,6 +92,8 @@ public class StationController {
             }
         } catch (Exception e) {
             e.printStackTrace(System.err);
+        } finally {
+            conn.disconnect();
         }
         return station;
     }
