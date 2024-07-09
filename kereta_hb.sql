@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 09, 2024 at 09:21 AM
+-- Generation Time: Jul 09, 2024 at 10:01 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -236,7 +236,6 @@ INSERT INTO `notification` (`notification_id`, `recipient_id`, `title`, `message
 
 CREATE TABLE `passenger` (
   `user_id` int(11) NOT NULL,
-  `wallet_id` int(11) DEFAULT NULL,
   `loyalty` int(11) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
@@ -250,8 +249,8 @@ CREATE TABLE `passenger` (
 -- Dumping data for table `passenger`
 --
 
-INSERT INTO `passenger` (`user_id`, `wallet_id`, `loyalty`, `email`, `password`, `name`, `cellphone`, `total_paid`, `pfp`) VALUES
-(2, NULL, NULL, 'john.doe@example.com', 'password123', 'John Doe', '1234567890', 1500, 'john_pfp.png');
+INSERT INTO `passenger` (`user_id`, `loyalty`, `email`, `password`, `name`, `cellphone`, `total_paid`, `pfp`) VALUES
+(2, NULL, 'john.doe@example.com', 'password123', 'John Doe', '1234567890', 1500, 'john_pfp.png');
 
 -- --------------------------------------------------------
 
@@ -361,8 +360,8 @@ INSERT INTO `stock` (`stock_id`, `victual_id`, `station_id`, `stock`) VALUES
 CREATE TABLE `ticket_transaction` (
   `transaction_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `schedule_id` int(11) NOT NULL,
-  `date` date NOT NULL,
+  `schedule_id` int(11) DEFAULT NULL,
+  `purchase_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `passengers` int(11) NOT NULL,
   `commute` tinyint(1) NOT NULL,
   `rescheduled` tinyint(1) DEFAULT NULL
@@ -410,7 +409,7 @@ INSERT INTO `train` (`train_id`, `station_id`, `speed`) VALUES
 CREATE TABLE `transaction_item` (
   `transaction_item_id` int(11) NOT NULL,
   `transaction_id` int(11) NOT NULL,
-  `victual_id` int(11) NOT NULL,
+  `victual_id` int(11) DEFAULT NULL,
   `quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -451,7 +450,7 @@ CREATE TABLE `victuals_transaction` (
   `transaction_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `station_id` int(11) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `date` timestamp NOT NULL DEFAULT current_timestamp(),
   `total` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -519,7 +518,6 @@ ALTER TABLE `notification`
 --
 ALTER TABLE `passenger`
   ADD PRIMARY KEY (`user_id`),
-  ADD KEY `wallet_id` (`wallet_id`),
   ADD KEY `loyalty` (`loyalty`);
 
 --
@@ -725,7 +723,6 @@ ALTER TABLE `notification`
 -- Constraints for table `passenger`
 --
 ALTER TABLE `passenger`
-  ADD CONSTRAINT `passenger_ibfk_1` FOREIGN KEY (`wallet_id`) REFERENCES `wallet` (`wallet_id`),
   ADD CONSTRAINT `passenger_ibfk_2` FOREIGN KEY (`loyalty`) REFERENCES `loyalty` (`loyalty_id`);
 
 --

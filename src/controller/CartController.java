@@ -195,10 +195,10 @@ public class CartController {
 
     public boolean verifyStock(Cart cart, int stationId) {
         HashMap<Integer, Integer> victuals = cart.getVictual();
-        VictualController victualController = new VictualController();
+        StockController stockController = new StockController();
 
         for (int victualId : victuals.keySet()) {
-            if (victualController.getStock(victualId, stationId) < victuals.get(victualId)) {
+            if (stockController.getStock(victualId, stationId) < victuals.get(victualId)) {
                 return false;
             }
         }

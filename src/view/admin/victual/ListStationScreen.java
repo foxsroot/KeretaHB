@@ -1,8 +1,7 @@
-package view.passenger.victual;
+package view.admin.victual;
 
 import controller.StationController;
 import model.classes.Station;
-import view.admin.victual.UpdateStockScreen;
 
 import javax.swing.*;
 import java.awt.*;

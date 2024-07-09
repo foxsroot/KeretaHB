@@ -1,7 +1,9 @@
 package view.passenger.victual;
 
+import config.DirectoryConfig;
 import controller.CartController;
 import controller.ImageController;
+import controller.StockController;
 import controller.VictualController;
 import model.classes.Victual;
 import view.passenger.transaction.CartCheckoutScreen;
@@ -45,7 +47,7 @@ public class ViewVictualScreen extends JFrame {
 
         JLabel imageLabel = new JLabel();
         imageLabel.setBounds(30, 30, 250, 300);
-        imageLabel.setIcon(new ImageIcon(ImageController.resizeImage("D:\\College\\Semester\\SP_2-3\\PBO\\KeretaHB\\assets\\dummy\\images.png", 250, 300)));
+        imageLabel.setIcon(new ImageIcon(ImageController.resizeImage(DirectoryConfig.VICTUAL_IMAGES + victual.getImage(), 250, 300)));
         itemPanel.add(imageLabel);
 
         JLabel itemName = new JLabel(victual.getName());
@@ -58,8 +60,8 @@ public class ViewVictualScreen extends JFrame {
         itemPrice.setBounds(300, 70, 250, 30);
         itemPanel.add(itemPrice);
 
-        VictualController controller = new VictualController();
-        int stock = controller.getStock(victual.getId(), stationId);
+        StockController stockController = new StockController();
+        int stock = stockController.getStock(victual.getId(), stationId);
 
         NumberFormat format = NumberFormat.getIntegerInstance();
         NumberFormatter numberFormatter = new NumberFormatter(format);
