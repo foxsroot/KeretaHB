@@ -16,7 +16,7 @@ public class TransactionController {
         conn.connect();
 
         ArrayList<Transaction> transactionList = new ArrayList<>();
-        String query = "SELECT vt.transaction_id, vt.user_id, vt.station_id, vt.date, vt.amount, ti.victual_id, ti.quantity FROM victuals_transaction vt LEFT JOIN transaction_item ti ON vt.transaction_id = ti.transaction_id WHERE vt.user_id = ? ORDER BY vt.date DESC";
+        String query = "SELECT vt.transaction_id, vt.user_id, vt.station_id, vt.date, vt.total, ti.victual_id, ti.quantity FROM victuals_transaction vt LEFT JOIN transaction_item ti ON vt.transaction_id = ti.transaction_id WHERE vt.user_id = ? ORDER BY vt.date DESC";
 
         try {
             PreparedStatement stmt = conn.con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -28,7 +28,7 @@ public class TransactionController {
                 transaction.setTransactionID(rs.getInt("transaction_id"));
                 transaction.setStationID(rs.getInt("station_id"));
                 transaction.setDatePurchase(rs.getTimestamp("date"));
-                transaction.setAmount(rs.getDouble("amount"));
+                transaction.setTotal(rs.getDouble("total"));
 
                 HashMap<Integer, Integer> victualBought = new HashMap<>();
 
@@ -64,7 +64,7 @@ public class TransactionController {
                 stmt.executeUpdate();
 
                 NotificationController notificationController = new NotificationController();
-                notificationController.sendNotification(email, "Victuals Cancelation", "Hi ---, we have successfully canceled your victual transaction and returned Rp " + transaction.getAmount() + " to your wallet.\n\nThank you!");
+                notificationController.sendNotification(email, "Victuals Cancelation", "Hi ---, we have successfully canceled your victual transaction and returned Rp " + transaction.getTotal() + " to your wallet.\n\nThank you!");
             } catch (SQLException e) {
                 e.printStackTrace();
                 return false;
@@ -112,7 +112,7 @@ public class TransactionController {
 
         try {
             PreparedStatement stmt = conn.con.prepareStatement(query);
-            stmt.setDouble(1, transaction.getAmount());
+            stmt.setDouble(1, transaction.getTotal());
             stmt.setInt(2, userId);
             stmt.executeUpdate();
         } catch (SQLException e) {

@@ -91,7 +91,7 @@ public class TransactionHistoryScreen extends JFrame {
             totalLabel.setBounds(550, 55, 350, 40);
             panel.add(totalLabel);
 
-            JLabel totalAmount = new JLabel("Rp " + transaction.getAmount());
+            JLabel totalAmount = new JLabel("Rp " + transaction.getTotal());
             totalAmount.setFont(new Font("calibri", Font.BOLD, 20));
             totalAmount.setBounds(550, 80, 350, 40);
             panel.add(totalAmount);

@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 09, 2024 at 07:28 AM
--- Server version: 11.2.1-MariaDB
+-- Generation Time: Jul 09, 2024 at 09:21 AM
+-- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -225,7 +225,8 @@ INSERT INTO `notification` (`notification_id`, `recipient_id`, `title`, `message
 (54, 2, 'Notification 48', 'This is the 48th notification', '2024-07-06 09:40:00'),
 (55, 2, 'Notification 49', 'This is the 49th notification', '2024-07-06 10:00:00'),
 (56, 2, 'Notification 50', 'This is the 50th notification', '2024-07-06 10:20:00'),
-(57, 2, 'Notification 51', 'This is the 51st notification', '2024-07-06 10:40:00');
+(57, 2, 'Notification 51', 'This is the 51st notification', '2024-07-06 10:40:00'),
+(58, 2, 'Victuals Cancelation', 'Hi ---, we have successfully canceled your victual transaction and returned Rp 86000.0 to your wallet.\n\nThank you!', '2024-07-09 12:57:52');
 
 -- --------------------------------------------------------
 
@@ -345,10 +346,10 @@ CREATE TABLE `stock` (
 --
 
 INSERT INTO `stock` (`stock_id`, `victual_id`, `station_id`, `stock`) VALUES
-(13, 9, 1, 82),
-(14, 8, 1, 65),
-(15, 14, 1, 67),
-(16, 11, 2, 399),
+(13, 9, 1, 100),
+(14, 8, 1, 68),
+(15, 14, 1, 70),
+(16, 11, 2, 400),
 (17, 10, 1, 100);
 
 -- --------------------------------------------------------
@@ -413,17 +414,6 @@ CREATE TABLE `transaction_item` (
   `quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `transaction_item`
---
-
-INSERT INTO `transaction_item` (`transaction_item_id`, `transaction_id`, `victual_id`, `quantity`) VALUES
-(9, 6, 9, 16),
-(10, 7, 11, 1),
-(11, 8, 8, 3),
-(12, 8, 9, 2),
-(13, 8, 14, 3);
-
 -- --------------------------------------------------------
 
 --
@@ -462,17 +452,8 @@ CREATE TABLE `victuals_transaction` (
   `user_id` int(11) NOT NULL,
   `station_id` int(11) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `amount` double NOT NULL
+  `total` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
---
--- Dumping data for table `victuals_transaction`
---
-
-INSERT INTO `victuals_transaction` (`transaction_id`, `user_id`, `station_id`, `date`, `amount`) VALUES
-(6, 2, 1, '2024-07-08 18:19:10', 0),
-(7, 2, 2, '2024-07-08 18:19:24', 0),
-(8, 2, 1, '2024-07-08 18:19:52', 0);
 
 -- --------------------------------------------------------
 
@@ -492,7 +473,7 @@ CREATE TABLE `wallet` (
 --
 
 INSERT INTO `wallet` (`wallet_id`, `user_id`, `balance`, `pin`) VALUES
-(1, 2, 79634000, 0);
+(1, 2, 79900000, 0);
 
 --
 -- Indexes for dumped tables
@@ -648,7 +629,7 @@ ALTER TABLE `loyalty`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `passenger`
