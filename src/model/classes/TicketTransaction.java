@@ -1,6 +1,6 @@
 package model.classes;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class TicketTransaction extends Transaction {
     int passengers;
@@ -8,8 +8,8 @@ public class TicketTransaction extends Transaction {
     Integer schdeuleID;
     boolean rescheduled;
 
-    public TicketTransaction(Integer transactionID, Date datePurchase, int passengers, boolean commute, Integer schdeuleID, boolean rescheduled) {
-        super(transactionID, datePurchase);
+    public TicketTransaction(Integer transactionID, Timestamp datePurchase, int passengers, boolean commute, Integer schdeuleID, boolean rescheduled, double amount) {
+        super(transactionID, datePurchase, amount);
         this.passengers = passengers;
         this.commute = commute;
         this.schdeuleID = schdeuleID;

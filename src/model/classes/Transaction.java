@@ -1,15 +1,19 @@
 package model.classes;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public abstract class Transaction {
     Integer transactionID;
-    Date datePurchase;
+    Timestamp datePurchase;
+    double amount;
 
-    public Transaction(Integer transactionID, Date datePurchase) {
+    public Transaction(Integer transactionID, Timestamp datePurchase, double amount) {
         this.transactionID = transactionID;
         this.datePurchase = datePurchase;
+        this.amount = amount;
     }
+
+    public Transaction() {}
 
     public Integer getTransactionID() {
         return transactionID;
@@ -19,11 +23,19 @@ public abstract class Transaction {
         this.transactionID = transactionID;
     }
 
-    public Date getDatePurchase() {
+    public Timestamp getDatePurchase() {
         return datePurchase;
     }
 
-    public void setDatePurchase(Date datePurchase) {
+    public void setDatePurchase(Timestamp datePurchase) {
         this.datePurchase = datePurchase;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 }
