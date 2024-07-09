@@ -28,7 +28,7 @@ public class TransactionController {
                 transaction.setTransactionID(rs.getInt("transaction_id"));
                 transaction.setStationID(rs.getInt("station_id"));
                 transaction.setDatePurchase(rs.getTimestamp("date"));
-                transaction.setAmount(rs.getDouble("amount"));
+//                transaction.setAmount(rs.getDouble("amount"));
 
                 HashMap<Integer, Integer> victualBought = new HashMap<>();
 
