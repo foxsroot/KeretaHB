@@ -3,6 +3,7 @@ package view.passenger.transaction;
 import config.DirectoryConfig;
 import controller.ImageController;
 import controller.StationController;
+import controller.TransactionController;
 import controller.VictualController;
 import model.classes.Victual;
 import model.classes.VictualTransaction;
@@ -100,7 +101,13 @@ public class VictualTransactionScreen extends JFrame {
         cancelButton.addActionListener(e -> {
             int option = JOptionPane.showConfirmDialog(null, "Cancel this transaction?", "Cancel Confirmation", JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {
-
+                TransactionController transactionController = new TransactionController();
+                if (transactionController.cancelVictualTransaction(transaction, 2, "john.doe@example.com")) { //nanti ganti ke user id beneran (get dari singleton login)
+                    JOptionPane.showMessageDialog(null, "Transaction Cancelled & Balance Refunded", "Cancel Success", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to Cancel Transaction", "Cancel Failure", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 

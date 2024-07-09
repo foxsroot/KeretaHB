@@ -14,7 +14,6 @@ import java.util.ArrayList;
 
 public class CartCheckoutScreen extends JFrame {
     Passenger passenger;
-    double total = 0;
 
     public CartCheckoutScreen() {
         CartController controller = new CartController();
@@ -65,7 +64,7 @@ public class CartCheckoutScreen extends JFrame {
         totalLabel.setBounds(20, yOffset + 30, 350, 30);
         itemPanel.add(totalLabel);
 
-        JLabel totalPriceLabel = new JLabel("Rp " + total);
+        JLabel totalPriceLabel = new JLabel("Rp " + passenger.getCart().getTotalPrice());
         totalPriceLabel.setFont(new Font("calibri", Font.BOLD, 30));
         totalPriceLabel.setBounds(600, yOffset + 30, 350, 30);
         itemPanel.add(totalPriceLabel);
@@ -74,15 +73,20 @@ public class CartCheckoutScreen extends JFrame {
         purchaseButton.setBounds(700, 630, 100, 30);
 
         purchaseButton.addActionListener(e -> {
-            int confirm = JOptionPane.showConfirmDialog(null, "Rp " + total + " will be deducted from balance, proceed?", "Purchase Confirmation", JOptionPane.YES_NO_OPTION);
+            int confirm = JOptionPane.showConfirmDialog(null, "Rp " + passenger.getCart().getTotalPrice() + " will be deducted from balance, proceed?", "Purchase Confirmation", JOptionPane.YES_NO_OPTION);
 
             if (confirm == JOptionPane.YES_OPTION) {
                 CartController controller = new CartController();
-                if (controller.checkout(passenger, total)) {
-                    JOptionPane.showMessageDialog(null, "Purchase Completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    dispose();
+
+                if (controller.verifyStock(passenger.getCart(), passenger.getCart().getStationId())) {
+                    if (controller.checkout(passenger, passenger.getCart().getTotalPrice())) {
+                        JOptionPane.showMessageDialog(null, "Purchase Completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Purchase Failed! Please Check your balance and try again", "Failure", JOptionPane.ERROR_MESSAGE);
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Purchase Failed! Please Check your balance and try again", "Failure", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Stock in station is less than the quantity you specified. Please clear the cart & try to add items to cart again!", "Failure", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -136,7 +140,6 @@ public class CartCheckoutScreen extends JFrame {
         victualPanel.add(totalLabel);
 
         double totalPrice = qty * victual.getPrice();
-        total += totalPrice;
 
         JLabel price = new JLabel("Rp " + totalPrice);
         price.setFont(new Font("calibri", Font.BOLD, 20));

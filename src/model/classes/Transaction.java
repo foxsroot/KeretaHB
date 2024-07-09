@@ -5,12 +5,12 @@ import java.sql.Timestamp;
 public abstract class Transaction {
     Integer transactionID;
     Timestamp datePurchase;
-    double amount;
+    double total;
 
-    public Transaction(Integer transactionID, Timestamp datePurchase, double amount) {
+    public Transaction(Integer transactionID, Timestamp datePurchase, double total) {
         this.transactionID = transactionID;
         this.datePurchase = datePurchase;
-        this.amount = amount;
+        this.total = total;
     }
 
     public Transaction() {}
@@ -31,11 +31,11 @@ public abstract class Transaction {
         this.datePurchase = datePurchase;
     }
 
-    public double getAmount() {
-        return amount;
+    public double getTotal() {
+        return total;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setTotal(double total) {
+        this.total = total;
     }
 }
