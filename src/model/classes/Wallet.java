@@ -34,4 +34,18 @@ public class Wallet {
     public void setPin(String pin) {
         this.pin = pin;
     }
+    
+    public void addBalance(Double newBalance) {
+        this.balance += newBalance;
+    }
+    
+    public boolean decreaseBalance(Double reduceBalance) {
+        if (this.balance < reduceBalance) return false;
+        this.balance -= reduceBalance;
+        return true;
+    }
+    
+    public boolean verifyPin(String pin) {
+        return this.pin.equals(pin);
+    }
 }
