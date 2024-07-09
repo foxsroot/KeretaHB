@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 09, 2024 at 06:13 AM
--- Server version: 10.4.32-MariaDB
+-- Generation Time: Jul 09, 2024 at 07:28 AM
+-- Server version: 11.2.1-MariaDB
 -- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -312,19 +312,20 @@ CREATE TABLE `station` (
   `station_id` int(11) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
-  `income` int(10) UNSIGNED DEFAULT NULL
+  `income` int(10) UNSIGNED DEFAULT NULL,
+  `picture` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `station`
 --
 
-INSERT INTO `station` (`station_id`, `name`, `location`, `income`) VALUES
-(1, 'Bandung Station', 'Bandung, West Java', 50000),
-(2, 'Bekasi Station', 'Bekasi, West Java', 45000),
-(3, 'Bogor Station', 'Bogor, West Java', 47000),
-(4, 'Cirebon Station', 'Cirebon, West Java', 48000),
-(5, 'Depok Station', 'Depok, West Java', 46000);
+INSERT INTO `station` (`station_id`, `name`, `location`, `income`, `picture`) VALUES
+(1, 'Bandung Station', 'Bandung, West Java', 50000, 'bandung_station.jpg'),
+(2, 'Bekasi Station', 'Bekasi, West Java', 45000, 'bekasi_station.jpg'),
+(3, 'Bogor Station', 'Bogor, West Java', 47000, 'bogor_station.jpg'),
+(4, 'Cirebon Station', 'Cirebon, West Java', 48000, 'cirebon_station.jpg'),
+(5, 'Depok Station', 'Depok, West Java', 46000, 'depok_station.jpg');
 
 -- --------------------------------------------------------
 
