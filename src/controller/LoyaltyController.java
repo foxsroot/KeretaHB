@@ -1,6 +1,5 @@
 package controller;
 
-import model.classes.Passenger;
 import model.enums.LoyaltyEnum;
 
 import java.sql.PreparedStatement;
@@ -100,16 +99,23 @@ public class LoyaltyController {
         return null;
     }
 
-    public boolean updateLoyaltyRules(LoyaltyEnum loyalty, double discount, double minimumTransaction) {
+    public boolean updateLoyaltyDiscount(LoyaltyEnum loyalty, String discount) {
+        double discountValue;
+
+        try {
+            discountValue = Double.parseDouble(discount);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
         conn.connect();
 
-        String query = "UPDATE loyalty SET discount = ?, minimum_transaction = ? WHERE loyalty_type = ?";
+        String query = "UPDATE loyalty SET discount = ? WHERE loyalty_type = ?";
 
         try {
             PreparedStatement stmt = conn.con.prepareStatement(query);
-            stmt.setDouble(1, discount);
-            stmt.setDouble(2, minimumTransaction);
-            stmt.setString(3, loyalty.toString());
+            stmt.setDouble(1, discountValue);
+            stmt.setString(2, loyalty.toString());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
