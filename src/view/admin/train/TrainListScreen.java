@@ -1,11 +1,11 @@
 package view.admin.train;
 
+import controller.StationController;
 import controller.TrainController;
 import model.classes.Train;
+import view.admin.AdminMenu;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
@@ -19,114 +19,87 @@ public class TrainListScreen extends JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
 
-        this.setLayout(new BorderLayout());
+        this.setLayout(null);
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBounds(20, 70, 850, 300);
+        JLabel screenTitle = new JLabel("Train List");
+        screenTitle.setFont(new Font("Calibri", Font.BOLD, 30));
+        screenTitle.setBounds(300, 20, 300, 30);
+        add(screenTitle);
 
-        displayTrainList(mainPanel);
+        JPanel trainListPanel = new JPanel();
+        trainListPanel.setLayout(null);
+        trainListPanel.setBackground(Color.WHITE);
 
-        JLabel showTrainById = createLabel("Input Train ID for Detail");
-        mainPanel.add(showTrainById);
+        displayTrainList(trainListPanel);
 
-        JPanel searchPanel = new JPanel();
-        searchPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        JScrollPane scrollPane = new JScrollPane(trainListPanel);
+        scrollPane.setBounds(10, 70, 870, 530);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        add(scrollPane);
 
-        JTextField showTrainByIdField = new JTextField();
-        showTrainByIdField.setFont(new Font("Calibri", Font.BOLD, 16));
-        showTrainByIdField.setPreferredSize(new Dimension(600, 30));
-
-        JButton searchButton = new JButton("Search");
-        searchButton.setFont(new Font("Calibri", Font.BOLD, 16));
-        searchButton.setPreferredSize(new Dimension(100, 29));
-
-        searchButton.addActionListener(e -> {
-            String searchID = showTrainByIdField.getText();
-            if (searchID.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please fill the Train ID", "Empty Field", JOptionPane.WARNING_MESSAGE);
-            } else {
-                try {
-                    Train searchedTrain = trainController.getTrainById(Integer.parseInt(searchID));
-                    if (searchedTrain == null) {
-                        JOptionPane.showMessageDialog(null, "Train ID not found", "Schedule Not Found", JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        TrainDetailScreen trainDetailScreen = new TrainDetailScreen(searchedTrain);
-                        this.dispose();
-                        trainDetailScreen.setVisible(true);
-                    }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Invalid Train ID", "Input Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
+        JButton backButton = new JButton("Back to Main Menu");
+        backButton.setBounds(30, 630, 250, 30);
+        backButton.setFont(new Font("Calibri", Font.BOLD, 16));
+        backButton.addActionListener(e -> {
+            AdminMenu admin = new AdminMenu();
         });
-
-        searchPanel.add(showTrainByIdField);
-        searchPanel.add(searchButton);
-
-        JScrollPane mainScrollPane = new JScrollPane(mainPanel);
-        this.add(mainScrollPane, BorderLayout.CENTER);
-        this.add(searchPanel, BorderLayout.SOUTH);
-
-        JScrollBar verticalScrollBar = mainScrollPane.getVerticalScrollBar();
-        verticalScrollBar.setUnitIncrement(16);
-        verticalScrollBar.setBlockIncrement(75);
+        add(backButton);
+        this.setVisible(true);
     }
 
     private void displayTrainList(JPanel panel) {
-        JLabel label = createLabel("Train List");
-        JTable table = createTable();
-        DefaultTableModel model = createTableModel();
-        table.setModel(model);
-        populateTrainList(model);
-
-        panel.add(label);
-        panel.add(new JScrollPane(table));
-    }
-
-    private JLabel createLabel(String text) {
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Calibri", Font.BOLD, 16));
-        label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        return label;
-    }
-
-    private JTable createTable() {
-        JTable table = new JTable();
-        table.setPreferredScrollableViewportSize(new Dimension(850, 100));
-        table.setFillsViewportHeight(true);
-        table.setRowHeight(25);
-        table.setFont(new Font("Calibri", Font.PLAIN, 14));
-        table.getTableHeader().setFont(new Font("Calibri", Font.BOLD, 14));
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
-        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
-        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setHeaderRenderer(headerRenderer);
-        }
-
-        return table;
-    }
-
-    private DefaultTableModel createTableModel() {
-        DefaultTableModel model = new DefaultTableModel();
-        String[] columns = {"Train ID", "Station ID", "Speed"};
-        for (String column : columns) {
-            model.addColumn(column);
-        }
-        return model;
-    }
-
-    private void populateTrainList(DefaultTableModel model) {
         List<Train> trains = trainController.getTrainList();
+        int yOffset = 10;
         for (Train train : trains) {
-            model.addRow(new Object[]{
-                    train.getId(),
-                    train.getStationId(),
-                    train.getSpeed()
-            });
+            panel.add(createTrainPanel(train, yOffset));
+            yOffset += 110;
         }
+        panel.setPreferredSize(new Dimension(870, yOffset + 120));
+    }
+
+    private JPanel createTrainPanel(Train train, int yOffset) {
+        JPanel trainPanel = new JPanel();
+        trainPanel.setLayout(null);
+        trainPanel.setBounds(10, yOffset, 850, 100);
+        trainPanel.setBackground(Color.WHITE);
+
+        JLabel trainId = new JLabel("ID: " + train.getId());
+        trainId.setFont(new Font("Calibri", Font.BOLD, 25));
+        trainId.setBounds(10, 10, 100, 30);
+        trainPanel.add(trainId);
+
+        StationController stationController = new StationController();
+        JLabel stationId = new JLabel("Station: " + stationController.getStationNameById(train.getStationId()));
+        stationId.setFont(new Font("Calibri", Font.PLAIN, 25));
+        stationId.setBounds(120, 10, 300, 30);
+        trainPanel.add(stationId);
+
+        JLabel speed = new JLabel("Speed: " + train.getSpeed());
+        speed.setFont(new Font("Calibri", Font.PLAIN, 25));
+        speed.setBounds(120, 50, 300, 30);
+        trainPanel.add(speed);
+
+        JButton viewCarriagesButton = new JButton("View Carriages");
+        viewCarriagesButton.setBounds(590, 30, 130, 30);
+        viewCarriagesButton.addActionListener(e -> {
+            TrainCarriagesListScreen trainCarriageListScreen = new TrainCarriagesListScreen(train);
+            this.dispose();
+            trainCarriageListScreen.setVisible(true);
+        });
+        trainPanel.add(viewCarriagesButton);
+
+        JButton viewDetailButton = new JButton("View Detail");
+        viewDetailButton.setBounds(730, 30, 110, 30);
+        viewDetailButton.addActionListener(e -> {
+            TrainDetailScreen trainDetailScreen = new TrainDetailScreen(train);
+            this.dispose();
+            trainDetailScreen.setVisible(true);
+        });
+        trainPanel.add(viewDetailButton);
+
+        return trainPanel;
     }
 
     // Testing

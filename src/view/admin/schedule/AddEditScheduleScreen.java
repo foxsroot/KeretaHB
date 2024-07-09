@@ -27,9 +27,16 @@ public class AddEditScheduleScreen extends JFrame {
         this.setLayout(null);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setTitle("Add Schedule");
+        this.setTitle("Schedule Form");
 
-        JLabel screenTitle = new JLabel("Add Schedule Form");
+        String formTitle;
+        if (schedule.getScheduleID() != null) {
+            formTitle = "Edit Schedule ID: " + schedule.getScheduleID();
+        } else {
+            formTitle = "Add Schedule";
+        }
+
+        JLabel screenTitle = new JLabel(formTitle);
         screenTitle.setFont(new Font("Calibri", Font.BOLD, 20));
         screenTitle.setBounds(370, 10, 200, 30);
 
@@ -99,7 +106,7 @@ public class AddEditScheduleScreen extends JFrame {
         }
 
         trainList.addActionListener(e -> {
-            if(trainController.totalTrainCapacity((Integer) trainList.getSelectedItem()) == 0){
+            if (trainController.totalTrainCapacity((Integer) trainList.getSelectedItem()) == 0) {
                 JOptionPane.showMessageDialog(this, "This train did not have any carriages. Please choose another train.");
                 trainList.setSelectedIndex(-1);
             }
@@ -134,24 +141,22 @@ public class AddEditScheduleScreen extends JFrame {
 
                 if (schController.validateScheduleForm(selectedTrainID, departureStationID, arrivalStationID, departureDateForm, Double.parseDouble(feeField.getText()))) {
 
+                    Schedule newSchedule = new Schedule(selectedTrainID, departureStationID, arrivalStationID, departureDateForm, Double.parseDouble(feeField.getText()));
                     //Update
                     if (schedule.getScheduleID() != null) {
-                        Schedule newSchedule = new Schedule(selectedTrainID, departureStationID, arrivalStationID, departureDateForm, Double.parseDouble(feeField.getText())).addScheduleID(schedule.getScheduleID());
+                        newSchedule.addScheduleID(schedule.getScheduleID());
                         if (schController.addSchedule(newSchedule, false)) {
                             JOptionPane.showMessageDialog(null, "Schedule Edited Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                             AdminMenu backToAdminMain = new AdminMenu();
                             this.dispose();
-                            backToAdminMain.setVisible(true);
                         } else {
                             JOptionPane.showMessageDialog(null, "Failed to Edit Schedule!", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
-                        Schedule newSchedule = new Schedule(selectedTrainID, departureStationID, arrivalStationID, departureDateForm, Double.parseDouble(feeField.getText()));
                         if (schController.addSchedule(newSchedule, true)) {
                             JOptionPane.showMessageDialog(null, "New Schedule Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                             AdminMenu backToAdminMain = new AdminMenu();
                             this.dispose();
-                            backToAdminMain.setVisible(true);
                         } else {
                             JOptionPane.showMessageDialog(null, "Failed to Add Schedule!", "Error", JOptionPane.ERROR_MESSAGE);
                         }
@@ -180,6 +185,7 @@ public class AddEditScheduleScreen extends JFrame {
         add(buttonPanel);
         add(warningLabel);
 
+        this.setVisible(true);
     }
 
     private void loadTrainList(Integer departureStationId) {

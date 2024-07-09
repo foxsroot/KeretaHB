@@ -62,6 +62,8 @@ public class ScheduleDetailScreen extends JFrame {
         this.setLayout(new BorderLayout());
         this.add(mainScrollPane, BorderLayout.CENTER);
         this.add(buttonPanel, BorderLayout.SOUTH);
+
+        this.setVisible(true);
     }
 
     private JLabel createLabel(String text) {

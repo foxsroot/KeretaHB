@@ -2,10 +2,7 @@ package controller;
 
 import model.classes.Carriage;
 import model.classes.Train;
-import model.enums.CarriageType;
-import model.enums.ClassType;
 
-import javax.swing.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -13,7 +10,8 @@ import java.util.List;
 
 public class TrainController {
     public int totalTrainCapacity(int train_id) {
-        Carriage[] carriages = getCarriage(train_id);
+        CarriageController carriageController = new CarriageController();
+        Carriage[] carriages = carriageController.getCarriage(train_id);
         int totalCapacity = 0;
         if (carriages[0] != null) {
             for (int i = 0; i < carriages.length; i++) {
@@ -42,12 +40,13 @@ public class TrainController {
             conn.connect();
             PreparedStatement st = conn.con.prepareStatement(query);
             ResultSet rs = st.executeQuery();
+            CarriageController carriageController = new CarriageController();
             while (rs.next()) {
                 Integer id = rs.getInt("train_id");
                 Integer station_id = rs.getInt("station_id");
                 int speed = rs.getInt("speed");
 
-                Train train = new Train(station_id, getCarriage(id), speed).addId(id);
+                Train train = new Train(station_id, carriageController.getCarriage(id), speed).addId(id);
                 trains.add(train);
             }
         } catch (Exception e) {
@@ -69,10 +68,10 @@ public class TrainController {
             PreparedStatement st = conn.con.prepareStatement(query);
             st.executeQuery(query);
             ResultSet rs = st.executeQuery();
-
+            CarriageController carriageController = new CarriageController();
             if (rs.next()) {
                 Integer station_id = rs.getInt("station_id");
-                Carriage[] carriages = getCarriage(train_id);
+                Carriage[] carriages = carriageController.getCarriage((train_id));
                 int speed = rs.getInt("speed");
 
                 train = new Train(station_id, carriages, speed).addId(train_id);
@@ -85,61 +84,12 @@ public class TrainController {
         return train;
     }
 
-    public Carriage[] getCarriage(int train_id) {
-        Carriage[] carriages = new Carriage[5];
-        ConnectionHandler conn = new ConnectionHandler();
-        String query = "SELECT * FROM carriage where train_id = '" + train_id + "'";
-        try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
-            ResultSet rs = st.executeQuery();
-            int i = 0;
-            while (rs.next() && i < 5) {
-                Integer trainId = rs.getInt("train_id");
-                String carriageType = rs.getString("type");
-                int capacity = rs.getInt("capacity");
-                String carriageClass = rs.getString("class");
-                Integer baggage = rs.getInt("baggage_allowance");
-
-                carriages[i] = new Carriage(trainId, capacity, CarriageType.valueOf(carriageType), baggage, ClassType.valueOf(carriageClass));
-                i++;
-            }
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-        } finally {
-            conn.disconnect();
-        }
-        return carriages;
-    }
-
-    public Carriage[] getUnassignedCarriages() {
-        Carriage[] carriages = new Carriage[5];
-        String query = "SELECT * FROM carriage WHERE train_id = '" + 0 + "'";
-        ConnectionHandler conn = new ConnectionHandler();
-        try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
-            ResultSet rs = st.executeQuery();
-            for (int i = 0; i < carriages.length; i++) {
-                String carriageType = rs.getString("type");
-                int capacity = rs.getInt("capacity");
-                String carriageClass = rs.getString("class");
-                Integer baggage = rs.getInt("baggage_allowance");
-
-                carriages[i] = new Carriage(0, capacity, CarriageType.valueOf(carriageType), baggage, ClassType.valueOf(carriageClass));
-            }
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-        } finally {
-            conn.disconnect();
-        }
-        return carriages;
-    }
 
     public List<Train> getTrainsByStationId(int stationId) {
         List<Train> trains = new ArrayList<>();
         String query = "SELECT * FROM train WHERE station_id = ?";
         ConnectionHandler conn = new ConnectionHandler();
+        CarriageController carriageController = new CarriageController();
         try {
             conn.connect();
             PreparedStatement st = conn.con.prepareStatement(query);
@@ -149,7 +99,7 @@ public class TrainController {
                 Integer id = rs.getInt("train_id");
                 Integer station_id = rs.getInt("station_id");
                 int speed = rs.getInt("speed");
-                Carriage[] carriages = getCarriage(id);
+                Carriage[] carriages = carriageController.getCarriage(id);
 
                 trains.add(new Train(station_id, carriages, speed).addId(id));
             }
@@ -162,16 +112,7 @@ public class TrainController {
     }
 
     public boolean validateTrainForm(Integer stationId, int speed) {
-        boolean valid = true;
-        if (stationId == null) {
-            JOptionPane.showMessageDialog(null, "Please insert Station ID.", "Validation Error", JOptionPane.ERROR_MESSAGE);
-            valid = false;
-        }
-        if (speed < 0) {
-            JOptionPane.showMessageDialog(null, "Please insert the correct Train Speed.", "Validation Error", JOptionPane.ERROR_MESSAGE);
-            valid = false;
-        }
-        return valid;
+        return stationId != null && speed > 0;
     }
 
     public boolean addTrain(Train newTrain, boolean add) {
@@ -200,17 +141,37 @@ public class TrainController {
     public boolean deleteTrain(Train train) {
         String query = "DELETE FROM train WHERE train_id =?";
         ConnectionHandler conn = new ConnectionHandler();
+        if (revokeCarriagesByTrainId(train.getId())) {
+            try {
+                conn.connect();
+                PreparedStatement st = conn.con.prepareStatement(query);
+                st.setInt(1, train.getId());
+                st.executeUpdate();
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                conn.disconnect();
+            }
+        }
+        return false;
+    }
+
+    private boolean revokeCarriagesByTrainId(Integer trainId) {
+        ConnectionHandler conn = new ConnectionHandler();
+        String query = "UPDATE carriage SET train_id = NULL WHERE train_id = ?";
         try {
             conn.connect();
             PreparedStatement st = conn.con.prepareStatement(query);
-            st.setInt(1, train.getId());
+            st.setInt(1, trainId);
             st.executeUpdate();
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         } finally {
             conn.disconnect();
         }
         return false;
     }
+
 }

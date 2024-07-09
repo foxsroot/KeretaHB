@@ -51,7 +51,6 @@ public class StationScheduleListScreen extends JFrame {
         backButton.addActionListener(e -> {
             StationScheduleSelection selectStation = new StationScheduleSelection();
             this.dispose();
-            selectStation.setVisible(true);
         });
 
         add(screenTitle);
@@ -99,7 +98,6 @@ public class StationScheduleListScreen extends JFrame {
         viewDetailButton.addActionListener(e -> {
             ScheduleDetailScreen scheduleDetailScreen = new ScheduleDetailScreen(schedule);
             this.dispose();
-            scheduleDetailScreen.setVisible(true);
         });
         schedulePanel.add(viewDetailButton);
 

@@ -67,7 +67,6 @@ public class ScheduleDetailScreen extends JFrame {
         backButton.addActionListener(e -> {
             StationScheduleSelection selectStation = new StationScheduleSelection();
             this.dispose();
-            selectStation.setVisible(true);
         });
 
         JPanel buttonPanel = new JPanel();
@@ -83,7 +82,6 @@ public class ScheduleDetailScreen extends JFrame {
         editScheduleButton.addActionListener(e -> {
             AddEditScheduleScreen scheduleEditScreen = new AddEditScheduleScreen(schedule);
             this.dispose();
-            scheduleEditScreen.setVisible(true);
         });
         deleteScheduleButton.addActionListener(e -> {
             ScheduleController schController = new ScheduleController();
@@ -93,10 +91,11 @@ public class ScheduleDetailScreen extends JFrame {
                     JOptionPane.showMessageDialog(null, "Schedule deleted successfully", "Delete Schedule", JOptionPane.INFORMATION_MESSAGE);
                     AdminMenu adminMenu = new AdminMenu();
                     this.dispose();
-                    adminMenu.setVisible(true);
                 }
             }
         });
+
+        this.setVisible(true);
     }
 
     private JLabel createLabel(String text) {

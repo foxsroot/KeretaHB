@@ -2,6 +2,7 @@ package view.admin.train;
 
 import controller.TrainController;
 import model.classes.Train;
+import view.admin.AdminMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,9 +16,16 @@ public class AddEditTrainScreen extends JFrame {
         this.setLayout(null);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setTitle("Add Train");
+        this.setTitle("Train Form");
 
-        JLabel screenTitle = new JLabel("Add Train Form");
+        String formTitle = "";
+        if (train.getId() != null) {
+            formTitle = "Edit Train ID: " + train.getId();
+        } else {
+            formTitle = "Add Train";
+        }
+
+        JLabel screenTitle = new JLabel(formTitle);
         screenTitle.setFont(new Font("Calibri", Font.BOLD, 20));
         screenTitle.setBounds(370, 10, 200, 30);
         add(screenTitle);
@@ -60,22 +68,26 @@ public class AddEditTrainScreen extends JFrame {
             try {
                 Integer stationId = Integer.parseInt(trainStationIdField.getText());
                 Integer speed = Integer.parseInt(trainSpeedField.getText());
+                Train newTrain = new Train(stationId, train.getCarriages(), speed);
 
                 if (trainController.validateTrainForm(stationId, speed)) {
                     //Edit
                     if (train.getId() != null) {
-                        Train newTrain = new Train(stationId, train.getCarriages(), speed);
+                        newTrain.addId(train.getId());
                         if (trainController.addTrain(newTrain, false)) {
                             JOptionPane.showMessageDialog(null, "Train Edited Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                            AdminMenu adminMenu = new AdminMenu();
+                            this.dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "All Fields Must Be Filled!", "Input Error!", JOptionPane.WARNING_MESSAGE);
                         }
                     }
                     //Add
                     else {
-                        Train newTrain = new Train(stationId, null, speed);
                         if (trainController.addTrain(newTrain, true)) {
                             JOptionPane.showMessageDialog(null, "Train Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                            AdminMenu adminMenu = new AdminMenu();
+                            this.dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "All Fields Must Be Filled!", "Input Error!", JOptionPane.WARNING_MESSAGE);
                         }
@@ -99,11 +111,12 @@ public class AddEditTrainScreen extends JFrame {
         warningLabel.setForeground(new Color(255, 0, 10));
         warningLabel.setBounds(50, 500, 170, 30);
         add(warningLabel);
+
+        this.setVisible(true);
     }
 
     public static void main(String[] args) {
         Train train = new Train(null, null, null).addId(null);
         AddEditTrainScreen addEditTrainScreen = new AddEditTrainScreen(train);
-        addEditTrainScreen.setVisible(true);
     }
 }
