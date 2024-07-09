@@ -79,7 +79,7 @@ public class TransactionController {
     }
 
     private boolean returnStock(HashMap<Integer, Integer> victuals, int stationId) {
-        VictualController controller = new VictualController();
+        StockController controller = new StockController();
 
         for (Integer victualId : victuals.keySet()) {
             controller.addStock(victualId, stationId, victuals.get(victualId));

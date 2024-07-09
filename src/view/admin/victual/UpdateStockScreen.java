@@ -2,10 +2,10 @@ package view.admin.victual;
 
 import config.DirectoryConfig;
 import controller.ImageController;
+import controller.StockController;
 import controller.VictualController;
 import model.classes.Station;
 import model.classes.Victual;
-import view.passenger.victual.ListStationScreen;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -109,8 +109,8 @@ public class UpdateStockScreen extends JFrame {
         victualPrice.setBounds(180, 40, 180, 20);
         singleVictualPanel.add(victualPrice);
 
-        VictualController victualController = new VictualController();
-        int stock = victualController.getStock(victual.getId(), station.getId());
+        StockController stockController = new StockController();
+        int stock = stockController.getStock(victual.getId(), station.getId());
 
         if (stock == -1) {
             JButton insertButton = new JButton("Add Item To Station");
@@ -131,7 +131,7 @@ public class UpdateStockScreen extends JFrame {
                         JOptionPane.showMessageDialog(null, "Please enter a valid stock (Number only)", "Error Input", JOptionPane.ERROR_MESSAGE);
                     }
 
-                    if (valid && victualController.insertNewStock(victual.getId(), station.getId(), initStock)) {
+                    if (valid && stockController.insertNewStock(victual.getId(), station.getId(), initStock)) {
                         JOptionPane.showMessageDialog(null, "Successfully added item to the station", "Success", JOptionPane.INFORMATION_MESSAGE);
                         victualPanel.removeAll();
                         insertVictualPanel();
@@ -152,11 +152,13 @@ public class UpdateStockScreen extends JFrame {
             numberFormatter.setMinimum(1);
             numberFormatter.setMaximum(999999999);
 
+            StockController controller = new StockController();
+
             JFormattedTextField quantityField = new JFormattedTextField(numberFormatter);
             quantityField.setFont(new Font("calibri", Font.PLAIN, 18));
             quantityField.setBounds(180, 100, 110, 30);
             quantityField.setColumns(9);
-            quantityField.setText(String.valueOf(victualController.getStock(victual.getId(), station.getId())));
+            quantityField.setText(String.valueOf(stockController.getStock(victual.getId(), station.getId())));
             singleVictualPanel.add(quantityField);
 
             JButton increaseButton = new JButton("+");
@@ -187,7 +189,7 @@ public class UpdateStockScreen extends JFrame {
                 if (confirm == JOptionPane.YES_OPTION) {
                     try {
                         int newStock = Integer.parseInt(quantityField.getText());
-                        if (newStock >= 0 && victualController.updateStock(victual.getId(), station.getId(), newStock)) {
+                        if (newStock >= 0 && stockController.updateStock(victual.getId(), station.getId(), newStock)) {
                             JOptionPane.showMessageDialog(null, "Stock updated successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             JOptionPane.showMessageDialog(null, "Failed to update stock", "Error", JOptionPane.ERROR_MESSAGE);
@@ -207,7 +209,7 @@ public class UpdateStockScreen extends JFrame {
             removeButton.addActionListener(e -> {
                 int confirm = JOptionPane.showConfirmDialog(null, "Remove This Item From This Station?", "Remove From Station Confirmation", JOptionPane.YES_NO_OPTION);
 
-                if (confirm == JOptionPane.YES_OPTION && victualController.removeFromStation(victual.getId(), station.getId())) {
+                if (confirm == JOptionPane.YES_OPTION && stockController.removeFromStation(victual.getId(), station.getId())) {
                     JOptionPane.showMessageDialog(null, "Item Removed From Station!", "Success", JOptionPane.INFORMATION_MESSAGE);
                     victualPanel.removeAll();
                     insertVictualPanel();
