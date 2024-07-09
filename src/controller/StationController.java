@@ -33,7 +33,8 @@ public class StationController {
                 String location = rs.getString("location");
                 ArrayList<Train> trains = (ArrayList<Train>) trainController.getTrainList();
                 double income = rs.getDouble("income");
-                Station station = new Station(id, schedules, victual, name, location, trains, income);
+                String picture = rs.getString("picture");
+                Station station = new Station(id, schedules, victual, name, location, trains, income, picture);
                 stations.add(station);
             }
             return stations;
@@ -86,9 +87,9 @@ public class StationController {
                 String name = rs.getString("name");
                 String location = rs.getString("location");
                 ArrayList<Train> trains = (ArrayList<Train>) trainController.getTrainsByStationId(id);
-
                 double income = rs.getDouble("income");
-                station = new Station(id, schedules, victual, name, location, trains, income);
+                String picture = rs.getString("picture");
+                station = new Station(id, schedules, victual, name, location, trains, income, picture);
             }
         } catch (Exception e) {
             e.printStackTrace(System.err);
