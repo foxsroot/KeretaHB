@@ -85,6 +85,16 @@ public class TransactionHistoryScreen extends JFrame {
                 dispose();
                 new VictualTransactionScreen((VictualTransaction) transaction);
             });
+
+            JLabel totalLabel = new JLabel("Total Price");
+            totalLabel.setFont(new Font("calibri", Font.BOLD, 20));
+            totalLabel.setBounds(550, 55, 350, 40);
+            panel.add(totalLabel);
+
+            JLabel totalAmount = new JLabel("Rp " + transaction.getAmount());
+            totalAmount.setFont(new Font("calibri", Font.BOLD, 20));
+            totalAmount.setBounds(550, 80, 350, 40);
+            panel.add(totalAmount);
         } else {
             panel.setBackground(Color.RED);
             panel.setBounds(xOffset, yOffset, 750, 200);

@@ -137,13 +137,14 @@ public class CartController {
 
         conn.connect();
 
-        String query = "INSERT INTO victuals_transaction(user_id, station_id, date) VALUES(?, ?, ?)";
+        String query = "INSERT INTO victuals_transaction(user_id, station_id, date, amount) VALUES(?, ?, ?, ?)";
 
         try {
             PreparedStatement stmt = conn.con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, passenger.getId());
             stmt.setInt(2, passenger.getCart().getStationId());
             stmt.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
+            stmt.setDouble(4, total);
 
             stmt.executeUpdate();
 

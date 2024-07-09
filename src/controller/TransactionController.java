@@ -16,7 +16,7 @@ public class TransactionController {
         conn.connect();
 
         ArrayList<Transaction> transactionList = new ArrayList<>();
-        String query = "SELECT vt.transaction_id, vt.user_id, vt.station_id, vt.date, ti.victual_id, ti.quantity FROM victuals_transaction vt LEFT JOIN transaction_item ti ON vt.transaction_id = ti.transaction_id WHERE vt.user_id = ? ORDER BY vt.date DESC";
+        String query = "SELECT vt.transaction_id, vt.user_id, vt.station_id, vt.date, vt.amount, ti.victual_id, ti.quantity FROM victuals_transaction vt LEFT JOIN transaction_item ti ON vt.transaction_id = ti.transaction_id WHERE vt.user_id = ? ORDER BY vt.date DESC";
 
         try {
             PreparedStatement stmt = conn.con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -28,7 +28,7 @@ public class TransactionController {
                 transaction.setTransactionID(rs.getInt("transaction_id"));
                 transaction.setStationID(rs.getInt("station_id"));
                 transaction.setDatePurchase(rs.getTimestamp("date"));
-//                transaction.setAmount(rs.getDouble("amount"));
+                transaction.setAmount(rs.getDouble("amount"));
 
                 HashMap<Integer, Integer> victualBought = new HashMap<>();
 
@@ -52,14 +52,65 @@ public class TransactionController {
         return transactionList;
     }
 
-    public boolean cancelVictualTransaction(int transactionID) {
+    public boolean cancelVictualTransaction(VictualTransaction transaction, int userId) {
+        if (refundVictualTrxBalance(transaction, userId) && returnStock(transaction.getItems(), transaction.getStationID()) && deleteTransactionItems(transaction.getTransactionID())) {
+            conn.connect();
+
+            String query = "DELETE FROM victuals_transaction WHERE transaction_id = ?";
+
+            try {
+                PreparedStatement stmt = conn.con.prepareStatement(query);
+                stmt.setInt(1, transaction.getTransactionID());
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            } finally {
+                conn.disconnect();
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean returnStock(HashMap<Integer, Integer> victuals, int stationId) {
+        VictualController controller = new VictualController();
+
+        for (Integer victualId : victuals.keySet()) {
+            controller.addStock(victualId, stationId, victuals.get(victualId));
+        }
+
+        return true;
+    }
+
+    private boolean deleteTransactionItems(int transactionID) {
         conn.connect();
 
-        String query = "DELETE FROM victuals_transaction WHERE transaction_id = ?";
+        String query = "DELETE FROM transaction_item WHERE transaction_id = ?";
 
         try {
             PreparedStatement stmt = conn.con.prepareStatement(query);
             stmt.setInt(1, transactionID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean refundVictualTrxBalance(VictualTransaction transaction, int userId) {
+        conn.connect();
+
+        String query = "UPDATE wallet SET balance = balance + ? WHERE user_id = ?";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setDouble(1, transaction.getAmount());
+            stmt.setInt(2, userId);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,11 +121,4 @@ public class TransactionController {
 
         return true;
     }
-
-//    private boolean refundBalance(int transactionID) {
-//        conn.connect();
-//
-//        String query = "UPDATE wallet SET balance = ? WHERE transaction_id = ?";
-//
-//    }
 }
