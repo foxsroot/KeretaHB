@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 public class CartCheckoutScreen extends JFrame {
     Passenger passenger;
+    double total = 0;
 
     public CartCheckoutScreen() {
         CartController controller = new CartController();
@@ -63,6 +64,8 @@ public class CartCheckoutScreen extends JFrame {
         totalLabel.setFont(new Font("calibri", Font.BOLD, 30));
         totalLabel.setBounds(20, yOffset + 30, 350, 30);
         itemPanel.add(totalLabel);
+
+        passenger.getCart().setTotalPrice(total);
 
         JLabel totalPriceLabel = new JLabel("Rp " + passenger.getCart().getTotalPrice());
         totalPriceLabel.setFont(new Font("calibri", Font.BOLD, 30));
@@ -145,6 +148,8 @@ public class CartCheckoutScreen extends JFrame {
         price.setFont(new Font("calibri", Font.BOLD, 20));
         price.setBounds(650, 45, 200, 30);
         victualPanel.add(price);
+
+        total += totalPrice;
 
         return victualPanel;
     }

@@ -78,6 +78,25 @@ public class TransactionController {
         return false;
     }
 
+    public boolean removeTransactionItem(int victualID) {
+        conn.connect();
+
+        String query = "UPDATE transaction_item SET victual_id = NULL WHERE victual_id = ?";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, victualID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            conn.disconnect();
+        }
+
+        return true;
+    }
+
     private boolean returnStock(HashMap<Integer, Integer> victuals, int stationId) {
         StockController controller = new StockController();
 

@@ -133,4 +133,23 @@ public class StockController {
 
         return true;
     }
+
+    public boolean removeFromAllStation(int victualID) {
+        conn.connect();
+
+        String query = "DELETE FROM stock WHERE victual_id = ?";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, victualID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            conn.disconnect();
+        }
+
+        return true;
+    }
 }

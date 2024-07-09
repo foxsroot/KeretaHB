@@ -14,7 +14,6 @@ import java.util.HashMap;
 
 public class VictualTransactionScreen extends JFrame {
     VictualTransaction transaction;
-    double totalPrice = 0;
 
     public VictualTransactionScreen(VictualTransaction transaction) {
         this.transaction = transaction;
@@ -56,18 +55,33 @@ public class VictualTransactionScreen extends JFrame {
         pricePerItemLabel.setBounds(600, 5, 200, 30);
         historyPanel.add(pricePerItemLabel);
 
-        for (int victualId : transaction.getItems().keySet()) {
-            Victual victual = controller.getVictual(victualId);
-            victuals.put(victual, transaction.getItems().get(victualId));
-        }
+//        for (int victualId : transaction.getItems().keySet()) {
+//            try {
+//                Victual victual = controller.getVictual(victualId);
+//                victuals.put(victual, transaction.getItems().get(victualId));
+//            } catch (NullPointerException e) {
+//
+//            }
+//        }
 
         int xOffset = 5;
         int yOffset = 45;
 
-        for (Victual victual : victuals.keySet()) {
-            historyPanel.add(createVictualPanel(victual, victuals.get(victual), xOffset, yOffset));
-            yOffset += 205;
+        for (int victualId : transaction.getItems().keySet()) {
+            try {
+                Victual victual = controller.getVictual(victualId);
+                historyPanel.add(createVictualPanel(victual, transaction.getItems().get(victual.getId()), xOffset, yOffset));
+            } catch (NullPointerException e) {
+                historyPanel.add(createVictualPanel(null, 0, xOffset, yOffset));
+            } finally {
+                yOffset += 205;
+            }
         }
+
+//        for (Victual victual : victuals.keySet()) {
+//            historyPanel.add(createVictualPanel(victual, victuals.get(victual), xOffset, yOffset));
+//            yOffset += 205;
+//        }
 
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
         separator.setBounds(10, yOffset, 760, 10);
@@ -87,7 +101,7 @@ public class VictualTransactionScreen extends JFrame {
         transactionDate.setBounds(10, yOffset, 350, 30);
         historyPanel.add(transactionDate);
 
-        JLabel totalPriceLabel = new JLabel("Rp " + totalPrice);
+        JLabel totalPriceLabel = new JLabel("Rp " + transaction.getTotal());
         totalPriceLabel.setFont(new Font("calibri", Font.BOLD, 20));
         totalPriceLabel.setBounds(580, yOffset - 35, 300, 30);
         historyPanel.add(totalPriceLabel);
@@ -133,34 +147,36 @@ public class VictualTransactionScreen extends JFrame {
         panel.setBackground(null);
         panel.setBounds(xOffset, yOffset, 830, 200);
 
-        JLabel victualImage = new JLabel(victual.getImage());
+        String imagePath = victual != null ? DirectoryConfig.VICTUAL_IMAGES + victual.getImage() : DirectoryConfig.ASSET_DIRECTORY + "dummy\\images.png";
+        JLabel victualImage = new JLabel(imagePath);
         victualImage.setBounds(5, 5, 120, 150);
-        victualImage.setIcon(new ImageIcon(ImageController.resizeImage(DirectoryConfig.VICTUAL_IMAGES + victual.getImage(), 120, 150)));
+        victualImage.setIcon(new ImageIcon(ImageController.resizeImage(imagePath, 120, 150)));
         panel.add(victualImage);
 
-        JLabel nameLabel = new JLabel(victual.getName());
+        String victualName = victual != null ? victual.getName() : "Deleted Item";
+        JLabel nameLabel = new JLabel(victualName);
         nameLabel.setFont(new Font("calibri", Font.BOLD, 20));
         nameLabel.setBounds(130, 10, 250, 20);
         panel.add(nameLabel);
 
-        JLabel priceLabel = new JLabel("Rp " + victual.getPrice());
+        String victualPrice = victual != null ? "Rp " + victual.getPrice() : "Deleted Item";
+        JLabel priceLabel = new JLabel(victualPrice);
         priceLabel.setFont(new Font("calibri", Font.PLAIN, 20));
         priceLabel.setBounds(130, 50, 150, 20);
         panel.add(priceLabel);
 
-        JLabel quantityLabel = new JLabel("x" + quantity);
+        String victualQuantity = victual != null ? "x" + quantity : "-";
+        JLabel quantityLabel = new JLabel(victualQuantity);
         quantityLabel.setFont(new Font("calibri", Font.PLAIN, 20));
         quantityLabel.setBounds(400, 50, 150, 20);
         panel.add(quantityLabel);
 
-        double itemPriceTotal = victual.getPrice() * quantity;
+        String price = victual != null ? String.valueOf(victual.getPrice() * quantity) : "-";
 
-        JLabel totalPricePerItem = new JLabel("Rp " + itemPriceTotal);
+        JLabel totalPricePerItem = new JLabel("Rp " + price);
         totalPricePerItem.setFont(new Font("calibri", Font.PLAIN, 20));
         totalPricePerItem.setBounds(600, 50, 200, 20);
         panel.add(totalPricePerItem);
-
-        totalPrice += itemPriceTotal;
 
         return panel;
     }

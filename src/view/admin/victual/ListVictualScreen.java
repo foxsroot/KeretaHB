@@ -10,6 +10,8 @@ import java.awt.*;
 import java.util.List;
 
 public class ListVictualScreen extends JFrame {
+    JPanel victualListPanel;
+
     public ListVictualScreen() {
         initComponents();
         this.setVisible(true);
@@ -27,30 +29,11 @@ public class ListVictualScreen extends JFrame {
         screenTitle.setFont(new Font("calibri", Font.BOLD, 20));
         screenTitle.setBounds(380, 10, 200, 30);
 
-        VictualController controller = new VictualController();
-        List<Victual> victuals = controller.getVictualList();
-
-        JPanel victualListPanel = new JPanel();
+        victualListPanel = new JPanel();
         victualListPanel.setLayout(null);
         victualListPanel.setBounds(30, 60, 880, 550);
 
-        int yOffset = 10;
-        int xOffset = 10;
-        int counter = 0;
-
-        for (Victual victual : victuals) {
-            if (counter != 0 && counter % 2 == 0) {
-                xOffset = 10;
-                yOffset += 160;
-            }
-
-            victualListPanel.add(createVictualPanel(victual, xOffset, yOffset));
-
-            counter++;
-            xOffset += 410;
-        }
-
-        victualListPanel.setPreferredSize(new Dimension(800, yOffset + 160));
+        generatePanel();
 
         JScrollPane scrollPane = new JScrollPane(victualListPanel);
         scrollPane.setBounds(20, 50, 850, 530);
@@ -95,19 +78,57 @@ public class ListVictualScreen extends JFrame {
         editButton.setBounds(140, 90, 70, 30);
         victualPanel.add(editButton);
 
-        //tambahin removeButton
+        editButton.addActionListener(e -> {
+            dispose();
+            new EditVictualScreen(victual);
+        });
+
         JButton removeButton = new JButton("Remove Victual");
         removeButton.setBackground(Color.RED);
         removeButton.setForeground(Color.WHITE);
         removeButton.setBounds(215, 90, 130, 30);
         victualPanel.add(removeButton);
 
-        editButton.addActionListener(e -> {
-            dispose();
-            new EditVictualScreen(victual);
+        removeButton.addActionListener(e -> {
+            int confirm = JOptionPane.showConfirmDialog(null, "Remove This Victual?\nVictual stock from every station will be removed", "Remove Victual Confirmation", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                VictualController controller = new VictualController();
+                if (controller.removeVictual(victual)) {
+                    JOptionPane.showMessageDialog(null, "Removed Victual!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    victualListPanel.removeAll();
+                    generatePanel();
+                    revalidate();
+                    repaint();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error Removing Victual!", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
         });
 
         return victualPanel;
+    }
+
+    private void generatePanel() {
+        VictualController controller = new VictualController();
+        List<Victual> victuals = controller.getVictualList();
+
+        int yOffset = 10;
+        int xOffset = 10;
+        int counter = 0;
+
+        for (Victual victual : victuals) {
+            if (counter != 0 && counter % 2 == 0) {
+                xOffset = 10;
+                yOffset += 160;
+            }
+
+            victualListPanel.add(createVictualPanel(victual, xOffset, yOffset));
+
+            counter++;
+            xOffset += 410;
+        }
+
+        victualListPanel.setPreferredSize(new Dimension(800, yOffset + 160));
     }
 
     public static void main(String[] args) {
