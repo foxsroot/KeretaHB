@@ -1,4 +1,6 @@
 package view.admin;
 
-public class AdminMenu {
+import javax.swing.*;
+
+public class AdminMenu extends JFrame {
 }

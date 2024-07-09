@@ -4,6 +4,7 @@ import controller.ScheduleController;
 import controller.StationController;
 import controller.TrainController;
 import model.classes.Schedule;
+import view.admin.AdminMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,8 +61,18 @@ public class ScheduleDetailScreen extends JFrame {
         deleteScheduleButton.setFont(new Font("Calibri", Font.BOLD, 16));
         deleteScheduleButton.setPreferredSize(new Dimension(150, 29));
 
+
+        JButton backButton = new JButton("Back to Schedule Selection");
+        backButton.setFont(new Font("Calibri", Font.BOLD, 16));
+        backButton.addActionListener(e -> {
+            StationScheduleSelection selectStation = new StationScheduleSelection();
+            this.dispose();
+            selectStation.setVisible(true);
+        });
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 10));
+        buttonPanel.add(backButton);
         buttonPanel.add(editScheduleButton);
         buttonPanel.add(deleteScheduleButton);
 
@@ -70,17 +81,20 @@ public class ScheduleDetailScreen extends JFrame {
         this.add(buttonPanel, BorderLayout.SOUTH);
 
         editScheduleButton.addActionListener(e -> {
-            AddScheduleScreen scheduleEditScreen = new AddScheduleScreen(schedule);
+            AddEditScheduleScreen scheduleEditScreen = new AddEditScheduleScreen(schedule);
             this.dispose();
             scheduleEditScreen.setVisible(true);
         });
         deleteScheduleButton.addActionListener(e -> {
             ScheduleController schController = new ScheduleController();
-            if (schController.deleteSchedule(schedule)) {
-                JOptionPane.showMessageDialog(null, "Schedule deleted successfully", "Delete Schedule", JOptionPane.INFORMATION_MESSAGE);
-                StationScheduleSelection scheduleSelectionListScreen = new StationScheduleSelection();
-                this.dispose();
-                scheduleSelectionListScreen.setVisible(true);
+            int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this Schedule?", "Warning", JOptionPane.YES_NO_OPTION);
+            if (confirm == JOptionPane.YES_OPTION) {
+                if (schController.deleteSchedule(schedule)) {
+                    JOptionPane.showMessageDialog(null, "Schedule deleted successfully", "Delete Schedule", JOptionPane.INFORMATION_MESSAGE);
+                    AdminMenu adminMenu = new AdminMenu();
+                    this.dispose();
+                    adminMenu.setVisible(true);
+                }
             }
         });
     }

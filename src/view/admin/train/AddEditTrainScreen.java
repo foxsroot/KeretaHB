@@ -6,10 +6,10 @@ import model.classes.Train;
 import javax.swing.*;
 import java.awt.*;
 
-public class AddTrainScreen extends JFrame {
+public class AddEditTrainScreen extends JFrame {
     private final TrainController trainController = new TrainController();
 
-    public AddTrainScreen(Train train) {
+    public AddEditTrainScreen(Train train) {
         this.setSize(900, 700);
         this.setResizable(false);
         this.setLayout(null);
@@ -60,18 +60,20 @@ public class AddTrainScreen extends JFrame {
             try {
                 Integer stationId = Integer.parseInt(trainStationIdField.getText());
                 Integer speed = Integer.parseInt(trainSpeedField.getText());
-                Train newTrain = null;
 
                 if (trainController.validateTrainForm(stationId, speed)) {
+                    //Edit
                     if (train.getId() != null) {
-                        newTrain = new Train(stationId, train.getCarriages(), speed);
+                        Train newTrain = new Train(stationId, train.getCarriages(), speed);
                         if (trainController.addTrain(newTrain, false)) {
                             JOptionPane.showMessageDialog(null, "Train Edited Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         } else {
                             JOptionPane.showMessageDialog(null, "All Fields Must Be Filled!", "Input Error!", JOptionPane.WARNING_MESSAGE);
                         }
-                    } else {
-                        newTrain = new Train(stationId, null, speed);
+                    }
+                    //Add
+                    else {
+                        Train newTrain = new Train(stationId, null, speed);
                         if (trainController.addTrain(newTrain, true)) {
                             JOptionPane.showMessageDialog(null, "Train Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         } else {
@@ -97,5 +99,11 @@ public class AddTrainScreen extends JFrame {
         warningLabel.setForeground(new Color(255, 0, 10));
         warningLabel.setBounds(50, 500, 170, 30);
         add(warningLabel);
+    }
+
+    public static void main(String[] args) {
+        Train train = new Train(null, null, null).addId(null);
+        AddEditTrainScreen addEditTrainScreen = new AddEditTrainScreen(train);
+        addEditTrainScreen.setVisible(true);
     }
 }

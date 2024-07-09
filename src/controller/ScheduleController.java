@@ -118,23 +118,18 @@ public class ScheduleController {
     public boolean validateScheduleForm(Integer train_id, Integer departureStationID, Integer arrivalStationID, Date departureDate, double fee) {
         boolean valid = true;
         if (train_id == null) {
-            JOptionPane.showMessageDialog(null, "Please select a train.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             valid = false;
         }
         if (departureStationID == null) {
-            JOptionPane.showMessageDialog(null, "Departure Station ID must not be empty.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             valid = false;
         }
         if (arrivalStationID == null) {
-            JOptionPane.showMessageDialog(null, "Arrival Station ID must not be empty.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             valid = false;
         }
         if (departureDate == null) {
-            JOptionPane.showMessageDialog(null, "Departure Date must not be empty.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             valid = false;
         }
         if (fee < 0) {
-            JOptionPane.showMessageDialog(null, "Fee must not be negative.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             valid = false;
         }
         return valid;
@@ -146,8 +141,8 @@ public class ScheduleController {
         if (add) {
             query = "INSERT INTO schedule (train_id, departure_station_id, arrival_station_id, departure_date, fee)" +
                     " VALUES (?,?,?,?,?)";
-        }else{
-            query = "UPDATE schedule SET train_id =?, departure_station_id =?, arrival_station_id =?, departure_date =?, fee =?" +
+        } else {
+            query = "UPDATE schedule SET train_id = ?, departure_station_id =?, arrival_station_id =?, departure_date =?, fee =?" +
                     " WHERE schedule_id = '" + schedule.getScheduleID() + "'";
         }
         try {
