@@ -1,5 +1,6 @@
 package controller;
 
+import model.classes.Passenger;
 import model.classes.Transaction;
 import model.classes.VictualTransaction;
 
