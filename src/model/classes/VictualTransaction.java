@@ -1,17 +1,19 @@
 package model.classes;
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.HashMap;
 
 public class VictualTransaction extends Transaction {
     HashMap<Integer, Integer> items; //id, quantity
-    Integer station_id;
+    Integer stationID;
 
-    public VictualTransaction(Integer transactionID, Date datePurchase, HashMap<Integer, Integer> items, Integer station_id) {
-        super(transactionID, datePurchase);
+    public VictualTransaction(Integer transactionID, Timestamp datePurchase, HashMap<Integer, Integer> items, Integer stationID, double amount) {
+        super(transactionID, datePurchase, amount);
         this.items = items;
-        this.station_id = station_id;
+        this.stationID = stationID;
     }
+
+    public VictualTransaction() {}
 
     public HashMap<Integer, Integer> getItems() {
         return items;
@@ -21,11 +23,11 @@ public class VictualTransaction extends Transaction {
         this.items = items;
     }
 
-    public Integer getStation_id() {
-        return station_id;
+    public Integer getStationID() {
+        return stationID;
     }
 
-    public void setStation_id(Integer station_id) {
-        this.station_id = station_id;
+    public void setStationID(Integer stationID) {
+        this.stationID = stationID;
     }
 }
