@@ -195,21 +195,26 @@ public class VictualController {
         return false;
     }
 
-    public boolean removeVictual(int victualId) {
-        conn.connect();
-        String query = "DELETE FROM victual WHERE victual_id = ?";
+    public boolean removeVictual(Victual victual) {
+        TransactionController transactionController = new TransactionController();
+        StockController stockController = new StockController();
 
-        try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
-            stmt.setInt(1, victualId);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            conn.disconnect();
+        if (transactionController.removeTransactionItem(victual.getId()) && stockController.removeFromAllStation(victual.getId()) && ImageController.deleteImage(DirectoryConfig.VICTUAL_IMAGES + victual.getImage())) {
+            conn.connect();
+            String query = "DELETE FROM victual WHERE victual_id = ?";
+
+            try {
+                PreparedStatement stmt = conn.con.prepareStatement(query);
+                stmt.setInt(1, victual.getId());
+                stmt.executeUpdate();
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                conn.disconnect();
+            }
         }
 
-        return true;
+        return false;
     }
 }
