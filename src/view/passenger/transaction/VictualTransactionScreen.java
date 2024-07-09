@@ -102,7 +102,7 @@ public class VictualTransactionScreen extends JFrame {
             int option = JOptionPane.showConfirmDialog(null, "Cancel this transaction?", "Cancel Confirmation", JOptionPane.YES_NO_OPTION);
             if (option == JOptionPane.YES_OPTION) {
                 TransactionController transactionController = new TransactionController();
-                if (transactionController.cancelVictualTransaction(transaction, 2)) { //nanti ganti ke user id beneran (get dari singleton login)
+                if (transactionController.cancelVictualTransaction(transaction, 2, "john.doe@example.com")) { //nanti ganti ke user id beneran (get dari singleton login)
                     JOptionPane.showMessageDialog(null, "Transaction Cancelled & Balance Refunded", "Cancel Success", JOptionPane.INFORMATION_MESSAGE);
                     dispose();
                 } else {

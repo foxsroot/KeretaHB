@@ -52,7 +52,7 @@ public class TransactionController {
         return transactionList;
     }
 
-    public boolean cancelVictualTransaction(VictualTransaction transaction, int userId) {
+    public boolean cancelVictualTransaction(VictualTransaction transaction, int userId, String email) {
         if (refundVictualTrxBalance(transaction, userId) && returnStock(transaction.getItems(), transaction.getStationID()) && deleteTransactionItems(transaction.getTransactionID())) {
             conn.connect();
 
@@ -62,6 +62,9 @@ public class TransactionController {
                 PreparedStatement stmt = conn.con.prepareStatement(query);
                 stmt.setInt(1, transaction.getTransactionID());
                 stmt.executeUpdate();
+
+                NotificationController notificationController = new NotificationController();
+                notificationController.sendNotification(email, "Victuals Cancelation", "Hi ---, we have successfully canceled your victual transaction and returned Rp " + transaction.getAmount() + " to your wallet.\n\nThank you!");
             } catch (SQLException e) {
                 e.printStackTrace();
                 return false;
