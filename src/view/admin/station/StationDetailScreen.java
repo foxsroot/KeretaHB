@@ -1,19 +1,13 @@
 package view.admin.station;
 
-import controller.StationController;
 import model.classes.Station;
-import model.classes.Train;
 import model.classes.Victual;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class StationDetailScreen extends JFrame {
-
-    private final StationController stationController = new StationController();
-    private ArrayList<Train> trainList = new ArrayList<>();
 
     public StationDetailScreen(Station station) {
         this.setTitle("Station Detail");
@@ -65,7 +59,6 @@ public class StationDetailScreen extends JFrame {
         backButton.addActionListener(e -> {
             StationListScreen stationListScreen = new StationListScreen();
             this.dispose();
-            stationListScreen.setVisible(true);
         });
 
         JPanel buttonPanel = new JPanel();
@@ -75,6 +68,8 @@ public class StationDetailScreen extends JFrame {
         this.setLayout(new BorderLayout());
         this.add(mainScrollPane, BorderLayout.CENTER);
         this.add(buttonPanel, BorderLayout.SOUTH);
+
+        this.setVisible(true);
     }
 
     private JLabel createLabel(String text) {

@@ -67,6 +67,8 @@ public class StationScheduleSelection extends JFrame {
         add(screenTitle);
         add(scrollPane);
         add(exitButton);
+
+        this.setVisible(true);
     }
 
     private JPanel createStationPanel(Station station, int xOffset, int yOffset) {

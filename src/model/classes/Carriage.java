@@ -11,12 +11,16 @@ public class Carriage {
     private int baggageAllowance;
     private ClassType carriageClass;
 
-    public Carriage(Integer train_id, int capacity, CarriageType type, int baggageAllowance, ClassType carriageClass) {
-        this.train_id = train_id;
+    public Carriage(int capacity, CarriageType type, int baggageAllowance, ClassType carriageClass) {
         this.capacity = capacity;
         this.type = type;
         this.baggageAllowance = baggageAllowance;
         this.carriageClass = carriageClass;
+    }
+
+    public Carriage addTrainId(Integer train_id) {
+        this.train_id = train_id;
+        return this;
     }
 
     public Carriage addId(Integer id){

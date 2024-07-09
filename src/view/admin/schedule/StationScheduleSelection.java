@@ -4,6 +4,7 @@ import config.DirectoryConfig;
 import controller.ImageController;
 import controller.StationController;
 import model.classes.Station;
+import view.admin.AdminMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,7 +62,8 @@ public class StationScheduleSelection extends JFrame {
         JButton exitButton = new JButton("Exit to Main Menu");
         exitButton.setBounds(20, 600, 150, 30);
         exitButton.addActionListener(e -> {
-            dispose();
+            AdminMenu adminMenu = new AdminMenu();
+            this.dispose();
         });
 
         add(screenTitle);
@@ -89,7 +91,6 @@ public class StationScheduleSelection extends JFrame {
         location.setFont(new Font("Calibri", Font.PLAIN, 18));
         location.setBounds(140, 30, 200, 30);
         stationPanel.add(location);
-
 
         JButton viewButton = new JButton("View Schedule");
         viewButton.setBounds(140, 90, 130, 30);
