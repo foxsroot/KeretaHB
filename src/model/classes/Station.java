@@ -9,10 +9,11 @@ public class Station {
     private HashMap<Victual, Integer> victual; //victual_id, stock
     private String name;
     private String location;
+    private String picture;
     private ArrayList<Train> trainList;
     private double income;
 
-    public Station(Integer id, ArrayList<Schedule> schedules, HashMap<Victual, Integer> victual, String name, String location, ArrayList<Train> trainList, double income) {
+    public Station(Integer id, ArrayList<Schedule> schedules, HashMap<Victual, Integer> victual, String name, String location, ArrayList<Train> trainList, double income, String picture) {
         this.id = id;
         this.schedules = schedules;
         this.victual = victual;
@@ -20,6 +21,15 @@ public class Station {
         this.location = location;
         this.trainList = trainList;
         this.income = income;
+        this.picture = picture;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 
     public Integer getId() {

@@ -3,172 +3,122 @@ package view.passenger.schedule;
 import controller.ScheduleController;
 import controller.StationController;
 import model.classes.Schedule;
+import view.passenger.schedule.ScheduleDetailScreen;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
 public class ListScheduleScreen extends JFrame {
     public ListScheduleScreen() {
-        this.setTitle("List Schedule");
+        this.setTitle("All Station Schedules");
         this.setSize(900, 700);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
+        initComponents();
+        this.setVisible(true);
     }
 
-    public void displayBandungSchedule(JPanel mainPanel) {
-        addBandungTable(mainPanel);
-    }
+    private void initComponents() {
+        this.setLayout(null);
 
-    public void displayBekasiSchedule(JPanel mainPanel) {
-        addBekasiTable(mainPanel);
-    }
+        JLabel screenTitle = new JLabel("All Station Schedules");
+        screenTitle.setFont(new Font("Calibri", Font.BOLD, 30));
+        screenTitle.setBounds(300, 20, 400, 30);
 
-    public void displayBogorSchedule(JPanel mainPanel) {
-        addBogorTable(mainPanel);
-    }
+        JPanel scheduleListPanel = new JPanel();
+        scheduleListPanel.setLayout(null);
+        scheduleListPanel.setBackground(Color.WHITE);
 
-    public void displayCirebonSchedule(JPanel mainPanel) {
-        addCirebonTable(mainPanel);
-    }
+        // Display schedules for all stations
+        String[] stations = {"Bandung", "Bekasi", "Bogor", "Cirebon", "Depok"};
+        int yOffset = 10;
+        for (String station : stations) {
+            JLabel stationLabel = new JLabel(station + " Station");
+            stationLabel.setFont(new Font("Calibri", Font.BOLD, 25));
+            stationLabel.setBounds(10, yOffset, 200, 30);
+            scheduleListPanel.add(stationLabel);
+            yOffset += 40;
 
-    public void displayDepokSchedule(JPanel mainPanel) {
-        addDepokTable(mainPanel);
-    }
-
-    private void addBandungTable(JPanel panel) {
-        JLabel label = createLabel("Bandung Station Schedule");
-        JTable table = createTable();
-        DefaultTableModel model = createTableModel();
-        table.setModel(model);
-        populateTable(model, 1);
-
-        panel.add(label);
-        panel.add(new JScrollPane(table));
-    }
-
-    private void addBekasiTable(JPanel panel) {
-        JLabel label = createLabel("Bekasi Station Schedule");
-        JTable table = createTable();
-        DefaultTableModel model = createTableModel();
-        table.setModel(model);
-        populateTable(model, 2);
-
-        panel.add(label);
-        panel.add(new JScrollPane(table));
-    }
-
-    private void addBogorTable(JPanel panel) {
-        JLabel label = createLabel("Bogor Station Schedule");
-        JTable table = createTable();
-        DefaultTableModel model = createTableModel();
-        table.setModel(model);
-        populateTable(model, 3);
-
-        panel.add(label);
-        panel.add(new JScrollPane(table));
-    }
-
-    private void addCirebonTable(JPanel panel) {
-        JLabel label = createLabel("Cirebon Station Schedule");
-        JTable table = createTable();
-        DefaultTableModel model = createTableModel();
-        table.setModel(model);
-        populateTable(model, 4);
-
-        panel.add(label);
-        panel.add(new JScrollPane(table));
-    }
-
-    private void addDepokTable(JPanel panel) {
-        JLabel label = createLabel("Depok Station Schedule");
-        JTable table = createTable();
-        DefaultTableModel model = createTableModel();
-        table.setModel(model);
-        populateTable(model, 5);
-
-        panel.add(label);
-        panel.add(new JScrollPane(table));
-    }
-
-    private JLabel createLabel(String text) {
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Calibri", Font.BOLD, 16));
-        label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        return label;
-    }
-
-    private JTable createTable() {
-        JTable table = new JTable();
-        table.setPreferredScrollableViewportSize(new Dimension(850, 100));
-        table.setFillsViewportHeight(true);
-        table.setRowHeight(25);
-        table.setFont(new Font("Calibri", Font.PLAIN, 14));
-        table.getTableHeader().setFont(new Font("Calibri", Font.BOLD, 14));
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
-        // Center align the table header
-        DefaultTableCellRenderer headerRenderer = new DefaultTableCellRenderer();
-        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
-            table.getColumnModel().getColumn(i).setHeaderRenderer(headerRenderer);
-        }
-
-        return table;
-    }
-
-    private DefaultTableModel createTableModel() {
-        DefaultTableModel model = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
+            List<Schedule> schedules = getSchedulesForStation(station);
+            for (Schedule schedule : schedules) {
+                scheduleListPanel.add(createSchedulePanel(schedule, yOffset));
+                yOffset += 110;
             }
-        };
-        String[] columns = {"Schedule ID", "Train ID", "Departure Station", "Arrival Station", "Departure Date", "Fee"};
-        for (String column : columns) {
-            model.addColumn(column);
+
+            yOffset += 20;
         }
-        return model;
+
+        scheduleListPanel.setPreferredSize(new Dimension(870, yOffset + 120));
+
+        JScrollPane scrollPane = new JScrollPane(scheduleListPanel);
+        scrollPane.setBounds(10, 70, 870, 530);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
+        JButton backButton = new JButton("Back to Schedule Selection");
+        backButton.setBounds(30, 630, 250, 30);
+        backButton.setFont(new Font("Calibri", Font.BOLD, 16));
+        backButton.addActionListener(e -> {
+            StationScheduleSelection selectStation = new StationScheduleSelection();
+            this.dispose();
+            selectStation.setVisible(true);
+        });
+
+        add(screenTitle);
+        add(scrollPane);
+        add(backButton);
     }
 
-    private void populateTable(DefaultTableModel model, int stationId) {
+    private List<Schedule> getSchedulesForStation(String station) {
         ScheduleController scheduleController = new ScheduleController();
-        StationController stationController = new StationController();
-        List<Schedule> schedules = scheduleController.getListSchedules(stationId);
-        for (Schedule schedule : schedules) {
-            model.addRow(new Object[]{
-                    schedule.getScheduleID(),
-                    schedule.getTrainID(),
-                    stationController.getStationNameById(schedule.getDeparture()),
-                    stationController.getStationNameById(schedule.getArrival()),
-                    schedule.getDepartureDate(),
-                    schedule.getFee()
-            });
+        switch (station) {
+            case "Bandung":
+                return scheduleController.getListSchedules(1);
+            case "Bekasi":
+                return scheduleController.getListSchedules(2);
+            case "Bogor":
+                return scheduleController.getListSchedules(3);
+            case "Cirebon":
+                return scheduleController.getListSchedules(4);
+            case "Depok":
+                return scheduleController.getListSchedules(5);
+            default:
+                return null;
         }
     }
 
-    // Testing
-    public static void test() {
-        ListScheduleScreen listScheduleScreen = new ListScheduleScreen();
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBounds(20, 70, 850, 300);
+    private JPanel createSchedulePanel(Schedule schedule, int yOffset) {
+        JPanel schedulePanel = new JPanel();
+        schedulePanel.setLayout(null);
+        schedulePanel.setBounds(10, yOffset, 850, 100);
+        schedulePanel.setBackground(Color.WHITE);
 
-        listScheduleScreen.displayBandungSchedule(mainPanel);
-        listScheduleScreen.displayBekasiSchedule(mainPanel);
-        listScheduleScreen.displayBogorSchedule(mainPanel);
-        listScheduleScreen.displayCirebonSchedule(mainPanel);
-        listScheduleScreen.displayDepokSchedule(mainPanel);
+        JLabel scheduleId = new JLabel("ID: " + schedule.getScheduleID());
+        scheduleId.setFont(new Font("Calibri", Font.BOLD, 25));
+        scheduleId.setBounds(10, 10, 100, 30);
+        schedulePanel.add(scheduleId);
 
-        JScrollPane mainScrollPane = new JScrollPane(mainPanel);
-        listScheduleScreen.add(mainScrollPane);
-        JScrollBar verticalScrollBar = mainScrollPane.getVerticalScrollBar();
-        verticalScrollBar.setUnitIncrement(16);
-        verticalScrollBar.setBlockIncrement(75);
+        JLabel scheduleDetail = new JLabel("Departure Date: " + schedule.getDepartureDate());
+        scheduleDetail.setFont(new Font("Calibri", Font.PLAIN, 25));
+        scheduleDetail.setBounds(120, 10, 600, 30);
+        schedulePanel.add(scheduleDetail);
 
-        listScheduleScreen.setVisible(true);
+        JButton viewDetailButton = new JButton("View Detail");
+        viewDetailButton.setBounds(730, 30, 110, 30);
+        viewDetailButton.addActionListener(e -> {
+            ScheduleDetailScreen scheduleDetailScreen = new ScheduleDetailScreen(schedule);
+            this.dispose();
+            scheduleDetailScreen.setVisible(true);
+        });
+        schedulePanel.add(viewDetailButton);
+
+        return schedulePanel;
+    }
+
+    public static void main(String[] args) {
+        new ListScheduleScreen();
     }
 }

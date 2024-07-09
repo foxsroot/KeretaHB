@@ -1,7 +1,3 @@
-import view.passenger.schedule.ListScheduleScreen;
-import view.passenger.schedule.StationScheduleSelection;
-import view.passenger.station.StationListScreen;
-
 public class Main {
     public static void main(String[] args) {
 

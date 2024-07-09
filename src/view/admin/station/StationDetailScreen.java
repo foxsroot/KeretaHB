@@ -1,4 +1,4 @@
-package view.passenger.station;
+package view.admin.station;
 
 import controller.StationController;
 import model.classes.Station;
@@ -23,7 +23,7 @@ public class StationDetailScreen extends JFrame {
         this.setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(10, 2, 5, 10));
+        mainPanel.setLayout(new GridLayout(0, 2, 5, 10));
         mainPanel.setBounds(20, 70, 850, 300);
 
         mainPanel.add(createLabel("Station ID"));
@@ -44,8 +44,18 @@ public class StationDetailScreen extends JFrame {
         mainPanel.add(createLabel("Number of Schedules"));
         mainPanel.add(createLabel(": " + station.getSchedules().size()));
 
-        mainPanel.add(createLabel("Victuals"));
-        mainPanel.add(createLabel(": " + getVictualDetails(station.getVictual())));
+        mainPanel.add(createLabel("Victual List"));
+        HashMap<Victual, Integer> victuals = station.getVictual();
+        if (!victuals.isEmpty()) {
+            for (Victual victual : victuals.keySet()) {
+                Integer stock = victuals.get(victual);
+                mainPanel.add(createLabel(": " + victual.getName() + ", Stock: " + stock));
+                mainPanel.add(createLabel(" "));
+            }
+        } else {
+            mainPanel.add(createLabel(": No victuals found"));
+            mainPanel.add(createLabel(" "));
+        }
 
         JScrollPane mainScrollPane = new JScrollPane(mainPanel);
 
@@ -73,21 +83,4 @@ public class StationDetailScreen extends JFrame {
         label.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         return label;
     }
-
-    private String getVictualDetails(HashMap<Victual, Integer> victuals) {
-        StringBuilder victualDetails = new StringBuilder();
-        for (Victual victual : victuals.keySet()) {
-            Integer stock = victuals.get(victual);
-            victualDetails.append(victual.getName())
-                    .append(" (Stock: ")
-                    .append(stock)
-                    .append("), ");
-        }
-        if (!victualDetails.isEmpty()) {
-            victualDetails.setLength(victualDetails.length() - 2);
-        }
-        return victualDetails.toString();
-    }
-
-
 }
