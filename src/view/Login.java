@@ -1,3 +1,5 @@
+package view;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -13,7 +15,7 @@ public class Login extends JFrame {
         this.setLayout(null);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setTitle("Login!");
+        this.setTitle("view.Login!");
 
         JLabel screenTitle = new JLabel("Login");
         screenTitle.setFont(new Font("calibri", Font.BOLD, 44));
