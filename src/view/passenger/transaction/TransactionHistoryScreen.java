@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 public class TransactionHistoryScreen extends JFrame {
     private JPanel historyPanel;
-    private JScrollPane scrollPane;
     private JComboBox<String> orderComboBox;
 
     public TransactionHistoryScreen() {
@@ -35,7 +34,7 @@ public class TransactionHistoryScreen extends JFrame {
         historyPanel = new JPanel();
         historyPanel.setLayout(null);
 
-        scrollPane = new JScrollPane(historyPanel);
+        JScrollPane scrollPane = new JScrollPane(historyPanel);
         scrollPane.setBounds(50, 50, 800, 530);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
