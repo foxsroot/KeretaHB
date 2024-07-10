@@ -7,8 +7,8 @@ public class VictualTransaction extends Transaction {
     HashMap<Integer, Integer> items; //id, quantity
     Integer stationID;
 
-    public VictualTransaction(Integer transactionID, Timestamp datePurchase, HashMap<Integer, Integer> items, Integer stationID, double amount) {
-        super(transactionID, datePurchase, amount);
+    public VictualTransaction(Integer transactionID, Timestamp datePurchase, HashMap<Integer, Integer> items, Integer stationID, double total) {
+        super(transactionID, datePurchase, total);
         this.items = items;
         this.stationID = stationID;
     }

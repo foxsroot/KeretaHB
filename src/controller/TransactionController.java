@@ -1,6 +1,6 @@
 package controller;
 
-import model.classes.Passenger;
+import model.classes.TicketTransaction;
 import model.classes.Transaction;
 import model.classes.VictualTransaction;
 
@@ -13,7 +13,52 @@ import java.util.HashMap;
 public class TransactionController {
     ConnectionHandler conn = new ConnectionHandler();
 
-    public ArrayList<Transaction> getVictualTransactionList(int userId) {
+    public ArrayList<TicketTransaction> getTicketTransactionList(int userID) {
+        conn.connect();
+        ArrayList<TicketTransaction> ticketTransactionList = new ArrayList<>();
+
+        String query = "SELECT * FROM ticket_transaction WHERE userID = ?";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, userID);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                TicketTransaction transaction = new TicketTransaction(rs.getInt("transaction_id"), rs.getTimestamp("purchase_date"), rs.getInt("passengers"), rs.getBoolean("commute"), rs.getInt("schedule_id"), rs.getBoolean("rescheduled"), rs.getDouble("total"));
+                ticketTransactionList.add(transaction);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conn.disconnect();
+        }
+
+        return ticketTransactionList;
+    }
+
+    public boolean bookTicket(int userID, int scheduleID, int passengers, boolean commute) {
+        conn.connect();
+
+        String query = "INSERT INTO ticket_transaction(user_id, schedule_id, passengers, commute) VALUES(?, ?, ?, ?)";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, userID);
+            stmt.setInt(2, scheduleID);
+            stmt.setInt(3, passengers);
+            stmt.setBoolean(4, commute);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            conn.disconnect();
+        }
+
+        return true;
+    }
+
+    public ArrayList<Transaction> getVictualTransactionList(int userID) {
         conn.connect();
 
         ArrayList<Transaction> transactionList = new ArrayList<>();
@@ -21,7 +66,7 @@ public class TransactionController {
 
         try {
             PreparedStatement stmt = conn.con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            stmt.setInt(1, userId);
+            stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {

@@ -8,8 +8,8 @@ public class TicketTransaction extends Transaction {
     Integer schdeuleID;
     boolean rescheduled;
 
-    public TicketTransaction(Integer transactionID, Timestamp datePurchase, int passengers, boolean commute, Integer schdeuleID, boolean rescheduled, double amount) {
-        super(transactionID, datePurchase, amount);
+    public TicketTransaction(Integer transactionID, Timestamp datePurchase, int passengers, boolean commute, Integer schdeuleID, boolean rescheduled, double total) {
+        super(transactionID, datePurchase, total);
         this.passengers = passengers;
         this.commute = commute;
         this.schdeuleID = schdeuleID;
