@@ -11,6 +11,58 @@ import java.util.HashMap;
 public class TransactionController {
     ConnectionHandler conn = new ConnectionHandler();
 
+    public String getTicketBuyerEmail(int transactionID) {
+        conn.connect();
+
+        String query = "SELECT passenger.email FROM passenger JOIN ticket_transaction ON passenger.user_id = ticket_transaction.user_id WHERE ticket_transaction.transaction_id = ?";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, transactionID);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("email");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            conn.disconnect();
+        }
+
+        return null;
+    }
+
+    public TicketTransaction getTicketTransaction(int transactionID) {
+        conn.connect();
+
+        String query = "SELECT * FROM ticket_transaction WHERE transaction_id = ?";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, transactionID);
+            ResultSet rs = stmt.executeQuery();
+
+            TicketTransaction transaction = new TicketTransaction();
+
+            while (rs.next()) {
+                transaction.setTransactionID(rs.getInt("transaction_id"));
+                transaction.setSchdeuleID(rs.getInt("schedule_id"));
+                transaction.setDatePurchase(rs.getTimestamp("purchase_date"));
+                transaction.setPassengers(rs.getInt("passengers"));
+                transaction.setCommute(rs.getBoolean("commute"));
+                transaction.setTotal(rs.getDouble("total"));
+            }
+
+            return  transaction;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            conn.disconnect();
+        }
+    }
+
     public ArrayList<TicketTransaction> getTicketTransactionList(int userID) {
         conn.connect();
         ArrayList<TicketTransaction> ticketTransactionList = new ArrayList<>();
