@@ -30,7 +30,7 @@ public class StationDetailScreen extends JFrame {
         mainPanel.add(createLabel(": " + station.getLocation()));
 
         mainPanel.add(createLabel("Income"));
-        mainPanel.add(createLabel(": $" + station.getIncome()));
+        mainPanel.add(createLabel(": Rp" + station.getIncome()));
 
         mainPanel.add(createLabel("Number of Trains"));
         mainPanel.add(createLabel(": " + station.getTrainList().size()));
