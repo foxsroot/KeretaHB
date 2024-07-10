@@ -1,6 +1,5 @@
 package controller;
 
-import model.classes.TicketTransaction;
 import model.enums.RescheduleEnum;
 
 import java.sql.PreparedStatement;
@@ -9,14 +8,15 @@ import java.sql.SQLException;
 public class RescheduleController {
     ConnectionHandler conn = new ConnectionHandler();
 
-    public boolean requestReschedule(int userID, TicketTransaction transaction, int requestedSchedule) {
+    public boolean requestReschedule(int transactionID, int requestedSchedule) {
         conn.connect();
 
-        String query = "INSERT INTO reschedule_request(transaction_id) VALUES (?)";
+        String query = "INSERT INTO reschedule_request(transaction_id, requested_schedule_id) VALUES (?, ?)";
 
         try {
             PreparedStatement stmt = conn.con.prepareStatement(query);
-            stmt.setInt(1, transaction.getTransactionID());
+            stmt.setInt(1, transactionID);
+            stmt.setInt(2, requestedSchedule);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -28,7 +28,7 @@ public class RescheduleController {
         return true;
     }
 
-    public boolean respondRescheduleRequest(int transactionID, RescheduleEnum status, int adminID) {
+    public boolean respondRescheduleRequest(int transactionID, int userID, RescheduleEnum status, int adminID) {
         conn.connect();
 
         String query = "UPDATE reschedule SET status = ?, admin_id = ? WHERE transactionID = ?";
@@ -40,7 +40,12 @@ public class RescheduleController {
             stmt.setInt(3, transactionID);
             stmt.executeUpdate();
 
-            //Kirim notif ke
+            NotificationController controller = new NotificationController();
+            if (status.equals(RescheduleEnum.SUCCESS)) {
+                controller.sendNotificationByID(userID, "Reschedule Request Approved", "Hi there, We are pleased to inform you that your request to reschedule your appointment has been approved");
+            } else {
+                controller.sendNotificationByID(userID, "Reschedule Request Declined", "We regret to inform you that your request to reschedule your appointment has been declined. Due to several reasons, we are unable to accommodate your requested change at this time.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             return false;

@@ -27,14 +27,13 @@ public class NotificationController {
 
         conn.connect();
 
-        String query = "INSERT INTO notification(recipient_id, title, message, received_date) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO notification(recipient_id, title, message) VALUES (?, ?, ?)";
 
         try {
             PreparedStatement stmt = conn.con.prepareStatement(query);
             stmt.setInt(1, user_id);
             stmt.setString(2, title);
             stmt.setString(3, message);
-            stmt.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis()));
 
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -69,6 +68,27 @@ public class NotificationController {
         }
 
         return notifications;
+    }
+
+    public boolean sendNotificationByID(int userID, String title, String message) {
+        conn.connect();
+
+        String query = "INSERT INTO notification(recipient_id, title, message) VALUES (?, ?, ?)";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setInt(1, userID);
+            stmt.setString(2, title);
+            stmt.setString(3, message);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            conn.disconnect();
+        }
+
+        return true;
     }
 
     private int getIdByEmail(String email) {

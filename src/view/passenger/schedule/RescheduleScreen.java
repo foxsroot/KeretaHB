@@ -6,10 +6,6 @@ import model.classes.Schedule;
 import model.classes.TicketTransaction;
 import view.passenger.transaction.TransactionHistoryScreen;
 
-import javax.swing.*;
-import java.awt.*;
-import java.sql.Timestamp;
-import java.util.List;
 
 public class RescheduleScreen extends JFrame {
     ScheduleController scheduleController = new ScheduleController();
