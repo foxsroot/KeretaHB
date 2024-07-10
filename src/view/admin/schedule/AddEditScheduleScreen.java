@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 public class AddEditScheduleScreen extends JFrame {
     private final StationController stationController = new StationController();
@@ -190,7 +191,7 @@ public class AddEditScheduleScreen extends JFrame {
         comboBox.removeAllItems();
         ArrayList<Station> stations = (ArrayList<Station>) stationController.getlistStations();
         for (Station station : stations) {
-            if (station.getId() != arrivalID) {
+            if (!Objects.equals(station.getId(), arrivalID)) {
                 comboBox.addItem(station.getId());
             }
         }
