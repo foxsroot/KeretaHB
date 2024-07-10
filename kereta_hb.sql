@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 10, 2024 at 04:10 AM
+-- Generation Time: Jul 10, 2024 at 06:29 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -148,10 +148,10 @@ CREATE TABLE `loyalty` (
 --
 
 INSERT INTO `loyalty` (`loyalty_id`, `loyalty_type`, `discount`, `minimum_transaction`) VALUES
-(1, 'CLASSIC', 0.1, 100000),
+(1, 'CLASSIC', 0, 0),
 (2, 'ELITE', 0.15, 1000000),
 (3, 'EXECUTIVE', 0.2, 10000000),
-(4, 'VVIP', 0.3, 100000000);
+(4, 'VVIP', 0.25, 100000000);
 
 -- --------------------------------------------------------
 
@@ -164,7 +164,7 @@ CREATE TABLE `notification` (
   `recipient_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `message` longtext NOT NULL,
-  `received_date` datetime NOT NULL
+  `received_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -172,64 +172,64 @@ CREATE TABLE `notification` (
 --
 
 INSERT INTO `notification` (`notification_id`, `recipient_id`, `title`, `message`, `received_date`) VALUES
-(1, 2, 'test', 'teasasadasd', '2024-07-05 00:00:00'),
-(2, 2, 'test', 'ehehehehhehehehe', '2024-07-05 00:00:00'),
-(3, 2, 'Cobain pertama', '111111111111111111111111111111111111111111111111111', '2024-07-05 00:00:00'),
-(4, 2, 'Cobain 2', 'ohohohohohohoo', '2024-07-05 00:00:00'),
-(5, 2, 'hehe cobain dulu gasi', 'ini nyoba nyoba ehe', '2024-07-05 17:40:19'),
-(6, 2, 'New Notification', 'This is a new notification', '2024-07-05 17:40:19'),
-(7, 2, 'Hello World', 'Hello from the other side', '2024-07-05 18:00:00'),
-(8, 2, 'Test Message', 'This is a test message', '2024-07-05 18:20:00'),
-(9, 2, 'Cobain Again', 'Cobain lagi dan lagi', '2024-07-05 18:40:00'),
-(10, 2, 'Random Title', 'Random message with random content', '2024-07-05 19:00:00'),
-(11, 2, 'Notification 5', 'This is the fifth notification', '2024-07-05 19:20:00'),
-(12, 2, 'Long Message', 'This is a very long message that will not fit in one line', '2024-07-05 19:40:00'),
-(13, 2, 'Short Title', 'Short message with short content', '2024-07-05 20:00:00'),
-(14, 2, 'Urgent Notification', 'This is an urgent notification', '2024-07-05 20:20:00'),
-(15, 2, 'Info Message', 'This is an informational message', '2024-07-05 20:40:00'),
-(16, 2, 'Warning Notification', 'This is a warning notification', '2024-07-05 21:00:00'),
-(17, 2, 'Success Message', 'This is a success message', '2024-07-05 21:20:00'),
-(18, 2, 'Error Notification', 'This is an error notification', '2024-07-05 21:40:00'),
-(19, 2, 'New Update', 'There is a new update available', '2024-07-05 22:00:00'),
-(20, 2, 'Reminder', 'This is a reminder notification', '2024-07-05 22:20:00'),
-(21, 2, 'Alert Message', 'This is an alert message', '2024-07-05 22:40:00'),
-(22, 2, 'Notification 16', 'This is the 16th notification', '2024-07-05 23:00:00'),
-(23, 2, 'Notification 17', 'This is the 17th notification', '2024-07-05 23:20:00'),
-(24, 2, 'Notification 18', 'This is the 18th notification', '2024-07-05 23:40:00'),
-(25, 2, 'Notification 19', 'This is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notification', '2024-07-06 00:00:00'),
-(26, 2, 'Notification 20', 'This is the 20th notification', '2024-07-06 00:20:00'),
-(27, 2, 'New Notification 21', 'This is a new notification 21', '2024-07-06 00:40:00'),
-(28, 2, 'Hello Again 22', 'Hello from the other side 22', '2024-07-06 01:00:00'),
-(29, 2, 'Test Message 23', 'This is a test message 23', '2024-07-06 01:20:00'),
-(30, 2, 'Cobain Again 24', 'Cobain lagi dan lagi 24', '2024-07-06 01:40:00'),
-(31, 2, 'Random Title 25', 'Random message with random content 25', '2024-07-06 02:00:00'),
-(32, 2, 'Notification 26', 'This is the 26th notification', '2024-07-06 02:20:00'),
-(33, 2, 'Long Message 27', 'This is a very long message that will not fit in one line 27', '2024-07-06 02:40:00'),
-(34, 2, 'Short Title 28', 'Short message with short content 28', '2024-07-06 03:00:00'),
-(35, 2, 'Urgent Notification 29', 'This is an urgent notification 29', '2024-07-06 03:20:00'),
-(36, 2, 'Info Message 30', 'This is an informational message 30', '2024-07-06 03:40:00'),
-(37, 2, 'Warning Notification 31', 'This is a warning notification 31', '2024-07-06 04:00:00'),
-(38, 2, 'Success Message 32', 'This is a success message 32', '2024-07-06 04:20:00'),
-(39, 2, 'Error Notification 33', 'This is an error notification 33', '2024-07-06 04:40:00'),
-(40, 2, 'New Update 34', 'There is a new update available 34', '2024-07-06 05:00:00'),
-(41, 2, 'Reminder 35', 'This is a reminder notification 35', '2024-07-06 05:20:00'),
-(42, 2, 'Alert Message 36', 'This is an alert message 36', '2024-07-06 05:40:00'),
-(43, 2, 'Notification 37', 'This is the 37th notification', '2024-07-06 06:00:00'),
-(44, 2, 'Notification 38', 'This is the 38th notification', '2024-07-06 06:20:00'),
-(45, 2, 'Notification 39', 'This is the 39th notification', '2024-07-06 06:40:00'),
-(46, 2, 'Notification 40', 'This is the 40th notification', '2024-07-06 07:00:00'),
-(47, 2, 'Notification 41', 'This is the 41st notification', '2024-07-06 07:20:00'),
-(48, 2, 'Notification 42', 'This is the 42nd notification', '2024-07-06 07:40:00'),
-(49, 2, 'Notification 43', 'This is the 43rd notification', '2024-07-06 08:00:00'),
-(50, 2, 'Notification 44', 'This is the 44th notification', '2024-07-06 08:20:00'),
-(51, 2, 'Notification 45', 'This is the 45th notification', '2024-07-06 08:40:00'),
-(52, 2, 'Notification 46', 'This is the 46th notification', '2024-07-06 09:00:00'),
-(53, 2, 'Notification 47', 'This is the 47th notification', '2024-07-06 09:20:00'),
-(54, 2, 'Notification 48', 'This is the 48th notification', '2024-07-06 09:40:00'),
-(55, 2, 'Notification 49', 'This is the 49th notification', '2024-07-06 10:00:00'),
-(56, 2, 'Notification 50', 'This is the 50th notification', '2024-07-06 10:20:00'),
-(57, 2, 'Notification 51', 'This is the 51st notification', '2024-07-06 10:40:00'),
-(58, 2, 'Victuals Cancelation', 'Hi ---, we have successfully canceled your victual transaction and returned Rp 86000.0 to your wallet.\n\nThank you!', '2024-07-09 12:57:52');
+(1, 2, 'test', 'teasasadasd', '2024-07-04 17:00:00'),
+(2, 2, 'test', 'ehehehehhehehehe', '2024-07-04 17:00:00'),
+(3, 2, 'Cobain pertama', '111111111111111111111111111111111111111111111111111', '2024-07-04 17:00:00'),
+(4, 2, 'Cobain 2', 'ohohohohohohoo', '2024-07-04 17:00:00'),
+(5, 2, 'hehe cobain dulu gasi', 'ini nyoba nyoba ehe', '2024-07-05 10:40:19'),
+(6, 2, 'New Notification', 'This is a new notification', '2024-07-05 10:40:19'),
+(7, 2, 'Hello World', 'Hello from the other side', '2024-07-05 11:00:00'),
+(8, 2, 'Test Message', 'This is a test message', '2024-07-05 11:20:00'),
+(9, 2, 'Cobain Again', 'Cobain lagi dan lagi', '2024-07-05 11:40:00'),
+(10, 2, 'Random Title', 'Random message with random content', '2024-07-05 12:00:00'),
+(11, 2, 'Notification 5', 'This is the fifth notification', '2024-07-05 12:20:00'),
+(12, 2, 'Long Message', 'This is a very long message that will not fit in one line', '2024-07-05 12:40:00'),
+(13, 2, 'Short Title', 'Short message with short content', '2024-07-05 13:00:00'),
+(14, 2, 'Urgent Notification', 'This is an urgent notification', '2024-07-05 13:20:00'),
+(15, 2, 'Info Message', 'This is an informational message', '2024-07-05 13:40:00'),
+(16, 2, 'Warning Notification', 'This is a warning notification', '2024-07-05 14:00:00'),
+(17, 2, 'Success Message', 'This is a success message', '2024-07-05 14:20:00'),
+(18, 2, 'Error Notification', 'This is an error notification', '2024-07-05 14:40:00'),
+(19, 2, 'New Update', 'There is a new update available', '2024-07-05 15:00:00'),
+(20, 2, 'Reminder', 'This is a reminder notification', '2024-07-05 15:20:00'),
+(21, 2, 'Alert Message', 'This is an alert message', '2024-07-05 15:40:00'),
+(22, 2, 'Notification 16', 'This is the 16th notification', '2024-07-05 16:00:00'),
+(23, 2, 'Notification 17', 'This is the 17th notification', '2024-07-05 16:20:00'),
+(24, 2, 'Notification 18', 'This is the 18th notification', '2024-07-05 16:40:00'),
+(25, 2, 'Notification 19', 'This is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notificationThis is the 19th notification', '2024-07-05 17:00:00'),
+(26, 2, 'Notification 20', 'This is the 20th notification', '2024-07-05 17:20:00'),
+(27, 2, 'New Notification 21', 'This is a new notification 21', '2024-07-05 17:40:00'),
+(28, 2, 'Hello Again 22', 'Hello from the other side 22', '2024-07-05 18:00:00'),
+(29, 2, 'Test Message 23', 'This is a test message 23', '2024-07-05 18:20:00'),
+(30, 2, 'Cobain Again 24', 'Cobain lagi dan lagi 24', '2024-07-05 18:40:00'),
+(31, 2, 'Random Title 25', 'Random message with random content 25', '2024-07-05 19:00:00'),
+(32, 2, 'Notification 26', 'This is the 26th notification', '2024-07-05 19:20:00'),
+(33, 2, 'Long Message 27', 'This is a very long message that will not fit in one line 27', '2024-07-05 19:40:00'),
+(34, 2, 'Short Title 28', 'Short message with short content 28', '2024-07-05 20:00:00'),
+(35, 2, 'Urgent Notification 29', 'This is an urgent notification 29', '2024-07-05 20:20:00'),
+(36, 2, 'Info Message 30', 'This is an informational message 30', '2024-07-05 20:40:00'),
+(37, 2, 'Warning Notification 31', 'This is a warning notification 31', '2024-07-05 21:00:00'),
+(38, 2, 'Success Message 32', 'This is a success message 32', '2024-07-05 21:20:00'),
+(39, 2, 'Error Notification 33', 'This is an error notification 33', '2024-07-05 21:40:00'),
+(40, 2, 'New Update 34', 'There is a new update available 34', '2024-07-05 22:00:00'),
+(41, 2, 'Reminder 35', 'This is a reminder notification 35', '2024-07-05 22:20:00'),
+(42, 2, 'Alert Message 36', 'This is an alert message 36', '2024-07-05 22:40:00'),
+(43, 2, 'Notification 37', 'This is the 37th notification', '2024-07-05 23:00:00'),
+(44, 2, 'Notification 38', 'This is the 38th notification', '2024-07-05 23:20:00'),
+(45, 2, 'Notification 39', 'This is the 39th notification', '2024-07-05 23:40:00'),
+(46, 2, 'Notification 40', 'This is the 40th notification', '2024-07-06 00:00:00'),
+(47, 2, 'Notification 41', 'This is the 41st notification', '2024-07-06 00:20:00'),
+(48, 2, 'Notification 42', 'This is the 42nd notification', '2024-07-06 00:40:00'),
+(49, 2, 'Notification 43', 'This is the 43rd notification', '2024-07-06 01:00:00'),
+(50, 2, 'Notification 44', 'This is the 44th notification', '2024-07-06 01:20:00'),
+(51, 2, 'Notification 45', 'This is the 45th notification', '2024-07-06 01:40:00'),
+(52, 2, 'Notification 46', 'This is the 46th notification', '2024-07-06 02:00:00'),
+(53, 2, 'Notification 47', 'This is the 47th notification', '2024-07-06 02:20:00'),
+(54, 2, 'Notification 48', 'This is the 48th notification', '2024-07-06 02:40:00'),
+(55, 2, 'Notification 49', 'This is the 49th notification', '2024-07-06 03:00:00'),
+(56, 2, 'Notification 50', 'This is the 50th notification', '2024-07-06 03:20:00'),
+(57, 2, 'Notification 51', 'This is the 51st notification', '2024-07-06 03:40:00'),
+(58, 2, 'Victuals Cancelation', 'Hi ---, we have successfully canceled your victual transaction and returned Rp 86000.0 to your wallet.\n\nThank you!', '2024-07-09 05:57:52');
 
 -- --------------------------------------------------------
 
@@ -239,7 +239,7 @@ INSERT INTO `notification` (`notification_id`, `recipient_id`, `title`, `message
 
 CREATE TABLE `passenger` (
   `user_id` int(11) NOT NULL,
-  `loyalty` int(11) DEFAULT NULL,
+  `loyalty` int(11) DEFAULT 1,
   `email` varchar(255) DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL,
@@ -253,7 +253,7 @@ CREATE TABLE `passenger` (
 --
 
 INSERT INTO `passenger` (`user_id`, `loyalty`, `email`, `password`, `name`, `cellphone`, `total_paid`, `pfp`) VALUES
-(2, NULL, 'john.doe@example.com', 'password123', 'John Doe', '1234567890', 1500, 'john_pfp.png');
+(2, 2, 'john.doe@example.com', 'password123', 'John Doe', '1234567890', 3810525, 'john_pfp.png');
 
 -- --------------------------------------------------------
 
@@ -268,6 +268,13 @@ CREATE TABLE `reschedule_request` (
   `requested_schedule_id` int(11) NOT NULL,
   `status` enum('SUCCESS','DENIED','PENDING') DEFAULT 'PENDING'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `reschedule_request`
+--
+
+INSERT INTO `reschedule_request` (`reschedule_id`, `transaction_id`, `admin_id`, `requested_schedule_id`, `status`) VALUES
+(1, 1, NULL, 4, 'PENDING');
 
 -- --------------------------------------------------------
 
@@ -289,22 +296,22 @@ CREATE TABLE `schedule` (
 --
 
 INSERT INTO `schedule` (`schedule_id`, `train_id`, `departure_station_id`, `arrival_station_id`, `departure_date`, `fee`) VALUES
-(1, 1, 1, 2, '2024-07-10', 50),
-(2, 9, 4, 3, '2024-07-11', 55),
-(3, 3, 1, 4, '2024-07-12', 60),
-(4, 4, 2, 1, '2024-07-10', 45),
-(5, 5, 2, 3, '2024-07-11', 55),
-(6, 6, 2, 4, '2024-07-12', 65),
-(7, 7, 3, 1, '2024-07-10', 55),
-(8, 8, 3, 2, '2024-07-11', 50),
-(9, 9, 3, 4, '2024-07-12', 70),
-(10, 10, 4, 1, '2024-07-10', 60),
-(11, 11, 4, 2, '2024-07-11', 65),
-(12, 12, 4, 3, '2024-07-12', 75),
-(13, 13, 5, 1, '2024-07-10', 70),
-(14, 14, 5, 2, '2024-07-11', 75),
-(15, 15, 5, 3, '2024-07-12', 80),
-(16, 1, 1, 3, '2024-07-17', 40);
+(1, 1, 1, 2, '2024-07-10', 810000),
+(2, 9, 4, 3, '2024-07-11', 900000),
+(3, 3, 1, 4, '2024-07-12', 970000),
+(4, 4, 2, 1, '2024-07-10', 700000),
+(5, 5, 2, 3, '2024-07-11', 900000),
+(6, 6, 2, 4, '2024-07-12', 1000000),
+(7, 7, 3, 1, '2024-07-10', 900000),
+(8, 8, 3, 2, '2024-07-11', 800000),
+(9, 9, 3, 4, '2024-07-12', 1150000),
+(10, 10, 4, 1, '2024-07-10', 970000),
+(11, 11, 4, 2, '2024-07-11', 1000000),
+(12, 12, 4, 3, '2024-07-12', 1200000),
+(13, 13, 5, 1, '2024-07-10', 1100000),
+(14, 14, 5, 2, '2024-07-11', 1200000),
+(15, 15, 5, 3, '2024-07-12', 1300000),
+(16, 1, 1, 3, '2024-07-17', 650000);
 
 -- --------------------------------------------------------
 
@@ -325,11 +332,11 @@ CREATE TABLE `station` (
 --
 
 INSERT INTO `station` (`station_id`, `name`, `location`, `income`, `picture`) VALUES
-(1, 'Bandung Station', 'Bandung, West Java', 50000, 'bandung_station.jpg'),
-(2, 'Bekasi Station', 'Bekasi, West Java', 45000, 'bekasi_station.jpg'),
-(3, 'Bogor Station', 'Bogor, West Java', 47000, 'bogor_station.jpg'),
-(4, 'Cirebon Station', 'Cirebon, West Java', 48000, 'cirebon_station.jpg'),
-(5, 'Depok Station', 'Depok, West Java', 46000, 'depok_station.jpg');
+(1, 'Bandung Station', 'Bandung, West Java', 800000000, 'bandung_station.jpg'),
+(2, 'Bekasi Station', 'Bekasi, West Java', 731000000, 'bekasi_station.jpg'),
+(3, 'Bogor Station', 'Bogor, West Java', 763000000, 'bogor_station.jpg'),
+(4, 'Cirebon Station', 'Cirebon, West Java', 779000000, 'cirebon_station.jpg'),
+(5, 'Depok Station', 'Depok, West Java', 747000000, 'depok_station.jpg');
 
 -- --------------------------------------------------------
 
@@ -349,9 +356,9 @@ CREATE TABLE `stock` (
 --
 
 INSERT INTO `stock` (`stock_id`, `victual_id`, `station_id`, `stock`) VALUES
-(13, 9, 1, 89),
+(13, 9, 1, 85),
 (14, 8, 1, 65),
-(15, 14, 1, 61),
+(15, 14, 1, 58),
 (16, 11, 2, 399),
 (20, 10, 5, 50),
 (21, 12, 5, 99),
@@ -387,6 +394,20 @@ CREATE TABLE `ticket_transaction` (
   `rescheduled` tinyint(1) NOT NULL DEFAULT 0,
   `total` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `ticket_transaction`
+--
+
+INSERT INTO `ticket_transaction` (`transaction_id`, `user_id`, `schedule_id`, `purchase_date`, `passengers`, `commute`, `rescheduled`, `total`) VALUES
+(1, 2, 4, '2024-07-10 03:53:07', 1, 0, 0, 800000),
+(2, 2, 5, '2024-07-10 03:53:07', 2, 1, 0, 3200000),
+(3, 2, 3, '2024-07-10 03:53:07', 4, 0, 0, 1000000),
+(4, 2, 1, '2024-07-10 10:39:53', 5, 1, 0, 4050000),
+(5, 2, 1, '2024-07-10 15:11:52', 3, 1, 0, 4009500),
+(6, 2, 1, '2024-07-10 15:24:30', 2, 1, 0, 2673000),
+(7, 2, 1, '2024-07-10 15:25:46', 2, 1, 0, 2673000),
+(8, 2, 1, '2024-07-10 15:29:39', 1, 1, 0, 1136025);
 
 -- --------------------------------------------------------
 
@@ -449,7 +470,9 @@ INSERT INTO `transaction_item` (`transaction_item_id`, `transaction_id`, `victua
 (21, 14, 8, 1),
 (22, 14, 9, 3),
 (23, 14, 14, 1),
-(24, 14, NULL, 3);
+(24, 14, NULL, 3),
+(25, 15, 9, 4),
+(26, 15, 14, 3);
 
 -- --------------------------------------------------------
 
@@ -502,7 +525,8 @@ INSERT INTO `victuals_transaction` (`transaction_id`, `user_id`, `station_id`, `
 (11, 2, 1, '2024-07-09 09:10:45', 85000),
 (12, 2, 1, '2024-07-09 09:11:04', 70000),
 (13, 2, 1, '2024-07-09 09:16:56', 25000),
-(14, 2, 1, '2024-07-09 09:17:30', 67000);
+(14, 2, 1, '2024-07-09 09:17:30', 67000),
+(15, 2, 1, '2024-07-10 14:07:12', 91000);
 
 -- --------------------------------------------------------
 
@@ -522,7 +546,7 @@ CREATE TABLE `wallet` (
 --
 
 INSERT INTO `wallet` (`wallet_id`, `user_id`, `balance`, `pin`) VALUES
-(1, 2, 79562000, 0);
+(1, 2, 72988975, 0);
 
 --
 -- Indexes for dumped tables
@@ -666,7 +690,7 @@ ALTER TABLE `carriage`
 -- AUTO_INCREMENT for table `cart_item`
 --
 ALTER TABLE `cart_item`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT for table `loyalty`
@@ -690,7 +714,7 @@ ALTER TABLE `passenger`
 -- AUTO_INCREMENT for table `reschedule_request`
 --
 ALTER TABLE `reschedule_request`
-  MODIFY `reschedule_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `reschedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `schedule`
@@ -714,7 +738,7 @@ ALTER TABLE `stock`
 -- AUTO_INCREMENT for table `ticket_transaction`
 --
 ALTER TABLE `ticket_transaction`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `train`
@@ -726,7 +750,7 @@ ALTER TABLE `train`
 -- AUTO_INCREMENT for table `transaction_item`
 --
 ALTER TABLE `transaction_item`
-  MODIFY `transaction_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `transaction_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `victual`
@@ -738,7 +762,7 @@ ALTER TABLE `victual`
 -- AUTO_INCREMENT for table `victuals_transaction`
 --
 ALTER TABLE `victuals_transaction`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `wallet`
