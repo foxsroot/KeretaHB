@@ -1,7 +1,10 @@
 package controller;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class UserController {
@@ -45,8 +48,9 @@ public class UserController {
         }
         return false;
     }
-    
+
     public boolean changePassword(int userId, String newPassword, String status) {
+        conn.connect();
         String query = "UPDATE ? SET password = ? WHERE user_id = ?";
         newPassword = hashingPassword(newPassword);
 
@@ -63,6 +67,31 @@ public class UserController {
             conn.disconnect();
         }
         return true;
+    }
+
+    public HashMap<String, String> getListUser() {
+        conn.connect();
+
+        HashMap<String, String> profileUser = new HashMap<>();
+        String[] tables = {"admin, passenger"};
+        for (String table : tables) {
+            String queryGetAdmin = "SELECT name, email FROM ?";
+            try {
+                PreparedStatement stmt = conn.con.prepareStatement(queryGetAdmin);
+                stmt.setString(1, table);
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    profileUser.put(rs.getString("name"), rs.getString("email"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
+            } finally {
+                conn.disconnect();
+            }
+        }
+        return profileUser;
     }
 
     private static String hashingPassword(String password) {
