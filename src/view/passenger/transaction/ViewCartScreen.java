@@ -135,21 +135,21 @@ public class ViewCartScreen extends JFrame {
         victualPanel.add(price);
         CartController cartController = new CartController();
 
-        final int[] qtyWrapper = {qty};
-
         plusButton.addActionListener(e -> {
-            qtyWrapper[0]++;
-            cartController.editCart(victual_id, passenger.getId(), qtyWrapper[0]);
-            victualQuantity.setText("Qty: x" + qtyWrapper[0]);
-            price.setText("Rp " + (qtyWrapper[0] * victual.getPrice()));
+            int currentQuantity = Integer.parseInt(victualQuantity.getText().replace("Qty: x", ""));
+            int newQuantity = currentQuantity + 1;
+            victualQuantity.setText("Qty: x" + newQuantity);
+            cartController.editCart(victual_id, passenger.getId(), newQuantity);
+            price.setText("Rp " + (newQuantity * victual.getPrice()));
         });
 
         minusButton.addActionListener(e -> {
-            if (qtyWrapper[0] > 1) {
-                qtyWrapper[0]--;
-                cartController.editCart(victual_id, passenger.getId(), qtyWrapper[0]);
-                victualQuantity.setText("Qty: x" + qtyWrapper[0]);
-                price.setText("Rp " + (qtyWrapper[0] * victual.getPrice()));
+            int currentQuantity = Integer.parseInt(victualQuantity.getText().replace("Qty: x", ""));
+            if (currentQuantity > 1) {
+                int newQuantity = currentQuantity - 1;
+                victualQuantity.setText("Qty: x" + newQuantity);
+                cartController.editCart(victual_id, passenger.getId(), newQuantity);
+                price.setText("Rp " + (newQuantity * victual.getPrice()));
             }
         });
 
