@@ -5,13 +5,12 @@ import controller.ScheduleController;
 import controller.StationController;
 import controller.TrainController;
 import model.classes.Schedule;
+import model.classes.Station;
 import model.classes.Train;
 import view.admin.AdminMenu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -49,41 +48,34 @@ public class AddEditScheduleScreen extends JFrame {
         departureStation.setBounds(0, 0, 150, 30);
         formPanel.add(departureStation);
 
-        JTextField departureStationField = new JTextField(schedule.getDeparture() != null ? schedule.getDeparture().toString() : "");
-        departureStationField.setFont(new Font("Calibri", Font.PLAIN, 15));
-        departureStationField.setBounds(200, 0, 300, 30);
-        formPanel.add(departureStationField);
+        JComboBox<Integer> departureStationComboBox = new JComboBox<>();
+        departureStationComboBox.setFont(new Font("Calibri", Font.PLAIN, 15));
+        departureStationComboBox.setBounds(200, 0, 300, 30);
+        loadStationList(departureStationComboBox, 0);
+        if (schedule.getDeparture() != null) {
+            departureStationComboBox.setSelectedItem(schedule.getDeparture());
+        }
+        formPanel.add(departureStationComboBox);
 
-        departureStationField.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                String text = departureStationField.getText();
-                if (text.length() == 1 && Character.isDigit(text.charAt(0))) {
-                    loadTrainList(Integer.parseInt(text));
-                }
-            }
-
-        });
 
         JLabel arrivalStation = new JLabel("Arrival Station ID");
         arrivalStation.setFont(new Font("Calibri", Font.PLAIN, 17));
         arrivalStation.setBounds(0, 50, 130, 30);
         formPanel.add(arrivalStation);
 
-        JTextField arrivalStationField = new JTextField(schedule.getArrival() != null ? schedule.getArrival().toString() : "");
-        arrivalStationField.setFont(new Font("Calibri", Font.PLAIN, 15));
-        arrivalStationField.setBounds(200, 50, 300, 30);
-        formPanel.add(arrivalStationField);
+        JComboBox<Integer> arrivalStationComboBox = new JComboBox<>();
+        arrivalStationComboBox.setFont(new Font("Calibri", Font.PLAIN, 15));
+        arrivalStationComboBox.setBounds(200, 50, 300, 30);
+        if (schedule.getArrival() != null) {
+            arrivalStationComboBox.setSelectedItem(schedule.getArrival());
+        }
+        formPanel.add(arrivalStationComboBox);
+
+        departureStationComboBox.addActionListener(e -> {
+            Integer selectedStationID = (Integer) departureStationComboBox.getSelectedItem();
+            loadStationList(arrivalStationComboBox, selectedStationID);
+            loadTrainList(selectedStationID);
+        });
 
         JLabel departureDate = new JLabel("Departure Date");
         departureDate.setFont(new Font("Calibri", Font.PLAIN, 17));
@@ -116,7 +108,6 @@ public class AddEditScheduleScreen extends JFrame {
         });
         formPanel.add(trainList);
 
-
         JLabel fee = new JLabel("Set Fee");
         fee.setFont(new Font("Calibri", Font.PLAIN, 17));
         fee.setBounds(0, 200, 130, 30);
@@ -137,20 +128,24 @@ public class AddEditScheduleScreen extends JFrame {
 
         submitButton.addActionListener(e -> {
             try {
-                Integer departureStationID = Integer.parseInt(departureStationField.getText());
-                Integer arrivalStationID = Integer.parseInt(arrivalStationField.getText());
+                Integer departureStationID = (Integer) departureStationComboBox.getSelectedItem();
+                Integer arrivalStationID = (Integer) arrivalStationComboBox.getSelectedItem();
+                if (departureStationID.equals(arrivalStationID)) {
+                    JOptionPane.showMessageDialog(null, "Arrival Station cannot be the same as Departure Station!", "Input Error!", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
                 Date departureDateForm = departureDateChooser.getDate();
                 Integer selectedTrainID = (Integer) trainList.getSelectedItem();
 
                 if (schController.validateScheduleForm(selectedTrainID, departureStationID, arrivalStationID, departureDateForm, Double.parseDouble(feeField.getText()))) {
 
                     Schedule newSchedule = new Schedule(selectedTrainID, departureStationID, arrivalStationID, departureDateForm, Double.parseDouble(feeField.getText()));
-                    //Update
+                    // Update
                     if (schedule.getScheduleID() != null) {
                         newSchedule.addScheduleID(schedule.getScheduleID());
                         if (schController.addSchedule(newSchedule, false)) {
                             JOptionPane.showMessageDialog(null, "Schedule Edited Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                            AdminMenu backToAdminMain = new AdminMenu();
+                            new AdminMenu();
                             this.dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "Failed to Edit Schedule!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -158,7 +153,7 @@ public class AddEditScheduleScreen extends JFrame {
                     } else {
                         if (schController.addSchedule(newSchedule, true)) {
                             JOptionPane.showMessageDialog(null, "New Schedule Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                            AdminMenu backToAdminMain = new AdminMenu();
+                            new AdminMenu();
                             this.dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "Failed to Add Schedule!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -191,6 +186,16 @@ public class AddEditScheduleScreen extends JFrame {
         this.setVisible(true);
     }
 
+    private void loadStationList(JComboBox<Integer> comboBox, Integer arrivalID) {
+        comboBox.removeAllItems();
+        ArrayList<Station> stations = (ArrayList<Station>) stationController.getlistStations();
+        for (Station station : stations) {
+            if (station.getId() != arrivalID) {
+                comboBox.addItem(station.getId());
+            }
+        }
+    }
+
     private void loadTrainList(Integer departureStationId) {
         trainList.removeAllItems();
         ArrayList<Train> trains = stationController.getStationById(departureStationId).getTrainList();
@@ -199,4 +204,8 @@ public class AddEditScheduleScreen extends JFrame {
         }
     }
 
+    public static void main(String[] args) {
+        Schedule schedule = new Schedule(null, null, null, null, 0);
+        new AddEditScheduleScreen(schedule);
+    }
 }
