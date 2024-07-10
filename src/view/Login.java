@@ -1,8 +1,10 @@
+package view;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class Register extends JFrame {
-    public Register() {
+public class Login extends JFrame {
+    public Login() {
         initComponents();
         this.setVisible(true);
     }
@@ -13,11 +15,11 @@ public class Register extends JFrame {
         this.setLayout(null);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setTitle("Login!");
+        this.setTitle("view.Login!");
 
-        JLabel screenTitle = new JLabel("Register");
+        JLabel screenTitle = new JLabel("Login");
         screenTitle.setFont(new Font("calibri", Font.BOLD, 44));
-        screenTitle.setBounds(116, 22, 200, 51);
+        screenTitle.setBounds(143, 22, 200, 51);
 
         JPanel formLogin = new JPanel();
         formLogin.setLayout(null);
@@ -30,7 +32,7 @@ public class Register extends JFrame {
 
         JTextField profileField = new JTextField(255);
         profileField.setFont(new Font("calibri", Font.PLAIN, 15));
-        profileField.setBounds(0, 33, 296, 30);
+        profileField.setBounds(0, 33, 298, 30);
         formLogin.add(profileField);
 
         JLabel passwordUser = new JLabel("Password:");
@@ -40,7 +42,7 @@ public class Register extends JFrame {
 
         JTextField passwordField = new JTextField(255);
         passwordField.setFont(new Font("calibri", Font.PLAIN, 15));
-        passwordField.setBounds(0, 110, 296, 30);
+        passwordField.setBounds(0, 110, 298, 30);
         formLogin.add(passwordField);
 
         JPanel buttonPanel = new JPanel();
@@ -61,6 +63,6 @@ public class Register extends JFrame {
     }
 
     public static void main(String[] args) {
-        new Register();
+        new Login();
     }
 }
