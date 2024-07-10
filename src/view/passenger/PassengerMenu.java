@@ -1,4 +1,9 @@
 package view.passenger;
 
-public class PassengerMenu {
+import javax.swing.*;
+
+public class PassengerMenu extends JFrame {
+    public PassengerMenu() {
+        this.setVisible(true);
+    }
 }
