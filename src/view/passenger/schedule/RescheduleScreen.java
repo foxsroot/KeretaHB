@@ -87,7 +87,7 @@ public class RescheduleScreen extends JFrame {
         JButton rescheduleButton = new JButton("Reschedule");
         rescheduleButton.setBounds(730, 30, 110, 30);
         rescheduleButton.addActionListener(e -> {
-            int choose = JOptionPane.showConfirmDialog(null, "Are you sure want to reschedule to " + schedule.getDepartureDate() + "?");
+            int choose = JOptionPane.showConfirmDialog(null, "Are you sure want to reschedule to " + schedule.getDepartureDate() + "?", "Confirmation", JOptionPane.YES_NO_OPTION);
             RescheduleController rescheduleController = new RescheduleController();
             if (choose == JOptionPane.YES_OPTION) {
                 if (rescheduleController.requestReschedule(ticket.getTransactionID(), schedule.getScheduleID())){
