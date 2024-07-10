@@ -14,6 +14,9 @@ public class TicketCheckoutScreen extends JFrame {
     private Schedule schedule;
     private JLabel totalLabel;
     private JLabel passengerLabel;
+    private JLabel priceLabel;
+    private JLabel loyaltyDiscountLabel;
+    private JLabel loyaltyPercentLabel;
     private JComboBox<String> commuteBox;
     private int passengerCount = 1;
     private NumberFormat currencyFormat;
@@ -36,7 +39,7 @@ public class TicketCheckoutScreen extends JFrame {
         this.setTitle("Ticket Checkout");
 
         LoyaltyController loyaltyController = new LoyaltyController();
-        loyaltyDiscount = loyaltyController.getLoyaltyDiscount(loyaltyController.getLoyalty(2)); //Ganti ke singleton yg lg login
+        loyaltyDiscount = loyaltyController.getLoyaltyDiscount(loyaltyController.getLoyalty(2)); // Ganti ke singleton yg lg login
 
         JLabel screenTitle = new JLabel("Ticket Checkout");
         screenTitle.setFont(new Font("Calibri", Font.BOLD, 30));
@@ -48,7 +51,7 @@ public class TicketCheckoutScreen extends JFrame {
         dateLabel.setBounds(50, 150, 400, 30);
         add(dateLabel);
 
-        JLabel priceLabel = new JLabel("Price                     : " + formatCurrency(schedule.getFee()));
+        priceLabel = new JLabel("Price                     : " + formatCurrency(schedule.getFee()));
         priceLabel.setFont(new Font("Calibri", Font.BOLD, 20));
         priceLabel.setBounds(50, 200, 400, 30);
         add(priceLabel);
@@ -68,7 +71,7 @@ public class TicketCheckoutScreen extends JFrame {
         decreaseButton.addActionListener(e -> {
             if (passengerCount > 1) {
                 passengerCount--;
-                updatePassengerCount();
+                updatePrices();
             }
         });
         add(decreaseButton);
@@ -78,7 +81,7 @@ public class TicketCheckoutScreen extends JFrame {
         increaseButton.addActionListener(e -> {
             if (passengerCount < 10) {
                 passengerCount++;
-                updatePassengerCount();
+                updatePrices();
             }
         });
         add(increaseButton);
@@ -93,17 +96,31 @@ public class TicketCheckoutScreen extends JFrame {
         commuteBox.setBounds(210, 300, 300, 30);
         add(commuteBox);
 
-        commuteBox.addActionListener(e -> {
-            if (commuteBox.getSelectedItem().equals("YES")) {
-                addCommutePrice();
-            } else {
-                updateTotalPrice();
-            }
-        });
+        commuteBox.addActionListener(e -> updatePrices());
 
-        totalLabel = new JLabel("Total Price: " + formatCurrency(schedule.getFee()));
+        JSeparator separatorForm = new JSeparator();
+        separatorForm.setBounds(50, 350, 800, 2);
+        add(separatorForm);
+
+        loyaltyPercentLabel = new JLabel("Loyalty Discount: " + (int) (loyaltyDiscount * 100) + "%");
+        loyaltyPercentLabel.setFont(new Font("Calibri", Font.BOLD, 30));
+        loyaltyPercentLabel.setBounds(495, 400, 400, 30);
+        add(loyaltyPercentLabel);
+
+        loyaltyDiscountLabel = new JLabel();
+        loyaltyDiscountLabel.setFont(new Font("Calibri", Font.BOLD, 30));
+        loyaltyDiscountLabel.setBounds(450, 450, 400, 30);
+        loyaltyDiscountLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        add(loyaltyDiscountLabel);
+
+        JSeparator separatorPrice = new JSeparator();
+        separatorPrice.setBounds(50, 500, 800, 2);
+        add(separatorPrice);
+
+        totalLabel = new JLabel();
         totalLabel.setFont(new Font("Calibri", Font.BOLD, 30));
-        totalLabel.setBounds(50, 450, 350, 30);
+        totalLabel.setBounds(450, 550, 400, 30);
+        totalLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         add(totalLabel);
 
         JButton purchaseButton = new JButton("Purchase");
@@ -131,40 +148,29 @@ public class TicketCheckoutScreen extends JFrame {
             // Baliks ke main menu :)
         });
         add(exitButton);
+
+        updatePrices();
     }
 
     private double parseTotalPrice(String text) {
         return Double.parseDouble(text.replace("Total Price: Rp ", "").replaceAll("\\D", "").trim());
     }
 
-    private void addCommutePrice() {
+    private void updatePrices() {
         try {
-            double price = schedule.getFee() + 0.65 * schedule.getFee();
-            double totalPrice = price * passengerCount;
-            totalPrice -= totalPrice * loyaltyDiscount;
+            double basePrice = schedule.getFee();
+            double totalBasePrice = basePrice * passengerCount;
+            double commutePrice = commuteBox.getSelectedItem().equals("YES") ? totalBasePrice * 0.65 : 0;
+            double finalPrice = totalBasePrice + commutePrice;
+            double discount = finalPrice * loyaltyDiscount;
+            double totalPrice = finalPrice - discount;
+
+            passengerLabel.setText(String.valueOf(passengerCount));
+            priceLabel.setText("Price                     : " + formatCurrency(basePrice));
+            loyaltyDiscountLabel.setText("Total Discount: " + formatCurrency(discount));
             totalLabel.setText("Total Price: " + formatCurrency(totalPrice));
         } catch (NumberFormatException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void updateTotalPrice() {
-        try {
-            double price = schedule.getFee();
-            double totalPrice = price * passengerCount;
-            totalPrice -= totalPrice * loyaltyDiscount;
-            totalLabel.setText("Total Price: " + formatCurrency(totalPrice));
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void updatePassengerCount() {
-        passengerLabel.setText(String.valueOf(passengerCount));
-        if (commuteBox.getSelectedItem().equals("YES")) {
-            addCommutePrice();
-        } else {
-            updateTotalPrice();
         }
     }
 
