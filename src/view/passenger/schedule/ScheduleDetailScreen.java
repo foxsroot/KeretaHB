@@ -3,9 +3,12 @@ package view.passenger.schedule;
 import controller.StationController;
 import controller.TrainController;
 import model.classes.Schedule;
+import view.passenger.transaction.TicketCheckoutScreen;
+//import view.passenger.transaction.TicketCheckoutScreen;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 
 public class ScheduleDetailScreen extends JFrame {
@@ -54,6 +57,11 @@ public class ScheduleDetailScreen extends JFrame {
         JButton bookTicketButton = new JButton("Book Ticket");
         bookTicketButton.setFont(new Font("Calibri", Font.BOLD, 16));
         bookTicketButton.setPreferredSize(new Dimension(150, 29));
+
+        bookTicketButton.addActionListener(e -> {
+            dispose();
+            new TicketCheckoutScreen(schedule);
+        });
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 10));

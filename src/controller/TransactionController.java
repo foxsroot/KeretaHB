@@ -1,8 +1,6 @@
 package controller;
 
-import model.classes.TicketTransaction;
-import model.classes.Transaction;
-import model.classes.VictualTransaction;
+import model.classes.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -38,10 +36,14 @@ public class TransactionController {
 
 
 
-    public boolean bookTicket(int userID, int scheduleID, int passengers, boolean commute) {
+    public boolean bookTicket(int userID, int scheduleID, int passengers, boolean commute, double total) {
+        if (!deductBalance(userID, total)) {
+            return false;
+        }
+
         conn.connect();
 
-        String query = "INSERT INTO ticket_transaction(user_id, schedule_id, passengers, commute) VALUES(?, ?, ?, ?)";
+        String query = "INSERT INTO ticket_transaction(user_id, schedule_id, passengers, commute, total) VALUES(?, ?, ?, ?, ?)";
 
         try {
             PreparedStatement stmt = conn.con.prepareStatement(query);
@@ -49,7 +51,12 @@ public class TransactionController {
             stmt.setInt(2, scheduleID);
             stmt.setInt(3, passengers);
             stmt.setBoolean(4, commute);
+            stmt.setDouble(5, total);
             stmt.executeUpdate();
+
+            LoyaltyController controller = new LoyaltyController();
+            controller.addTotalPaid(userID, total);
+            controller.updateLoyalty(userID);
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -167,6 +174,31 @@ public class TransactionController {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+
+        return true;
+    }
+
+    private boolean deductBalance(int userID, double amount) {
+        WalletController controller = new WalletController();
+
+        if (controller.getWallet(userID).getBalance() < amount) {
+            return false;
+        }
+
+        conn.connect();
+        String query = "UPDATE wallet SET balance = balance - ? WHERE user_id = ?";
+
+        try {
+            PreparedStatement stmt = conn.con.prepareStatement(query);
+            stmt.setDouble(1, amount);
+            stmt.setInt(2, userID);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            conn.disconnect();
         }
 
         return true;

@@ -80,7 +80,7 @@ public class LoyaltyController {
     public LoyaltyEnum getLoyalty(int userID) {
         conn.connect();
 
-        String query = "SELECT loyalty.loyalty_type FROM loyalty INNER JOIN user ON user.loyalty = loyalty.loyalty_type WHERE user.user_id = ?";
+        String query = "SELECT loyalty.loyalty_type FROM loyalty INNER JOIN passenger ON passenger.loyalty = loyalty.loyalty_type WHERE passenger.user_id = ?";
 
         try {
             PreparedStatement stmt = conn.con.prepareStatement(query);
