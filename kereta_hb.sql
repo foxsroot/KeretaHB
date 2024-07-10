@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 09, 2024 at 10:01 AM
+-- Generation Time: Jul 10, 2024 at 04:10 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -130,14 +130,6 @@ CREATE TABLE `cart_item` (
   `amount` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
---
--- Dumping data for table `cart_item`
---
-
-INSERT INTO `cart_item` (`item_id`, `user_id`, `victual_id`, `station_id`, `amount`) VALUES
-(59, 2, 14, 1, 5),
-(60, 2, 8, 1, 3);
-
 -- --------------------------------------------------------
 
 --
@@ -147,8 +139,19 @@ INSERT INTO `cart_item` (`item_id`, `user_id`, `victual_id`, `station_id`, `amou
 CREATE TABLE `loyalty` (
   `loyalty_id` int(11) NOT NULL,
   `loyalty_type` enum('CLASSIC','ELITE','EXECUTIVE','VVIP') NOT NULL,
-  `discount` double DEFAULT NULL
+  `discount` double DEFAULT NULL,
+  `minimum_transaction` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `loyalty`
+--
+
+INSERT INTO `loyalty` (`loyalty_id`, `loyalty_type`, `discount`, `minimum_transaction`) VALUES
+(1, 'CLASSIC', 0.1, 100000),
+(2, 'ELITE', 0.15, 1000000),
+(3, 'EXECUTIVE', 0.2, 10000000),
+(4, 'VVIP', 0.3, 100000000);
 
 -- --------------------------------------------------------
 
@@ -262,7 +265,8 @@ CREATE TABLE `reschedule_request` (
   `reschedule_id` int(11) NOT NULL,
   `transaction_id` int(11) NOT NULL,
   `admin_id` int(11) DEFAULT NULL,
-  `status` enum('SUCCESS','DENIED','PENDING') DEFAULT NULL
+  `requested_schedule_id` int(11) NOT NULL,
+  `status` enum('SUCCESS','DENIED','PENDING') DEFAULT 'PENDING'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -345,11 +349,27 @@ CREATE TABLE `stock` (
 --
 
 INSERT INTO `stock` (`stock_id`, `victual_id`, `station_id`, `stock`) VALUES
-(13, 9, 1, 100),
-(14, 8, 1, 68),
-(15, 14, 1, 70),
-(16, 11, 2, 400),
-(17, 10, 1, 100);
+(13, 9, 1, 89),
+(14, 8, 1, 65),
+(15, 14, 1, 61),
+(16, 11, 2, 399),
+(20, 10, 5, 50),
+(21, 12, 5, 99),
+(22, 9, 5, 500),
+(24, 9, 2, 250),
+(25, 10, 2, 300),
+(26, 12, 2, 200),
+(27, 14, 2, 50),
+(28, 13, 4, 100),
+(29, 9, 4, 500),
+(30, 8, 4, 250),
+(31, 9, 3, 500),
+(32, 8, 3, 150),
+(33, 11, 3, 200),
+(34, 10, 3, 200),
+(35, 12, 3, 100),
+(36, 13, 3, 100),
+(37, 14, 3, 150);
 
 -- --------------------------------------------------------
 
@@ -364,7 +384,8 @@ CREATE TABLE `ticket_transaction` (
   `purchase_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `passengers` int(11) NOT NULL,
   `commute` tinyint(1) NOT NULL,
-  `rescheduled` tinyint(1) DEFAULT NULL
+  `rescheduled` tinyint(1) NOT NULL DEFAULT 0,
+  `total` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -413,6 +434,23 @@ CREATE TABLE `transaction_item` (
   `quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `transaction_item`
+--
+
+INSERT INTO `transaction_item` (`transaction_item_id`, `transaction_id`, `victual_id`, `quantity`) VALUES
+(14, 9, 8, 2),
+(15, 9, 9, 1),
+(16, 9, 14, 3),
+(17, 10, 11, 1),
+(18, 11, 14, 5),
+(19, 12, 9, 7),
+(20, 13, NULL, 5),
+(21, 14, 8, 1),
+(22, 14, 9, 3),
+(23, 14, 14, 1),
+(24, 14, NULL, 3);
+
 -- --------------------------------------------------------
 
 --
@@ -454,6 +492,18 @@ CREATE TABLE `victuals_transaction` (
   `total` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Dumping data for table `victuals_transaction`
+--
+
+INSERT INTO `victuals_transaction` (`transaction_id`, `user_id`, `station_id`, `date`, `total`) VALUES
+(9, 2, 1, '2024-07-09 09:08:39', 71000),
+(10, 2, 2, '2024-07-09 09:10:13', 20000),
+(11, 2, 1, '2024-07-09 09:10:45', 85000),
+(12, 2, 1, '2024-07-09 09:11:04', 70000),
+(13, 2, 1, '2024-07-09 09:16:56', 25000),
+(14, 2, 1, '2024-07-09 09:17:30', 67000);
+
 -- --------------------------------------------------------
 
 --
@@ -472,7 +522,7 @@ CREATE TABLE `wallet` (
 --
 
 INSERT INTO `wallet` (`wallet_id`, `user_id`, `balance`, `pin`) VALUES
-(1, 2, 79900000, 0);
+(1, 2, 79562000, 0);
 
 --
 -- Indexes for dumped tables
@@ -526,7 +576,8 @@ ALTER TABLE `passenger`
 ALTER TABLE `reschedule_request`
   ADD PRIMARY KEY (`reschedule_id`),
   ADD KEY `transaction_id` (`transaction_id`),
-  ADD KEY `fk_admin` (`admin_id`);
+  ADD KEY `fk_admin` (`admin_id`),
+  ADD KEY `fk_requested_schedule_id` (`requested_schedule_id`);
 
 --
 -- Indexes for table `schedule`
@@ -615,13 +666,13 @@ ALTER TABLE `carriage`
 -- AUTO_INCREMENT for table `cart_item`
 --
 ALTER TABLE `cart_item`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `loyalty`
 --
 ALTER TABLE `loyalty`
-  MODIFY `loyalty_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `loyalty_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `notification`
@@ -657,7 +708,7 @@ ALTER TABLE `station`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `ticket_transaction`
@@ -675,19 +726,19 @@ ALTER TABLE `train`
 -- AUTO_INCREMENT for table `transaction_item`
 --
 ALTER TABLE `transaction_item`
-  MODIFY `transaction_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `transaction_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `victual`
 --
 ALTER TABLE `victual`
-  MODIFY `victual_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `victual_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `victuals_transaction`
 --
 ALTER TABLE `victuals_transaction`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `wallet`
@@ -730,6 +781,7 @@ ALTER TABLE `passenger`
 --
 ALTER TABLE `reschedule_request`
   ADD CONSTRAINT `fk_admin` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`user_id`),
+  ADD CONSTRAINT `fk_requested_schedule_id` FOREIGN KEY (`requested_schedule_id`) REFERENCES `schedule` (`schedule_id`),
   ADD CONSTRAINT `reschedule_request_ibfk_1` FOREIGN KEY (`transaction_id`) REFERENCES `ticket_transaction` (`transaction_id`);
 
 --
