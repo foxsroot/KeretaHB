@@ -37,13 +37,15 @@ public class RegisterController {
         }
         password = hashingPassword(password);
 
-        String queryInsert = "INSERT INTO passenger(`email`, `password`, `name`, `cellphone`) VALUES (?, ?, ?, ?)";
+        String queryInsert = "INSERT INTO passenger VALUES (, ?, ?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement stmt = conn.con.prepareStatement(queryInsert);
-            stmt.setString(1, email);
-            stmt.setString(2, password);
-            stmt.setString(3, name);
-            stmt.setString(4, cellphone);
+            stmt.setInt(1, 1);
+            stmt.setString(2, email);
+            stmt.setString(3, password);
+            stmt.setString(4, name);
+            stmt.setString(5, cellphone);
+            stmt.setDouble(6, 0);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
