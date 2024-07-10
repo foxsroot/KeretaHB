@@ -67,7 +67,10 @@ public class AddEditScheduleScreen extends JFrame {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                loadTrainList(Integer.parseInt(departureStationField.getText()));
+                String text = departureStationField.getText();
+                if (text.length() == 1 && Character.isDigit(text.charAt(0))) {
+                    loadTrainList(Integer.parseInt(text));
+                }
             }
 
         });

@@ -17,6 +17,8 @@ public class Schedule {
         this.departureDate = departureDate;
         this.fee = fee;
     }
+
+    // Intention : Builder
     public Schedule addScheduleID(Integer scheduleID) {
         this.scheduleID = scheduleID;
         return this;

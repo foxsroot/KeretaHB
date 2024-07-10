@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CarriageController {
+    ConnectionHandler conn = new ConnectionHandler();
 
-    public boolean revokeCarriageFromTrain(Integer carriageId, Integer trainId){
-        ConnectionHandler conn = new ConnectionHandler();
+    public boolean revokeCarriageFromTrain(Integer carriageId, Integer trainId) {
         String query = "UPDATE carriage SET train_id = NULL WHERE carriage_id =? AND train_id =?";
         try {
             conn.connect();
@@ -21,27 +21,26 @@ public class CarriageController {
             st.setInt(2, trainId);
             st.executeUpdate();
             return true;
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace(System.err);
-        }finally {
+        } finally {
             conn.disconnect();
         }
         return false;
     }
 
-    public boolean assignCarriageToTrain(Integer carriageId, Integer trainId){
-        ConnectionHandler conn = new ConnectionHandler();
+    public boolean assignCarriageToTrain(Integer carriageId, Integer trainId) {
         String query = "UPDATE carriage SET train_id =? WHERE carriage_id =?";
-        try{
+        try {
             conn.connect();
             PreparedStatement st = conn.con.prepareStatement(query);
             st.setInt(1, trainId);
             st.setInt(2, carriageId);
             st.executeUpdate();
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace(System.err);
-        }finally{
+        } finally {
             conn.disconnect();
         }
         return false;
@@ -52,7 +51,6 @@ public class CarriageController {
     }
 
     public boolean addCarriage(Carriage carriage, boolean add) {
-        ConnectionHandler conn = new ConnectionHandler();
         String query;
         if (add) {
             query = "INSERT INTO carriage (type, capacity, `class`, baggage_allowance) VALUES (?,?,?,?)";
@@ -81,7 +79,6 @@ public class CarriageController {
 
     public Carriage[] getCarriage(int train_id) {
         List<Carriage> carriagesList = new ArrayList<>();
-        ConnectionHandler conn = new ConnectionHandler();
         String query = "SELECT * FROM carriage WHERE train_id = ?";
         try {
             conn.connect();
@@ -113,9 +110,8 @@ public class CarriageController {
 
 
     public List<Carriage> getUnassignedCarriages() {
-        List<Carriage> carriages = new ArrayList<>(); // Initialize ArrayList to hold carriages
+        List<Carriage> carriages = new ArrayList<>();
         String query = "SELECT * FROM carriage WHERE train_id IS NULL";
-        ConnectionHandler conn = new ConnectionHandler();
         try {
             conn.connect();
             PreparedStatement st = conn.con.prepareStatement(query);
