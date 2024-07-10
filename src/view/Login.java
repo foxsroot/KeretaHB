@@ -17,7 +17,7 @@ public class Login extends JFrame {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setTitle("view.Login!");
 
-        JLabel screenTitle = new JLabel("view.Login");
+        JLabel screenTitle = new JLabel("Login");
         screenTitle.setFont(new Font("calibri", Font.BOLD, 44));
         screenTitle.setBounds(143, 22, 200, 51);
 
@@ -49,11 +49,11 @@ public class Login extends JFrame {
         buttonPanel.setLayout(null);
         buttonPanel.setBounds(86, 300, 350, 100);
 
-        JButton loginButton = new JButton("view.Login");
+        JButton loginButton = new JButton("Login");
         loginButton.setBounds(0, 0, 100, 40);
         buttonPanel.add(loginButton);
 
-        JButton registerButton = new JButton("view.Register");
+        JButton registerButton = new JButton("Register");
         registerButton.setBounds(110, 0, 100, 40);
         buttonPanel.add(registerButton);
 
