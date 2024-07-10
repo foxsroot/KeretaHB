@@ -2,7 +2,6 @@ package controller;
 
 import model.classes.*;
 
-import javax.swing.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -10,8 +9,9 @@ import java.util.Date;
 import java.util.List;
 
 public class ScheduleController {
+    ConnectionHandler conn = new ConnectionHandler();
+
     public boolean deleteSchedule(Schedule schedule) {
-        ConnectionHandler conn = new ConnectionHandler();
         String query = "DELETE FROM schedule WHERE schedule_id = ?";
 
         try {
@@ -30,7 +30,6 @@ public class ScheduleController {
 
     public List<Schedule> getListSchedules(int stationId) {
         List<Schedule> schedules = new ArrayList<>();
-        ConnectionHandler conn = new ConnectionHandler();
 
         String query = "SELECT * FROM schedule WHERE departure_station_id = ?";
         try {
@@ -59,7 +58,6 @@ public class ScheduleController {
     }
 
     public Schedule getSchedulesById(int schedule_Id) {
-        ConnectionHandler conn = new ConnectionHandler();
 
         String query = "SELECT * FROM schedule WHERE schedule_id = ?";
         try {
@@ -87,7 +85,6 @@ public class ScheduleController {
     }
 
     public ArrayList<Schedule> getSchedulesByStationId(int stationId) {
-        ConnectionHandler conn = new ConnectionHandler();
         ArrayList<Schedule> schedules = new ArrayList<>();
         String query = "SELECT * FROM schedule WHERE station_id = ?";
         try {
@@ -116,23 +113,7 @@ public class ScheduleController {
     }
 
     public boolean validateScheduleForm(Integer train_id, Integer departureStationID, Integer arrivalStationID, Date departureDate, double fee) {
-        boolean valid = true;
-        if (train_id == null) {
-            valid = false;
-        }
-        if (departureStationID == null) {
-            valid = false;
-        }
-        if (arrivalStationID == null) {
-            valid = false;
-        }
-        if (departureDate == null) {
-            valid = false;
-        }
-        if (fee < 0) {
-            valid = false;
-        }
-        return valid;
+        return train_id != null && departureStationID != null && arrivalStationID != null && departureDate != null && fee > 0;
     }
 
     public boolean addSchedule(Schedule schedule, boolean add) {

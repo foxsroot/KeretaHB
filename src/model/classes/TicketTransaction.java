@@ -16,6 +16,10 @@ public class TicketTransaction extends Transaction {
         this.rescheduled = rescheduled;
     }
 
+    public TicketTransaction() {
+
+    }
+
     public int getPassengers() {
         return passengers;
     }

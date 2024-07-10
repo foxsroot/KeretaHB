@@ -49,7 +49,7 @@ public class ScheduleDetailScreen extends JFrame {
         mainPanel.add(createLabel(": " + departureDate));
 
         mainPanel.add(createLabel("Fee"));
-        mainPanel.add(createLabel(": $" + schedule.getFee()));
+        mainPanel.add(createLabel(": Rp" + schedule.getFee()));
 
         JScrollPane mainScrollPane = new JScrollPane(mainPanel);
 

@@ -12,6 +12,7 @@ public class Train {
         this.speed = speed;
     }
 
+    // Intention : Builder
     public Train addId(Integer id){
         this.id = id;
         return this;

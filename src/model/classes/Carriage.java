@@ -18,6 +18,7 @@ public class Carriage {
         this.carriageClass = carriageClass;
     }
 
+    // Intention : Builder
     public Carriage addTrainId(Integer train_id) {
         this.train_id = train_id;
         return this;
