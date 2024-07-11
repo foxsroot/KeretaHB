@@ -26,9 +26,6 @@ public class AuthenticationController {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return new int[]{-1, -1};
-        } finally {
-            ConnectionHandler.getInstance().disconnect();
         }
 
         String queryGetAdmin = "SELECT user_id, name, email, password FROM admin";
@@ -49,13 +46,13 @@ public class AuthenticationController {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return new int[]{-1, -1};
         } finally {
             ConnectionHandler.getInstance().disconnect();
         }
 
         return new int[]{0, -1};
     }
+
     public boolean logout(int userId) {
         return true;
     }
