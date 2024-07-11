@@ -13,7 +13,7 @@ public class RescheduleController {
         ConnectionHandler.getInstance().connect();
         ArrayList<RescheduleRequest> rescheduleRequestList = new ArrayList<>();
 
-        String query = "SELECT * FROM reschedule_request";
+        String query = "SELECT * FROM reschedule_request WHERE status = 'PENDING'";
 
         try {
             PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
