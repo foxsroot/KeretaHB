@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 10, 2024 at 06:29 PM
+-- Generation Time: Jul 11, 2024 at 04:51 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -34,6 +34,15 @@ CREATE TABLE `admin` (
   `name` varchar(100) NOT NULL,
   `cellphone` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`user_id`, `email`, `password`, `name`, `cellphone`) VALUES
+(1, 'admin1@example.com', 'password1', 'Admin One', '123-456-7890'),
+(2, 'admin2@example.com', 'password2', 'Admin Two', '987-654-3210'),
+(3, 'admin3@example.com', 'password3', 'Admin Three', '555-123-4567');
 
 -- --------------------------------------------------------
 
@@ -229,7 +238,8 @@ INSERT INTO `notification` (`notification_id`, `recipient_id`, `title`, `message
 (55, 2, 'Notification 49', 'This is the 49th notification', '2024-07-06 03:00:00'),
 (56, 2, 'Notification 50', 'This is the 50th notification', '2024-07-06 03:20:00'),
 (57, 2, 'Notification 51', 'This is the 51st notification', '2024-07-06 03:40:00'),
-(58, 2, 'Victuals Cancelation', 'Hi ---, we have successfully canceled your victual transaction and returned Rp 86000.0 to your wallet.\n\nThank you!', '2024-07-09 05:57:52');
+(58, 2, 'Victuals Cancelation', 'Hi ---, we have successfully canceled your victual transaction and returned Rp 86000.0 to your wallet.\n\nThank you!', '2024-07-09 05:57:52'),
+(59, 2, 'Reschedule Request Approved', 'Hi there, We are pleased to inform you that your request to reschedule your appointment has been approved', '2024-07-10 18:05:52');
 
 -- --------------------------------------------------------
 
@@ -244,7 +254,7 @@ CREATE TABLE `passenger` (
   `password` varchar(100) DEFAULT NULL,
   `name` varchar(100) DEFAULT NULL,
   `cellphone` varchar(20) DEFAULT NULL,
-  `total_paid` double DEFAULT NULL,
+  `total_paid` double DEFAULT 0,
   `pfp` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -274,7 +284,7 @@ CREATE TABLE `reschedule_request` (
 --
 
 INSERT INTO `reschedule_request` (`reschedule_id`, `transaction_id`, `admin_id`, `requested_schedule_id`, `status`) VALUES
-(1, 1, NULL, 4, 'PENDING');
+(1, 1, 1, 4, 'SUCCESS');
 
 -- --------------------------------------------------------
 
@@ -400,7 +410,7 @@ CREATE TABLE `ticket_transaction` (
 --
 
 INSERT INTO `ticket_transaction` (`transaction_id`, `user_id`, `schedule_id`, `purchase_date`, `passengers`, `commute`, `rescheduled`, `total`) VALUES
-(1, 2, 4, '2024-07-10 03:53:07', 1, 0, 0, 800000),
+(1, 2, 4, '2024-07-10 03:53:07', 1, 0, 1, 800000),
 (2, 2, 5, '2024-07-10 03:53:07', 2, 1, 0, 3200000),
 (3, 2, 3, '2024-07-10 03:53:07', 4, 0, 0, 1000000),
 (4, 2, 1, '2024-07-10 10:39:53', 5, 1, 0, 4050000),
@@ -678,7 +688,7 @@ ALTER TABLE `wallet`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `carriage`
@@ -702,7 +712,7 @@ ALTER TABLE `loyalty`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
 
 --
 -- AUTO_INCREMENT for table `passenger`
@@ -732,7 +742,7 @@ ALTER TABLE `station`
 -- AUTO_INCREMENT for table `stock`
 --
 ALTER TABLE `stock`
-  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `stock_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `ticket_transaction`

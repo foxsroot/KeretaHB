@@ -1,9 +1,7 @@
 package view.passenger.victual;
 
 import config.DirectoryConfig;
-import controller.ImageController;
-import controller.StationController;
-import controller.VictualController;
+import controller.*;
 import model.classes.Station;
 import model.classes.Victual;
 

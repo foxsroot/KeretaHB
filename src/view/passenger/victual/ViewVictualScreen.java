@@ -1,10 +1,7 @@
 package view.passenger.victual;
 
 import config.DirectoryConfig;
-import controller.CartController;
-import controller.ImageController;
-import controller.StockController;
-import controller.VictualController;
+import controller.*;
 import model.classes.Victual;
 import view.passenger.transaction.CartCheckoutScreen;
 import view.passenger.transaction.ViewCartScreen;
@@ -118,7 +115,7 @@ public class ViewVictualScreen extends JFrame {
 
             if (confirm == JOptionPane.YES_OPTION) {
                 CartController cartController = new CartController();
-                if (cartController.addToCart(2, victual.getId(), Integer.parseInt(quantityField.getText()), stationId)) {
+                if (cartController.addToCart(AuthenticationHelper.getInstance().getUserId(), victual.getId(), Integer.parseInt(quantityField.getText()), stationId)) {
                     JOptionPane.showMessageDialog(null, "Successfully added " + victual.getName() + " to Cart!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(null, "Failed to add item to the cart", "Error", JOptionPane.ERROR_MESSAGE);
@@ -135,7 +132,7 @@ public class ViewVictualScreen extends JFrame {
 
             if (confirm == JOptionPane.YES_OPTION) {
                 CartController cartController = new CartController();
-                if (cartController.addToCart(2, victual.getId(), Integer.parseInt(quantityField.getText()), stationId)) {
+                if (cartController.addToCart(AuthenticationHelper.getInstance().getUserId(), victual.getId(), Integer.parseInt(quantityField.getText()), stationId)) {
                     dispose();
                     new ViewCartScreen();
                 }

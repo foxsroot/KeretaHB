@@ -70,10 +70,10 @@ public class Login extends JFrame {
                 JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
             } else {
                 AuthenticationHelper.getInstance().setUserId(results[0]);
-                String role = null;
-                if (results[0] == 0) role = "Passenger";
-                else role = "Admin";
-                AuthenticationHelper.getInstance().setRole(role);
+                String userRole = null;
+                if (results[0] == 0) userRole = "Passenger";
+                else userRole = "Admin";
+                AuthenticationHelper.getInstance().setUserRole(userRole);
                 this.dispose();
                 if (results[1] == 0) {
                     new PassengerMenu();
