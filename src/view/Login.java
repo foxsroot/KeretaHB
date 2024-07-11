@@ -75,9 +75,11 @@ public class Login extends JFrame {
                 passwordField.setText(null);
                 JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
             } else if (results[1] == 0) {
-                PassengerMenu passengerMenu = new PassengerMenu();
-                this.dispose();
+                System.out.println("Success connect PassengerMenu");
+	            new PassengerMenu();
+	            this.dispose();
             } else {
+                System.out.println("Success connect AdminMenu");
                 AdminMenu adminMenu = new AdminMenu();
                 this.dispose();
                 adminMenu.setVisible(true);
