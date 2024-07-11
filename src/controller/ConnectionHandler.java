@@ -14,9 +14,13 @@ public class ConnectionHandler {
 
     private static ConnectionHandler instance;
 
-    public static synchronized ConnectionHandler getInstance() {
+    public static ConnectionHandler getInstance() {
         if (instance == null) {
-            instance = new ConnectionHandler();
+            synchronized (ConnectionHandler.class) {
+                if (instance == null) {
+                    instance = new ConnectionHandler();
+                }
+            }
         }
         return instance;
     }
