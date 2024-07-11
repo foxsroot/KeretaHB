@@ -7,7 +7,6 @@ import model.enums.RescheduleEnum;
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,10 +72,6 @@ public class RescheduleRequestListScreen extends JFrame {
         StationController stationController = new StationController();
         String departureStationName = stationController.getStationNameById(schedule.getDeparture());
         String arrivalStationName = stationController.getStationNameById(schedule.getArrival());
-
-//        JLabel transactionTitle = new JLabel("Transaction ID: " + rescheduleRequest.getTransactionID());
-//        transactionTitle.setBounds(10, 0, 300, 30);
-//        panel.add(transactionTitle);
 
         JLabel buyerLabel = new JLabel("Buyer Email: " + buyerEmail);
         buyerLabel.setBounds(10, 0, 300, 30);
