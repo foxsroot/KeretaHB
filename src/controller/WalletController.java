@@ -7,6 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class WalletController {
+    public double getBalance(int user_id) {
+        Wallet userWallet = getWallet(user_id);
+        return userWallet.getBalance();
+    }
+
     public Wallet getWallet(int user_id) {
         ConnectionHandler.getInstance().connect();
 
