@@ -1,27 +1,18 @@
 package view.passenger.transaction;
 
 import config.DirectoryConfig;
-import controller.CartController;
-import controller.ImageController;
-import controller.VictualController;
-import controller.WalletController;
+import controller.*;
 import model.classes.*;
-import model.enums.LoyaltyEnum;
+import view.passenger.PassengerMenu;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class ViewCartScreen extends JFrame {
-    Passenger passenger;
     JPanel itemPanel;
     JScrollPane scrollPane;
 
     public ViewCartScreen() {
-        CartController controller = new CartController();
-        WalletController walletController = new WalletController();
-        //ambil passenger yg lg login
-        passenger = new Passenger("John Doe", "1234567890", "john.doe@example.com", "password123", 2, new ArrayList<>(), walletController.getWallet(2), LoyaltyEnum.CLASSIC, 0, new ArrayList<>(), controller.getCart(2));
         initComponents();
         this.setVisible(true);
     }
@@ -43,8 +34,11 @@ public class ViewCartScreen extends JFrame {
         itemPanel = new JPanel();
         itemPanel.setLayout(null);
 
-        for (int victual_id : passenger.getCart().getVictual().keySet()) {
-            itemPanel.add(createVictualPanel(victual_id, passenger.getCart().getVictual().get(victual_id), yOffset));
+        CartController cartController = new CartController();
+        Cart cart = cartController.getCart(AuthenticationHelper.getInstance().getUserId());
+
+        for (int victual_id : cart.getVictual().keySet()) {
+            itemPanel.add(createVictualPanel(victual_id, cart.getVictual().get(victual_id), yOffset));
             yOffset += 110;
         }
 
@@ -72,7 +66,7 @@ public class ViewCartScreen extends JFrame {
 
         exitButton.addActionListener(e -> {
             dispose();
-            //balik ke main menu
+            new PassengerMenu();
         });
 
         add(screenTitle);
@@ -139,7 +133,7 @@ public class ViewCartScreen extends JFrame {
             int currentQuantity = Integer.parseInt(victualQuantity.getText().replace("Qty: x", ""));
             int newQuantity = currentQuantity + 1;
             victualQuantity.setText("Qty: x" + newQuantity);
-            cartController.editCart(victual_id, passenger.getId(), newQuantity);
+            cartController.editCart(victual_id, AuthenticationHelper.getInstance().getUserId(), newQuantity);
             price.setText("Rp " + (newQuantity * victual.getPrice()));
         });
 
@@ -148,13 +142,13 @@ public class ViewCartScreen extends JFrame {
             if (currentQuantity > 1) {
                 int newQuantity = currentQuantity - 1;
                 victualQuantity.setText("Qty: x" + newQuantity);
-                cartController.editCart(victual_id, passenger.getId(), newQuantity);
+                cartController.editCart(victual_id, AuthenticationHelper.getInstance().getUserId(), newQuantity);
                 price.setText("Rp " + (newQuantity * victual.getPrice()));
             }
         });
 
         deleteButton.addActionListener(e -> {
-            cartController.removeFromCart(victual_id, passenger.getId());
+            cartController.removeFromCart(victual_id, AuthenticationHelper.getInstance().getUserId());
             updateItemPanel();
         });
 
@@ -165,11 +159,10 @@ public class ViewCartScreen extends JFrame {
         int yOffset = 30;
         itemPanel.removeAll();
 
-        CartController controller = new CartController();
-        passenger.setCart(controller.getCart(passenger.getId()));
+        Cart cart = new CartController().getCart(AuthenticationHelper.getInstance().getUserId());
 
-        for (int victual_id : passenger.getCart().getVictual().keySet()) {
-            itemPanel.add(createVictualPanel(victual_id, passenger.getCart().getVictual().get(victual_id), yOffset));
+        for (int victual_id : cart.getVictual().keySet()) {
+            itemPanel.add(createVictualPanel(victual_id, cart.getVictual().get(victual_id), yOffset));
             yOffset += 110;
         }
 

@@ -1,6 +1,7 @@
 package controller;
 
 import model.classes.*;
+import model.enums.VictualTransactionStatus;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +10,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TransactionController {
+    public boolean claimVictual(int transactionID) {
+        ConnectionHandler.getInstance().connect();
+
+        String query = "UPDATE victuals_transaction SET status = 'CLAIMED' WHERE transaction_id = ?";
+
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            stmt.setInt(1, transactionID);
+            stmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+
+        return true;
+    }
+
     public String getTicketBuyerEmail(int transactionID) {
         ConnectionHandler.getInstance().connect();
 
@@ -145,7 +165,7 @@ public class TransactionController {
         ConnectionHandler.getInstance().connect();
 
         ArrayList<Transaction> transactionList = new ArrayList<>();
-        String query = "SELECT vt.transaction_id, vt.user_id, vt.station_id, vt.date, vt.total, ti.victual_id, ti.quantity FROM victuals_transaction vt LEFT JOIN transaction_item ti ON vt.transaction_id = ti.transaction_id WHERE vt.user_id = ? ORDER BY vt.date DESC";
+        String query = "SELECT vt.transaction_id, vt.user_id, vt.station_id, vt.date, vt.total, vt.status, ti.victual_id, ti.quantity FROM victuals_transaction vt LEFT JOIN transaction_item ti ON vt.transaction_id = ti.transaction_id WHERE vt.user_id = ? ORDER BY vt.date DESC";
 
         try {
             PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -158,6 +178,7 @@ public class TransactionController {
                 transaction.setStationID(rs.getInt("station_id"));
                 transaction.setDatePurchase(rs.getTimestamp("date"));
                 transaction.setTotal(rs.getDouble("total"));
+                transaction.setStatus(VictualTransactionStatus.valueOf(rs.getString("status")));
 
                 HashMap<Integer, Integer> victualBought = new HashMap<>();
 
