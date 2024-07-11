@@ -1,6 +1,7 @@
 package view;
 
 import controller.AuthenticationController;
+import controller.AuthenticationHelper;
 import view.admin.AdminMenu;
 import view.passenger.PassengerMenu;
 
@@ -63,26 +64,19 @@ public class Login extends JFrame {
             String password = passwordField.getText();
             int[] results = controller.login(profile, password);
             if (results[1] == -1) {
-                String title = "";
-                String message = "";
-                if (results[0] == 0) {
-                    title = "User tidak ditemukan";
-                    message = "Tidak dapat ditemukan username atau email: " + profile;
-                } else {
-                    title = "Error!";
-                    message = "Database sekarang sedang tidak berfungsi.";
-                }
                 passwordField.setText(null);
+                String title = "User tidak ditemukan";
+                String message = "Tidak dapat ditemukan username atau email: " + profile;
                 JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
-            } else if (results[1] == 0) {
-                System.out.println("Success connect PassengerMenu");
-	            new PassengerMenu();
-	            this.dispose();
             } else {
-                System.out.println("Success connect AdminMenu");
-                AdminMenu adminMenu = new AdminMenu();
+                AuthenticationHelper.getInstance().setUserId(results[0]);
                 this.dispose();
-                adminMenu.setVisible(true);
+                if (results[1] == 0) {
+                    new PassengerMenu();
+                } else {
+                    AdminMenu adminMenu = new AdminMenu();
+                    adminMenu.setVisible(true);
+                }
             }
         });
 
