@@ -12,6 +12,15 @@ public class ConnectionHandler {
     private String username = "root";
     private String password = "";
 
+    private static ConnectionHandler instance;
+
+    public static synchronized ConnectionHandler getInstance() {
+        if (instance == null) {
+            instance = new ConnectionHandler();
+        }
+        return instance;
+    }
+
     private Connection logOn() {
         try {
             Class.forName(driver).getDeclaredConstructor().newInstance();
