@@ -8,16 +8,14 @@ import java.util.List;
 import java.util.Random;
 
 public class UserController {
-    ConnectionHandler conn = new ConnectionHandler();
-
     public boolean updateProfile(int userId, String changeProfile, String status, int selectColumn) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         if (selectColumn == 0) {
             String query = "UPDATE ? SET name = ? WHERE user_id = ?";
 
             try {
-                PreparedStatement stmt = conn.con.prepareStatement(query);
+                PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
                 stmt.setString(1, status);
                 stmt.setString(2, changeProfile);
                 stmt.setInt(3, userId);
@@ -26,14 +24,14 @@ public class UserController {
                 e.printStackTrace();
                 return false;
             } finally {
-                conn.disconnect();
+                ConnectionHandler.getInstance().disconnect();
             }
             return true;
         } else if (selectColumn == 1) {
             String query = "UPDATE ? SET email = ? WHERE user_id = ?";
 
             try {
-                PreparedStatement stmt = conn.con.prepareStatement(query);
+                PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
                 stmt.setString(1, status);
                 stmt.setString(2, changeProfile);
                 stmt.setInt(3, userId);
@@ -42,7 +40,7 @@ public class UserController {
                 e.printStackTrace();
                 return false;
             } finally {
-                conn.disconnect();
+                ConnectionHandler.getInstance().disconnect();
             }
             return true;
         }
@@ -50,12 +48,12 @@ public class UserController {
     }
 
     public boolean changePassword(int userId, String newPassword, String status) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
         String query = "UPDATE ? SET password = ? WHERE user_id = ?";
         newPassword = hashingPassword(newPassword);
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setString(1, status);
             stmt.setString(2, newPassword);
             stmt.setInt(3, userId);
@@ -64,20 +62,20 @@ public class UserController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
         return true;
     }
 
     public HashMap<String, String> getListUser() {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         HashMap<String, String> profileUser = new HashMap<>();
         String[] tables = {"admin, passenger"};
         for (String table : tables) {
             String queryGetAdmin = "SELECT name, email FROM ?";
             try {
-                PreparedStatement stmt = conn.con.prepareStatement(queryGetAdmin);
+                PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(queryGetAdmin);
                 stmt.setString(1, table);
                 ResultSet rs = stmt.executeQuery();
 
@@ -88,7 +86,7 @@ public class UserController {
                 e.printStackTrace();
                 return null;
             } finally {
-                conn.disconnect();
+                ConnectionHandler.getInstance().disconnect();
             }
         }
         return profileUser;

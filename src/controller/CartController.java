@@ -10,14 +10,12 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 
 public class CartController {
-    ConnectionHandler conn = new ConnectionHandler();
-
     public boolean addToCart(int userId, int victualId, int amount, int station_id) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         try {
             String checkOtherStationQuery = "SELECT * FROM cart_item WHERE user_id = ? AND station_id <> ?";
-            PreparedStatement checkOtherStationStmt = conn.con.prepareStatement(checkOtherStationQuery);
+            PreparedStatement checkOtherStationStmt = ConnectionHandler.getInstance().con.prepareStatement(checkOtherStationQuery);
             checkOtherStationStmt.setInt(1, userId);
             checkOtherStationStmt.setInt(2, station_id);
             ResultSet rsOtherStation = checkOtherStationStmt.executeQuery();
@@ -30,7 +28,7 @@ public class CartController {
             checkOtherStationStmt.close();
 
             String checkQuery = "SELECT * FROM cart_item WHERE user_id = ? AND victual_id = ? AND station_id = ?";
-            PreparedStatement checkStmt = conn.con.prepareStatement(checkQuery);
+            PreparedStatement checkStmt = ConnectionHandler.getInstance().con.prepareStatement(checkQuery);
             checkStmt.setInt(1, userId);
             checkStmt.setInt(2, victualId);
             checkStmt.setInt(3, station_id);
@@ -40,7 +38,7 @@ public class CartController {
                 int currentAmount = rs.getInt("amount");
 
                 String updateQuery = "UPDATE cart_item SET amount = ? WHERE user_id = ? AND victual_id = ? AND station_id = ?";
-                PreparedStatement updateStmt = conn.con.prepareStatement(updateQuery);
+                PreparedStatement updateStmt = ConnectionHandler.getInstance().con.prepareStatement(updateQuery);
                 updateStmt.setInt(1, currentAmount + amount);
                 updateStmt.setInt(2, userId);
                 updateStmt.setInt(3, victualId);
@@ -50,7 +48,7 @@ public class CartController {
                 updateStmt.close();
             } else {
                 String insertQuery = "INSERT INTO cart_item (user_id, victual_id, station_id, amount) VALUES (?, ?, ?, ?)";
-                PreparedStatement insertStmt = conn.con.prepareStatement(insertQuery);
+                PreparedStatement insertStmt = ConnectionHandler.getInstance().con.prepareStatement(insertQuery);
                 insertStmt.setInt(1, userId);
                 insertStmt.setInt(2, victualId);
                 insertStmt.setInt(3, station_id);
@@ -66,18 +64,18 @@ public class CartController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
         return true;
     }
 
     public boolean removeFromCart(int victualId, int userId) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "DELETE FROM cart_item WHERE user_id = ? AND victual_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, userId);
             stmt.setInt(2, victualId);
             stmt.executeUpdate();
@@ -85,20 +83,20 @@ public class CartController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return true;
     }
 
     public boolean editCart(int victualId, int user_id, int amount) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         if (amount <= 0) {
             String query = "DELETE FROM cart_item WHERE victual_id = ? AND user_id = ?";
 
             try {
-                PreparedStatement stmt = conn.con.prepareStatement(query);
+                PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
                 stmt.setInt(1, victualId);
                 stmt.setInt(2, user_id);
                 stmt.executeUpdate();
@@ -106,13 +104,13 @@ public class CartController {
                 e.printStackTrace();
                 return false;
             } finally {
-                conn.disconnect();
+                ConnectionHandler.getInstance().disconnect();
             }
         } else {
             String query = "UPDATE cart_item SET amount = ? WHERE victual_id = ? AND user_id = ?";
 
             try {
-                PreparedStatement stmt = conn.con.prepareStatement(query);
+                PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
                 stmt.setInt(1, amount);
                 stmt.setInt(2, victualId);
                 stmt.setInt(3, user_id);
@@ -121,7 +119,7 @@ public class CartController {
                 e.printStackTrace();
                 return false;
             } finally {
-                conn.disconnect();
+                ConnectionHandler.getInstance().disconnect();
             }
         }
 
@@ -135,12 +133,12 @@ public class CartController {
             return false;
         }
 
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "INSERT INTO victuals_transaction(user_id, station_id, date, total) VALUES(?, ?, ?, ?)";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, passenger.getId());
             stmt.setInt(2, passenger.getCart().getStationId());
             stmt.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
@@ -156,7 +154,7 @@ public class CartController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         Cart cart = getCart(passenger.getId());
@@ -169,11 +167,11 @@ public class CartController {
                     return false;
                 }
 
-                conn.connect();
+                ConnectionHandler.getInstance().connect();
                 String itemQuery = "INSERT INTO transaction_item(transaction_id, victual_id, quantity) VALUES(?, ?, ?)";
 
                 try {
-                    PreparedStatement stmt = conn.con.prepareStatement(itemQuery);
+                    PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(itemQuery);
                     stmt.setInt(1, transaction_id);
                     stmt.setInt(2, victual_id);
                     stmt.setInt(3, cart.getVictual().get(victual_id));
@@ -181,10 +179,10 @@ public class CartController {
                     stmt.executeUpdate();
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    conn.disconnect();
+                    ConnectionHandler.getInstance().disconnect();
                     return false;
                 } finally {
-                    conn.disconnect();
+                    ConnectionHandler.getInstance().disconnect();
                 }
             }
         }
@@ -211,11 +209,11 @@ public class CartController {
             return false;
         }
 
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
         String query = "UPDATE wallet SET balance = ? WHERE user_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setDouble(1, passenger.getWallet().getBalance() - amount);
             stmt.setInt(2, passenger.getId());
             stmt.executeUpdate();
@@ -223,36 +221,36 @@ public class CartController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return true;
     }
 
     private void clearCart(int user_id) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
         String query = "DELETE FROM cart_item WHERE user_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, user_id);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
     }
 
     public Cart getCart(int userId) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
         HashMap<Integer, Integer> victuals = new HashMap<>();
         Integer stationId = -1;
 
         String query = "SELECT * FROM cart_item WHERE user_id=?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, userId);
             ResultSet rs = stmt.executeQuery();
 
@@ -263,7 +261,7 @@ public class CartController {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         Cart cart = new Cart(victuals, stationId);

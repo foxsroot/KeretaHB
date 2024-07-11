@@ -5,14 +5,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AuthenticationController {
-    ConnectionHandler conn = new ConnectionHandler();
     public int[] login(String userProfile, String userPassword) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
         String[] tables = {"admin", "passenger"};
         for (String table : tables) {
             String queryGetAdmin = "SELECT user_id, name, email, password FROM ?";
             try {
-                PreparedStatement stmt = conn.con.prepareStatement(queryGetAdmin);
+                PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(queryGetAdmin);
                 stmt.setString(1, table);
                 ResultSet rs = stmt.executeQuery();
 
@@ -35,7 +34,7 @@ public class AuthenticationController {
                 e.printStackTrace();
                 return new int[]{-1, -1};
             } finally {
-                conn.disconnect();
+                ConnectionHandler.getInstance().disconnect();
             }
         }
         return new int[]{0, -1};

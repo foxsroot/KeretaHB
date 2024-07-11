@@ -20,10 +20,10 @@ public class StationController {
         VictualController victualController = new VictualController();
 
         String query = "SELECT * FROM station";
-        ConnectionHandler conn = new ConnectionHandler();
+        
         try {
-            conn.connect();
-            java.sql.PreparedStatement st = conn.con.prepareStatement(query);
+            ConnectionHandler.getInstance().connect();
+            java.sql.PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Integer id = rs.getInt("station_id");
@@ -41,7 +41,7 @@ public class StationController {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
         return null;
     }
@@ -49,10 +49,10 @@ public class StationController {
     public String getStationNameById(Integer station_id) {
         String query = "SELECT * FROM station WHERE station_id = '" + station_id + "'";
         String name = "";
-        ConnectionHandler conn = new ConnectionHandler();
+        
         try {
-            conn.connect();
-            java.sql.PreparedStatement st = conn.con.prepareStatement(query);
+            ConnectionHandler.getInstance().connect();
+            java.sql.PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 name = rs.getString("name");
@@ -62,7 +62,7 @@ public class StationController {
             e.printStackTrace();
             return null;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
     }
 
@@ -71,12 +71,12 @@ public class StationController {
         TrainController trainController = new TrainController();
         ScheduleController scheduleController = new ScheduleController();
         VictualController victualController = new VictualController();
-        ConnectionHandler conn = new ConnectionHandler();
+        
 
         String query = "SELECT * FROM station WHERE station_id = '" + station_id + "'";
         try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
             st.executeQuery(query);
             ResultSet rs = st.executeQuery();
 
@@ -94,7 +94,7 @@ public class StationController {
         } catch (Exception e) {
             e.printStackTrace(System.err);
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
         return station;
     }

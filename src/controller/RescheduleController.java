@@ -9,16 +9,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class RescheduleController {
-    ConnectionHandler conn = new ConnectionHandler();
-
     public ArrayList<RescheduleRequest> getRescheduleRequestList() {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
         ArrayList<RescheduleRequest> rescheduleRequestList = new ArrayList<>();
 
         String query = "SELECT * FROM reschedule_request";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 RescheduleRequest rescheduleRequest = new RescheduleRequest(rs.getInt("reschedule_id"), rs.getInt("transaction_id"), rs.getInt("requested_schedule_id"), RescheduleEnum.valueOf(rs.getString("status")));
@@ -27,19 +25,19 @@ public class RescheduleController {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return rescheduleRequestList;
     }
 
     public boolean requestReschedule(int transactionID, int requestedSchedule) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "INSERT INTO reschedule_request(transaction_id, requested_schedule_id) VALUES (?, ?)";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, transactionID);
             stmt.setInt(2, requestedSchedule);
             stmt.executeUpdate();
@@ -47,19 +45,19 @@ public class RescheduleController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return true;
     }
 
     public boolean respondRescheduleRequest(int transactionID, String email, RescheduleEnum status, int adminID, int newSchedule) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "UPDATE reschedule_request SET status = ?, admin_id = ? WHERE transaction_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setString(1, status.toString());
             stmt.setInt(2, adminID);
             stmt.setInt(3, transactionID);
@@ -77,19 +75,19 @@ public class RescheduleController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return true;
     }
 
     private boolean changeTransactionSchedule(int transactionID, int requestedSchedule) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "UPDATE ticket_transaction SET schedule_id = ?, rescheduled = 1 WHERE transaction_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, requestedSchedule);
             stmt.setInt(2, transactionID);
             stmt.executeUpdate();
@@ -97,7 +95,7 @@ public class RescheduleController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return true;

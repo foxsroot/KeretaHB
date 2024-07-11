@@ -6,13 +6,11 @@ import java.sql.SQLException;
 import java.util.Random;
 
 public class RegisterController {
-    ConnectionHandler conn = new ConnectionHandler();
-
     public String register(String name, String email, String password, String cellphone) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
         String query = "SELECT * FROM passanger WHERE name = ? OR email = ?";
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setString(1, name);
             stmt.setString(2, email);
             ResultSet rs = stmt.executeQuery();
@@ -29,7 +27,7 @@ public class RegisterController {
             e.printStackTrace();
             return null;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         if (password.length() <= 4) {
@@ -39,7 +37,7 @@ public class RegisterController {
 
         String queryInsert = "INSERT INTO passenger VALUES (, ?, ?, ?, ?, ?, ?, ?)";
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(queryInsert);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(queryInsert);
             stmt.setInt(1, 1);
             stmt.setString(2, email);
             stmt.setString(3, password);
@@ -51,7 +49,7 @@ public class RegisterController {
             e.printStackTrace();
             return "false";
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
         return "Berhasil melakukan registrasi!";
     }

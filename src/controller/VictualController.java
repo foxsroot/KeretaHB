@@ -12,16 +12,14 @@ import java.util.HashMap;
 import java.util.List;
 
 public class VictualController {
-    ConnectionHandler conn = new ConnectionHandler();
-
     public List<Victual> getVictualList() {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         List<Victual> victualList = new ArrayList<>();
         String query = "SELECT * FROM victual";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Victual victual = new Victual();
@@ -50,13 +48,13 @@ public class VictualController {
     }
 
     public HashMap<Victual, Integer> listVictual(int stationId) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         HashMap<Victual, Integer> victuals = new HashMap<>();
         String query = "SELECT vict.*, stck.stock FROM victual vict JOIN stock stck ON vict.victual_id = stck.victual_id WHERE station_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, stationId);
             ResultSet rs = stmt.executeQuery();
 
@@ -73,19 +71,19 @@ public class VictualController {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return victuals;
     }
 
     public Victual getVictual(int victualId) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
         Victual victual = null;
         String query = "SELECT * FROM victual WHERE victual_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, victualId);
             ResultSet rs = stmt.executeQuery();
 
@@ -95,7 +93,7 @@ public class VictualController {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return victual;
@@ -112,13 +110,13 @@ public class VictualController {
             return false;
         }
 
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         if (oldVictual.getImage().equals(picture.getName())) {
             String query = "UPDATE victual SET name = ?, price = ?, description = ? WHERE victual_id = ?";
 
             try {
-                PreparedStatement stmt = conn.con.prepareStatement(query);
+                PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
                 stmt.setString(1, name);
                 stmt.setDouble(2, priceValue);
                 stmt.setString(3, description);
@@ -129,7 +127,7 @@ public class VictualController {
                 e.printStackTrace();
                 return false;
             } finally {
-                conn.disconnect();
+                ConnectionHandler.getInstance().disconnect();
             }
         } else {
             ImageController.deleteImage(DirectoryConfig.VICTUAL_IMAGES + oldVictual.getImage());
@@ -140,7 +138,7 @@ public class VictualController {
                 String query = "UPDATE victual SET name = ?, price = ?, description = ?, picture = ? WHERE victual_id = ?";
 
                 try {
-                    PreparedStatement stmt = conn.con.prepareStatement(query);
+                    PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
                     stmt.setString(1, name);
                     stmt.setDouble(2, priceValue);
                     stmt.setString(3, description);
@@ -151,7 +149,7 @@ public class VictualController {
                     e.printStackTrace();
                     return false;
                 } finally {
-                    conn.disconnect();
+                    ConnectionHandler.getInstance().disconnect();
                 }
             }
         }
@@ -171,13 +169,13 @@ public class VictualController {
         }
 
         String fileName = ImageController.generateName(image);
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         if (ImageController.saveImage(image, fileName, DirectoryConfig.VICTUAL_IMAGES)) {
             String query = "INSERT INTO victual (name, price, picture, description) VALUES (?, ?, ?, ?)";
 
             try {
-                PreparedStatement stmt = conn.con.prepareStatement(query);
+                PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
                 stmt.setString(1, name.toUpperCase());
                 stmt.setDouble(2, priceValue);
                 stmt.setString(3, fileName);
@@ -188,7 +186,7 @@ public class VictualController {
                 e.printStackTrace();
                 return false;
             } finally {
-                conn.disconnect();
+                ConnectionHandler.getInstance().disconnect();
             }
         }
 
@@ -200,18 +198,18 @@ public class VictualController {
         StockController stockController = new StockController();
 
         if (transactionController.removeTransactionItem(victual.getId()) && stockController.removeFromAllStation(victual.getId()) && ImageController.deleteImage(DirectoryConfig.VICTUAL_IMAGES + victual.getImage())) {
-            conn.connect();
+            ConnectionHandler.getInstance().connect();
             String query = "DELETE FROM victual WHERE victual_id = ?";
 
             try {
-                PreparedStatement stmt = conn.con.prepareStatement(query);
+                PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
                 stmt.setInt(1, victual.getId());
                 stmt.executeUpdate();
                 return true;
             } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
-                conn.disconnect();
+                ConnectionHandler.getInstance().disconnect();
             }
         }
 
