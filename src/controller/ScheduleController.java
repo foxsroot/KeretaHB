@@ -9,14 +9,12 @@ import java.util.Date;
 import java.util.List;
 
 public class ScheduleController {
-    ConnectionHandler conn = new ConnectionHandler();
-
     public boolean deleteSchedule(Schedule schedule) {
         String query = "DELETE FROM schedule WHERE schedule_id = ?";
 
         try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
             st.setInt(1, schedule.getScheduleID());
             st.executeUpdate();
             return true;
@@ -24,7 +22,7 @@ public class ScheduleController {
             e.printStackTrace(System.err);
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
     }
 
@@ -33,8 +31,8 @@ public class ScheduleController {
 
         String query = "SELECT * FROM schedule WHERE departure_station_id = ?";
         try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
             st.setInt(1, stationId);
             ResultSet rs = st.executeQuery();
 
@@ -52,7 +50,7 @@ public class ScheduleController {
         } catch (Exception e) {
             e.printStackTrace(System.err);
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
         return schedules;
     }
@@ -61,8 +59,8 @@ public class ScheduleController {
 
         String query = "SELECT * FROM schedule WHERE schedule_id = ?";
         try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
             st.setInt(1, schedule_Id);
             ResultSet rs = st.executeQuery();
 
@@ -79,7 +77,7 @@ public class ScheduleController {
         } catch (Exception e) {
             e.printStackTrace(System.err);
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
         return null;
     }
@@ -88,8 +86,8 @@ public class ScheduleController {
         ArrayList<Schedule> schedules = new ArrayList<>();
         String query = "SELECT * FROM schedule WHERE station_id = ?";
         try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
             st.setInt(1, stationId);
             ResultSet rs = st.executeQuery();
 
@@ -107,7 +105,7 @@ public class ScheduleController {
         } catch (Exception e) {
             e.printStackTrace(System.err);
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
         return null;
     }
@@ -117,7 +115,7 @@ public class ScheduleController {
     }
 
     public boolean addSchedule(Schedule schedule, boolean add) {
-        ConnectionHandler conn = new ConnectionHandler();
+        
         String query = "";
         if (add) {
             query = "INSERT INTO schedule (train_id, departure_station_id, arrival_station_id, departure_date, fee)" +
@@ -127,8 +125,8 @@ public class ScheduleController {
                     " WHERE schedule_id = '" + schedule.getScheduleID() + "'";
         }
         try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
             st.setInt(1, schedule.getTrainID());
             st.setInt(2, schedule.getDeparture());
             st.setInt(3, schedule.getArrival());
@@ -139,7 +137,7 @@ public class ScheduleController {
         } catch (Exception e) {
             e.printStackTrace(System.err);
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
         return false;
     }

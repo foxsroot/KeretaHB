@@ -9,15 +9,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TransactionController {
-    ConnectionHandler conn = new ConnectionHandler();
-
     public String getTicketBuyerEmail(int transactionID) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "SELECT passenger.email FROM passenger JOIN ticket_transaction ON passenger.user_id = ticket_transaction.user_id WHERE ticket_transaction.transaction_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, transactionID);
             ResultSet rs = stmt.executeQuery();
 
@@ -27,19 +25,19 @@ public class TransactionController {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return null;
     }
 
     public TicketTransaction getTicketTransaction(int transactionID) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "SELECT * FROM ticket_transaction WHERE transaction_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, transactionID);
             ResultSet rs = stmt.executeQuery();
 
@@ -59,18 +57,18 @@ public class TransactionController {
             e.printStackTrace();
             return null;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
     }
 
     public ArrayList<TicketTransaction> getTicketTransactionList(int userID) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
         ArrayList<TicketTransaction> ticketTransactionList = new ArrayList<>();
 
         String query = "SELECT * FROM ticket_transaction WHERE userID = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -80,7 +78,7 @@ public class TransactionController {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return ticketTransactionList;
@@ -93,12 +91,12 @@ public class TransactionController {
             return false;
         }
 
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "INSERT INTO ticket_transaction(user_id, schedule_id, passengers, commute, total) VALUES(?, ?, ?, ?, ?)";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, userID);
             stmt.setInt(2, scheduleID);
             stmt.setInt(3, passengers);
@@ -113,20 +111,20 @@ public class TransactionController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return true;
     }
 
     public ArrayList<Transaction> getVictualTransactionList(int userID) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         ArrayList<Transaction> transactionList = new ArrayList<>();
         String query = "SELECT vt.transaction_id, vt.user_id, vt.station_id, vt.date, vt.total, ti.victual_id, ti.quantity FROM victuals_transaction vt LEFT JOIN transaction_item ti ON vt.transaction_id = ti.transaction_id WHERE vt.user_id = ? ORDER BY vt.date DESC";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
 
@@ -153,7 +151,7 @@ public class TransactionController {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return transactionList;
@@ -161,12 +159,12 @@ public class TransactionController {
 
     public boolean cancelVictualTransaction(VictualTransaction transaction, int userId, String email) {
         if (refundVictualTrxBalance(transaction, userId) && returnStock(transaction.getItems(), transaction.getStationID()) && deleteTransactionItems(transaction.getTransactionID())) {
-            conn.connect();
+            ConnectionHandler.getInstance().connect();
 
             String query = "DELETE FROM victuals_transaction WHERE transaction_id = ?";
 
             try {
-                PreparedStatement stmt = conn.con.prepareStatement(query);
+                PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
                 stmt.setInt(1, transaction.getTransactionID());
                 stmt.executeUpdate();
 
@@ -176,7 +174,7 @@ public class TransactionController {
                 e.printStackTrace();
                 return false;
             } finally {
-                conn.disconnect();
+                ConnectionHandler.getInstance().disconnect();
             }
 
             return true;
@@ -186,19 +184,19 @@ public class TransactionController {
     }
 
     public boolean removeTransactionItem(int victualID) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "UPDATE transaction_item SET victual_id = NULL WHERE victual_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, victualID);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return true;
@@ -215,12 +213,12 @@ public class TransactionController {
     }
 
     private boolean deleteTransactionItems(int transactionID) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "DELETE FROM transaction_item WHERE transaction_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, transactionID);
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -238,11 +236,11 @@ public class TransactionController {
             return false;
         }
 
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
         String query = "UPDATE wallet SET balance = balance - ? WHERE user_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setDouble(1, amount);
             stmt.setInt(2, userID);
             stmt.executeUpdate();
@@ -250,19 +248,19 @@ public class TransactionController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return true;
     }
 
     private boolean refundVictualTrxBalance(VictualTransaction transaction, int userId) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "UPDATE wallet SET balance = balance + ? WHERE user_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setDouble(1, transaction.getTotal());
             stmt.setInt(2, userId);
             stmt.executeUpdate();
@@ -270,7 +268,7 @@ public class TransactionController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return true;

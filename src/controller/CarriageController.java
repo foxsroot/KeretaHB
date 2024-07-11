@@ -10,13 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CarriageController {
-    ConnectionHandler conn = new ConnectionHandler();
-
     public boolean revokeCarriageFromTrain(Integer carriageId, Integer trainId) {
         String query = "UPDATE carriage SET train_id = NULL WHERE carriage_id =? AND train_id =?";
         try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
             st.setInt(1, carriageId);
             st.setInt(2, trainId);
             st.executeUpdate();
@@ -24,7 +22,7 @@ public class CarriageController {
         } catch (Exception e) {
             e.printStackTrace(System.err);
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
         return false;
     }
@@ -32,8 +30,8 @@ public class CarriageController {
     public boolean assignCarriageToTrain(Integer carriageId, Integer trainId) {
         String query = "UPDATE carriage SET train_id =? WHERE carriage_id =?";
         try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
             st.setInt(1, trainId);
             st.setInt(2, carriageId);
             st.executeUpdate();
@@ -41,7 +39,7 @@ public class CarriageController {
         } catch (Exception e) {
             e.printStackTrace(System.err);
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
         return false;
     }
@@ -58,8 +56,8 @@ public class CarriageController {
             query = "UPDATE carriage SET type = ?, capacity = ?, `class` = ?, baggage_allowance =? WHERE carriage_id =?";
         }
         try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
             st.setString(1, carriage.getType().toString());
             st.setInt(2, carriage.getCapacity());
             st.setString(3, carriage.getCarriageClass().toString());
@@ -72,7 +70,7 @@ public class CarriageController {
         } catch (Exception e) {
             e.printStackTrace(System.err);
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
         return false;
     }
@@ -81,8 +79,8 @@ public class CarriageController {
         List<Carriage> carriagesList = new ArrayList<>();
         String query = "SELECT * FROM carriage WHERE train_id = ?";
         try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
             st.setInt(1, train_id);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
@@ -100,7 +98,7 @@ public class CarriageController {
         } catch (Exception e) {
             e.printStackTrace(System.err);
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         Carriage[] carriagesArray = new Carriage[carriagesList.size()];
@@ -113,8 +111,8 @@ public class CarriageController {
         List<Carriage> carriages = new ArrayList<>();
         String query = "SELECT * FROM carriage WHERE train_id IS NULL";
         try {
-            conn.connect();
-            PreparedStatement st = conn.con.prepareStatement(query);
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
             ResultSet rs = st.executeQuery();
             while (rs.next()) {
                 Integer id = rs.getInt("carriage_id");
@@ -131,7 +129,7 @@ public class CarriageController {
         } catch (Exception e) {
             e.printStackTrace(System.err);
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
         return carriages;
     }

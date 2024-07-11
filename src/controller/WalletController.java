@@ -7,17 +7,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class WalletController {
-    ConnectionHandler conn = new ConnectionHandler();
-
     public Wallet getWallet(int user_id) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         Wallet wallet = null;
 
         String query = "SELECT * FROM wallet WHERE user_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, user_id);
             ResultSet rs = stmt.executeQuery();
 
@@ -32,7 +30,7 @@ public class WalletController {
             e.printStackTrace();
             return null;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return wallet;

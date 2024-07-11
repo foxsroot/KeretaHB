@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class NotificationController {
-    ConnectionHandler conn = new ConnectionHandler();
+    
 
     public boolean validateNotificationForm(String email, String title, String message) {
         if (email == null || title == null || message == null) {
@@ -25,12 +25,12 @@ public class NotificationController {
             return false;
         }
 
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "INSERT INTO notification(recipient_id, title, message) VALUES (?, ?, ?)";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, user_id);
             stmt.setString(2, title);
             stmt.setString(3, message);
@@ -40,20 +40,20 @@ public class NotificationController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return true;
     }
 
     public ArrayList<Notification> getNotifications(int user_id) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
         ArrayList<Notification> notifications = new ArrayList<>();
 
         String query = "SELECT * FROM notification WHERE recipient_id=? ORDER BY received_date DESC";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, user_id);
             ResultSet rs = stmt.executeQuery();
 
@@ -64,19 +64,19 @@ public class NotificationController {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return notifications;
     }
 
     public boolean sendNotificationByID(int userID, String title, String message) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "INSERT INTO notification(recipient_id, title, message) VALUES (?, ?, ?)";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, userID);
             stmt.setString(2, title);
             stmt.setString(3, message);
@@ -85,19 +85,19 @@ public class NotificationController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return true;
     }
 
     private int getIdByEmail(String email) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "SELECT user_id FROM passenger WHERE email=?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setString(1, email);
 
             ResultSet rs = stmt.executeQuery();
@@ -109,7 +109,7 @@ public class NotificationController {
             e.printStackTrace();
             return -1;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return -1;

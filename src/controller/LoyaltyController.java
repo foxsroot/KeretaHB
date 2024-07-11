@@ -8,15 +8,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class LoyaltyController {
-    ConnectionHandler conn = new ConnectionHandler();
-
     public ArrayList<LoyaltyEnum> getLoyalties() {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "SELECT * FROM loyalty";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
             ArrayList<LoyaltyEnum> loyalties = new ArrayList<>();
 
@@ -29,17 +27,17 @@ public class LoyaltyController {
             e.printStackTrace();
             return null;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
     }
 
 //    public double getMinimumTransaction(LoyaltyEnum loyalty) {
-//        conn.connect();
+//        ConnectionHandler.getInstance().connect();
 //
 //        String query = "SELECT minimum_transaction FROM loyalty WHERE loyalty_type = ?";
 //
 //        try {
-//            PreparedStatement stmt = conn.con.prepareStatement(query);
+//            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
 //            stmt.setString(1, loyalty.toString());
 //            ResultSet rs = stmt.executeQuery();
 //
@@ -49,19 +47,19 @@ public class LoyaltyController {
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        } finally {
-//            conn.disconnect();
+//            ConnectionHandler.getInstance().disconnect();
 //        }
 //
 //        return 0;
 //    }
 
     public double getLoyaltyDiscount(LoyaltyEnum loyalty) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "SELECT discount FROM loyalty WHERE loyalty_type = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setString(1, loyalty.toString());
             ResultSet rs = stmt.executeQuery();
 
@@ -71,19 +69,19 @@ public class LoyaltyController {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return 0;
     }
 
     public LoyaltyEnum getLoyalty(int userID) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "SELECT loyalty.loyalty_type FROM loyalty INNER JOIN passenger ON passenger.loyalty = loyalty.loyalty_type WHERE passenger.user_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
 
@@ -93,7 +91,7 @@ public class LoyaltyController {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return null;
@@ -108,12 +106,12 @@ public class LoyaltyController {
             return false;
         }
 
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "UPDATE loyalty SET discount = ? WHERE loyalty_type = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setDouble(1, discountValue);
             stmt.setString(2, loyalty.toString());
             stmt.executeUpdate();
@@ -121,7 +119,7 @@ public class LoyaltyController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return true;
@@ -129,12 +127,12 @@ public class LoyaltyController {
 
     public boolean updateLoyalty(int userID) {
         int updatedLoyalty = checkLoyalty(getTotalPaid(userID));
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "UPDATE passenger SET loyalty = ? WHERE user_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, updatedLoyalty);
             stmt.setInt(2, userID);
             stmt.executeUpdate();
@@ -142,19 +140,19 @@ public class LoyaltyController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return true;
     }
 
     public boolean addTotalPaid(int userID, double total) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "UPDATE passenger SET total_paid = total_paid + ? WHERE user_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setDouble(1, total);
             stmt.setInt(2, userID);
             stmt.executeUpdate();
@@ -162,19 +160,19 @@ public class LoyaltyController {
             e.printStackTrace();
             return false;
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return updateLoyalty(userID);
     }
 
     private double getTotalPaid(int userID) {
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "SELECT total_paid FROM passenger WHERE user_id = ?";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, userID);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -190,12 +188,12 @@ public class LoyaltyController {
     private int checkLoyalty(double totalTransaction) {
         int currentLoyalty = -1;
 
-        conn.connect();
+        ConnectionHandler.getInstance().connect();
 
         String query = "SELECT * FROM loyalty";
 
         try {
-            PreparedStatement stmt = conn.con.prepareStatement(query);
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -206,7 +204,7 @@ public class LoyaltyController {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            conn.disconnect();
+            ConnectionHandler.getInstance().disconnect();
         }
 
         return currentLoyalty;
