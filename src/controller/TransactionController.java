@@ -52,7 +52,7 @@ public class TransactionController {
                 transaction.setTotal(rs.getDouble("total"));
             }
 
-            return  transaction;
+            return transaction;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -85,23 +85,23 @@ public class TransactionController {
     }
 
 
-
-    public boolean bookTicket(int userID, int scheduleID, int passengers, boolean commute, double total) {
+    public boolean bookTicket(int userID, int scheduleID, int passengers, boolean commute, double total, String type) {
         if (!deductBalance(userID, total)) {
             return false;
         }
 
         ConnectionHandler.getInstance().connect();
 
-        String query = "INSERT INTO ticket_transaction(user_id, schedule_id, passengers, commute, total) VALUES(?, ?, ?, ?, ?)";
+        String query = "INSERT INTO ticket_transaction(user_id, schedule_id, passengers, type, commute, total) VALUES(?, ?, ?, ?, ?, ?)";
 
         try {
             PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, userID);
             stmt.setInt(2, scheduleID);
             stmt.setInt(3, passengers);
-            stmt.setBoolean(4, commute);
-            stmt.setDouble(5, total);
+            stmt.setString(4, type);
+            stmt.setBoolean(5, commute);
+            stmt.setDouble(6, total);
             stmt.executeUpdate();
 
             LoyaltyController controller = new LoyaltyController();
@@ -115,6 +115,30 @@ public class TransactionController {
         }
 
         return true;
+    }
+
+    public boolean updateOccupied(String type, int train_id, int passenger) {
+        String query = "SELECT * FROM carriage WHERE train_id = '" + train_id + "'";
+        try {
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                if (rs.getString("type").equals(type)) {
+                    int occupied = rs.getInt("occupied");
+                    if (occupied < rs.getInt("capacity")) {
+                        rs.updateInt("occupied", occupied + passenger);
+                        rs.updateRow();
+                        return true;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+        return false;
     }
 
     public ArrayList<Transaction> getVictualTransactionList(int userID) {
