@@ -7,6 +7,7 @@ import controller.TransactionController;
 import controller.VictualController;
 import model.classes.Victual;
 import model.classes.VictualTransaction;
+import model.enums.VictualTransactionStatus;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,7 +35,6 @@ public class VictualTransactionScreen extends JFrame {
         screenTitle.setBounds(350, 10, 300, 30);
 
         VictualController controller = new VictualController();
-        HashMap<Victual, Integer> victuals = new HashMap<>();
 
         JPanel historyPanel = new JPanel();
         historyPanel.setLayout(null);
@@ -55,15 +55,6 @@ public class VictualTransactionScreen extends JFrame {
         pricePerItemLabel.setBounds(600, 5, 200, 30);
         historyPanel.add(pricePerItemLabel);
 
-//        for (int victualId : transaction.getItems().keySet()) {
-//            try {
-//                Victual victual = controller.getVictual(victualId);
-//                victuals.put(victual, transaction.getItems().get(victualId));
-//            } catch (NullPointerException e) {
-//
-//            }
-//        }
-
         int xOffset = 5;
         int yOffset = 45;
 
@@ -77,11 +68,6 @@ public class VictualTransactionScreen extends JFrame {
                 yOffset += 205;
             }
         }
-
-//        for (Victual victual : victuals.keySet()) {
-//            historyPanel.add(createVictualPanel(victual, victuals.get(victual), xOffset, yOffset));
-//            yOffset += 205;
-//        }
 
         JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
         separator.setBounds(10, yOffset, 760, 10);
@@ -106,24 +92,57 @@ public class VictualTransactionScreen extends JFrame {
         totalPriceLabel.setBounds(580, yOffset - 35, 300, 30);
         historyPanel.add(totalPriceLabel);
 
-        JButton cancelButton = new JButton("Cancel Transaction");
-        cancelButton.setBackground(Color.RED);
-        cancelButton.setForeground(Color.WHITE);
-        cancelButton.setBounds(30, yOffset + 40, 200, 30);
-        historyPanel.add(cancelButton);
+        if (transaction.getStatus().equals(VictualTransactionStatus.PENDING)) {
+            JButton cancelButton = new JButton("Cancel Transaction");
+            cancelButton.setBackground(Color.RED);
+            cancelButton.setForeground(Color.WHITE);
+            cancelButton.setBounds(30, yOffset + 40, 200, 30);
+            historyPanel.add(cancelButton);
 
-        cancelButton.addActionListener(e -> {
-            int option = JOptionPane.showConfirmDialog(null, "Cancel this transaction?", "Cancel Confirmation", JOptionPane.YES_NO_OPTION);
-            if (option == JOptionPane.YES_OPTION) {
-                TransactionController transactionController = new TransactionController();
-                if (transactionController.cancelVictualTransaction(transaction, 2, "john.doe@example.com")) { //nanti ganti ke user id beneran (get dari singleton login)
-                    JOptionPane.showMessageDialog(null, "Transaction Cancelled & Balance Refunded", "Cancel Success", JOptionPane.INFORMATION_MESSAGE);
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Failed to Cancel Transaction", "Cancel Failure", JOptionPane.ERROR_MESSAGE);
+            cancelButton.addActionListener(e -> {
+                int option = JOptionPane.showConfirmDialog(null, "Cancel this transaction?", "Cancel Confirmation", JOptionPane.YES_NO_OPTION);
+                if (option == JOptionPane.YES_OPTION) {
+                    TransactionController transactionController = new TransactionController();
+                    if (transactionController.cancelVictualTransaction(transaction, 2, "john.doe@example.com")) { //nanti ganti ke user id beneran (get dari singleton login)
+                        JOptionPane.showMessageDialog(null, "Transaction Cancelled & Balance Refunded", "Cancel Success", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Failed to Cancel Transaction", "Cancel Failure", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-            }
-        });
+            });
+
+            JButton claimButton = new JButton("Claim Victual");
+            claimButton.setBounds(260, yOffset + 40, 200, 30);
+            historyPanel.add(claimButton);
+
+            claimButton.addActionListener(e -> {
+                int confirm = JOptionPane.showConfirmDialog(null, "WARNING: This button should be pressed after you claimed your victuals on station", "Claim victual?", JOptionPane.YES_NO_OPTION);
+
+                if (confirm == JOptionPane.YES_OPTION) {
+                    TransactionController transactionController = new TransactionController();
+                    if (transactionController.claimVictual(transaction.getTransactionID())) {
+                        JOptionPane.showMessageDialog(null, "Transaction Claimed", "Claim Success", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
+                    }
+                }
+            });
+        }
+
+        if (transaction.getStatus().equals(VictualTransactionStatus.EXPIRED)) {
+            JLabel expiredLabel = new JLabel("This Transaction is Expired");
+            expiredLabel.setFont(new Font("calibri", Font.BOLD, 20));
+            expiredLabel.setForeground(Color.RED);
+            expiredLabel.setBounds(10, yOffset + 70, 350, 30);
+            historyPanel.add(expiredLabel);
+        }
+
+        if (transaction.getStatus().equals(VictualTransactionStatus.CLAIMED)) {
+            JLabel claimedLabel = new JLabel("You Claimed This Transaction Already");
+            claimedLabel.setFont(new Font("calibri", Font.BOLD, 20));
+            claimedLabel.setBounds(10, yOffset + 70, 350, 30);
+            historyPanel.add(claimedLabel);
+        }
 
         historyPanel.setPreferredSize(new Dimension(800, yOffset + 100));
 
