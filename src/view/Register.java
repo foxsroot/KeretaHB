@@ -15,7 +15,7 @@ public class Register extends JFrame {
         this.setLayout(null);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setTitle("view.Login!");
+        this.setTitle("Register!");
 
         JLabel screenTitle = new JLabel("Register");
         screenTitle.setFont(new Font("calibri", Font.BOLD, 44));
