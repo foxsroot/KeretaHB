@@ -4,7 +4,7 @@ import model.enums.LoyaltyEnum;
 
 import java.util.ArrayList;
 
-public class Passenger extends User{
+public class Passenger extends User {
     private ArrayList<Transaction> transactions;
     private Wallet wallet;
     private LoyaltyEnum loyalty;

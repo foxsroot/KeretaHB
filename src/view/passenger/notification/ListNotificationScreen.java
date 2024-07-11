@@ -1,8 +1,10 @@
 package view.passenger.notification;
 
+import controller.AuthenticationHelper;
 import controller.NotificationController;
 import model.classes.Notification;
 import model.classes.Passenger;
+import view.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,12 +16,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class ListNotificationScreen extends JFrame {
-    Passenger passenger;
+//    Passenger passenger;
+    int userID;
 
-    public ListNotificationScreen(Passenger passenger) {
-        this.passenger = passenger;
-        initComponents();
-        this.setVisible(true);
+    public ListNotificationScreen() {
+//        this.passenger = passenger;
+        userID = AuthenticationHelper.getInstance().getUserId();
+        if (userID != 0) {
+            initComponents();
+            this.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(null, "You haven't logged in!", "Error", JOptionPane.ERROR_MESSAGE);
+            dispose();
+            new Login();
+        }
     }
 
     private void initComponents() {
@@ -31,8 +41,9 @@ public class ListNotificationScreen extends JFrame {
         this.setTitle("Notifications");
 
         NotificationController controller = new NotificationController();
-        passenger.setNotifications(controller.getNotifications(passenger.getId()));
-        ArrayList<Notification> notifications = passenger.getNotifications();
+//        passenger.setNotifications(controller.getNotifications(passenger.getId()));
+//        ArrayList<Notification> notifications = passenger.getNotifications();
+        ArrayList<Notification> notifications = controller.getNotifications(userID);
 
         JLabel screenTitle = new JLabel("Notification List");
         screenTitle.setFont(new Font("calibri", Font.BOLD, 20));
@@ -111,7 +122,7 @@ public class ListNotificationScreen extends JFrame {
     }
 
     public static void main(String[] args) {
-        Passenger passenger1 = new Passenger("John Doe", "+6287885827270", "john.doe@example.com", "password123", 2, null, null, null, 0, null, null);
-        new ListNotificationScreen(passenger1);
+//        Passenger passenger1 = new Passenger("John Doe", "+6287885827270", "john.doe@example.com", "password123", 2, null, null, null, 0, null, null);
+        new ListNotificationScreen();
     }
 }
