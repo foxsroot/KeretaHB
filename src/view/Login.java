@@ -72,10 +72,8 @@ public class Login extends JFrame {
                 AuthenticationHelper.getInstance().setUserId(results[0]);
                 this.dispose();
                 if (results[1] == 0) {
-                    System.out.println("Passenger");
                     new PassengerMenu();
                 } else {
-                    System.out.println("Admin");
                     AdminMenu adminMenu = new AdminMenu();
                     adminMenu.setVisible(true);
                 }
