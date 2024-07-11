@@ -1,5 +1,9 @@
 package view;
 
+import controller.AuthenticationController;
+import view.admin.AdminMenu;
+import view.passenger.PassengerMenu;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -15,7 +19,7 @@ public class Login extends JFrame {
         this.setLayout(null);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setTitle("view.Login!");
+        this.setTitle("Login!");
 
         JLabel screenTitle = new JLabel("Login");
         screenTitle.setFont(new Font("calibri", Font.BOLD, 44));
@@ -52,6 +56,33 @@ public class Login extends JFrame {
         JButton loginButton = new JButton("Login");
         loginButton.setBounds(0, 0, 100, 40);
         buttonPanel.add(loginButton);
+
+        loginButton.addActionListener(e -> {
+            AuthenticationController controller = new AuthenticationController();
+            String profile = profileField.getText();
+            String password = passwordField.getText();
+            int[] results = controller.login(profile, password);
+            if (results[1] == -1) {
+                String title = "";
+                String message = "";
+                if (results[0] == 0) {
+                    title = "User tidak ditemukan";
+                    message = "Tidak dapat ditemukan username atau email: " + profile;
+                } else {
+                    title = "Error!";
+                    message = "Database sekarang sedang tidak berfungsi.";
+                }
+                passwordField.setText(null);
+                JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
+            } else if (results[1] == 0) {
+                PassengerMenu passengerMenu = new PassengerMenu();
+                this.dispose();
+            } else {
+                AdminMenu adminMenu = new AdminMenu();
+                this.dispose();
+                adminMenu.setVisible(true);
+            }
+        });
 
         JButton registerButton = new JButton("Register");
         registerButton.setBounds(110, 0, 100, 40);
