@@ -84,7 +84,7 @@ public class ScheduleDetailScreen extends JFrame {
         this.add(buttonPanel, BorderLayout.SOUTH);
 
         editScheduleButton.addActionListener(e -> {
-            new AddScheduleScreen(schedule);
+            new EditScheduleScreen(schedule);
             this.dispose();
         });
         deleteScheduleButton.addActionListener(e -> {
