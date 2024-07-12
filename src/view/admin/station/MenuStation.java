@@ -1,12 +1,6 @@
 package view.admin.station;
 
-import model.classes.Schedule;
-import model.classes.Station;
 import view.admin.AdminMenu;
-import view.admin.schedule.AddEditScheduleScreen;
-import view.admin.schedule.RescheduleRequestListScreen;
-import view.admin.schedule.ScheduleDetailScreen;
-
 import javax.swing.*;
 import java.awt.*;
 

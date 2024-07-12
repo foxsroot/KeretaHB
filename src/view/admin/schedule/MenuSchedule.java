@@ -31,7 +31,7 @@ public class MenuSchedule extends JFrame {
 
 		modifySchedule.addActionListener(e -> {
 			this.dispose();
-			new AddEditScheduleScreen(new Schedule(null, null, null,null, 0));
+			new EditScheduleScreen(new Schedule(null, null, null,null, 0));
 		});
 
 		JButton viewRescheduleRequest = new JButton("View Reschedule Request");

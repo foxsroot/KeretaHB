@@ -53,7 +53,7 @@ public class ScheduleDetailScreen extends JFrame {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
         currencyFormat.setMaximumFractionDigits(0);
         mainPanel.add(createLabel("Fee"));
-        mainPanel.add(createLabel(": Rp" + currencyFormat.format(schedule.getFee())));
+        mainPanel.add(createLabel(": " + currencyFormat.format(schedule.getFee())));
 
         JScrollPane mainScrollPane = new JScrollPane(mainPanel);
 
