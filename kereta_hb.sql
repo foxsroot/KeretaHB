@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 12, 2024 at 06:18 PM
--- Server version: 10.4.32-MariaDB
+-- Generation Time: Jul 12, 2024 at 08:59 PM
+-- Server version: 11.2.1-MariaDB
 -- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -292,7 +292,7 @@ CREATE TABLE `schedule` (
   `train_id` int(11) DEFAULT NULL,
   `departure_station_id` int(11) DEFAULT NULL,
   `arrival_station_id` int(11) DEFAULT NULL,
-  `departure_date` date DEFAULT NULL,
+  `departure_date` timestamp NULL DEFAULT NULL,
   `fee` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -301,7 +301,22 @@ CREATE TABLE `schedule` (
 --
 
 INSERT INTO `schedule` (`schedule_id`, `train_id`, `departure_station_id`, `arrival_station_id`, `departure_date`, `fee`) VALUES
-(22, 1, 1, 2, '2024-07-20', 500000);
+(26, 1, 1, 3, '2024-07-13 01:55:00', 50000),
+(27, 8, 3, 2, '2024-07-25 19:07:00', 70000),
+(28, 1, 1, 2, '2024-07-14 04:54:00', 78000),
+(29, 11, 1, 4, '2024-07-15 08:43:00', 56000),
+(30, 2, 2, 1, '2024-07-16 10:43:00', 76000),
+(31, 7, 2, 3, '2024-07-17 14:22:00', 43000),
+(32, 12, 2, 3, '2024-07-17 17:23:00', 36000),
+(33, 3, 3, 1, '2024-07-17 20:23:00', 120000),
+(34, 8, 3, 5, '2024-07-17 22:23:00', 96000),
+(35, 3, 3, 4, '2024-07-18 01:23:00', 66000),
+(36, 9, 4, 3, '2024-07-18 17:00:00', 696969),
+(37, 9, 4, 5, '2024-07-18 17:00:00', 696969),
+(38, 9, 4, 5, '2024-07-19 17:00:00', 696969),
+(39, 5, 5, 3, '2024-07-20 20:00:00', 130200),
+(40, 10, 5, 2, '2024-07-21 06:00:00', 130200),
+(41, 10, 5, 2, '2024-07-21 09:00:00', 130200);
 
 -- --------------------------------------------------------
 
@@ -321,9 +336,54 @@ CREATE TABLE `schedule_capacity` (
 --
 
 INSERT INTO `schedule_capacity` (`capacity_id`, `carriage_id`, `schedule_id`, `occupied`) VALUES
-(75, 3, 22, 0),
-(76, 4, 22, 0),
-(77, 5, 22, 0);
+(87, 28, 26, 0),
+(88, 29, 26, 0),
+(89, 30, 26, 0),
+(90, 38, 27, 0),
+(91, 39, 27, 0),
+(92, 40, 27, 0),
+(93, 3, 28, 0),
+(94, 4, 28, 0),
+(95, 5, 28, 0),
+(96, 53, 29, 0),
+(97, 54, 29, 0),
+(98, 55, 29, 0),
+(99, 8, 30, 0),
+(100, 9, 30, 0),
+(101, 10, 30, 0),
+(102, 33, 31, 0),
+(103, 34, 31, 0),
+(104, 35, 31, 0),
+(105, 58, 32, 0),
+(106, 59, 32, 0),
+(107, 60, 32, 0),
+(108, 13, 33, 0),
+(109, 14, 33, 0),
+(110, 15, 33, 0),
+(111, 38, 34, 0),
+(112, 39, 34, 0),
+(113, 40, 34, 0),
+(114, 13, 35, 0),
+(115, 14, 35, 0),
+(116, 15, 35, 0),
+(117, 43, 36, 0),
+(118, 44, 36, 0),
+(119, 45, 36, 0),
+(120, 43, 37, 0),
+(121, 44, 37, 0),
+(122, 45, 37, 0),
+(123, 43, 38, 0),
+(124, 44, 38, 0),
+(125, 45, 38, 0),
+(126, 23, 39, 0),
+(127, 24, 39, 0),
+(128, 25, 39, 0),
+(129, 48, 40, 0),
+(130, 49, 40, 0),
+(131, 50, 40, 0),
+(132, 48, 41, 0),
+(133, 49, 41, 0),
+(134, 50, 41, 0);
 
 -- --------------------------------------------------------
 
@@ -723,13 +783,13 @@ ALTER TABLE `reschedule_request`
 -- AUTO_INCREMENT for table `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `schedule_capacity`
 --
 ALTER TABLE `schedule_capacity`
-  MODIFY `capacity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `capacity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=135;
 
 --
 -- AUTO_INCREMENT for table `station`
