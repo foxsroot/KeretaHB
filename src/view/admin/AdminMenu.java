@@ -7,6 +7,7 @@ import javax.swing.*;
 
 public class AdminMenu extends JFrame {
     public AdminMenu() {
+        this.setVisible(true);
     }
 
     public static void main(String[] args) {
