@@ -5,7 +5,6 @@ import model.enums.CarriageType;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ScheduleController {
@@ -41,7 +40,7 @@ public class ScheduleController {
                 Integer train = rs.getInt("train_id");
                 Integer departure = rs.getInt("departure_station_id");
                 Integer arrival = rs.getInt("arrival_station_id");
-                Date departureDate = rs.getDate("departure_date");
+                Timestamp departureDate = rs.getTimestamp("departure_date");
                 double fee = rs.getDouble("fee");
 
                 Schedule schedule = new Schedule(train, departure, arrival, departureDate, fee).addScheduleID(scheduleId);
@@ -68,7 +67,7 @@ public class ScheduleController {
                 Integer train = rs.getInt("train_id");
                 Integer departure = rs.getInt("departure_station_id");
                 Integer arrival = rs.getInt("arrival_station_id");
-                Date departureDate = rs.getDate("departure_date");
+                Timestamp departureDate = rs.getTimestamp("departure_date");
                 double fee = rs.getDouble("fee");
 
                 return new Schedule(train, departure, arrival, departureDate, fee).addScheduleID(scheduleId);
@@ -95,7 +94,7 @@ public class ScheduleController {
                 Integer train = rs.getInt("train_id");
                 Integer departure = rs.getInt("departure_station_id");
                 Integer arrival = rs.getInt("arrival_station_id");
-                Date departureDate = rs.getDate("departure_date");
+                Timestamp departureDate = rs.getTimestamp("departure_date");
                 double fee = rs.getDouble("fee");
 
                 schedules.add(new Schedule(train, departure, arrival, departureDate, fee).addScheduleID(scheduleId));
@@ -109,8 +108,8 @@ public class ScheduleController {
         return null;
     }
 
-    public boolean validateScheduleForm(Integer train_id, Integer departureStationID, Integer arrivalStationID, Date departureDate, double fee) {
-        return train_id != null && departureStationID != null && arrivalStationID != null && departureDate != null && fee > 0;
+    public boolean validateScheduleForm(Integer train_id, Integer departureStationID, Integer arrivalStationID, Timestamp departureTimestamp, double fee) {
+        return train_id != null && departureStationID != null && arrivalStationID != null && departureTimestamp != null && fee > 0;
     }
 
     public boolean addNewSchedule(Schedule schedule) {
@@ -122,7 +121,7 @@ public class ScheduleController {
             st.setInt(1, schedule.getTrainID());
             st.setInt(2, schedule.getDeparture());
             st.setInt(3, schedule.getArrival());
-            st.setDate(4, new java.sql.Date(schedule.getDepartureDate().getTime()));
+            st.setTimestamp(4, new java.sql.Timestamp(schedule.getDepartureDate().getTime()));
             st.setDouble(5, schedule.getFee());
             st.executeUpdate();
             ResultSet rs = st.getGeneratedKeys();
@@ -155,7 +154,7 @@ public class ScheduleController {
             st.setInt(1, schedule.getTrainID());
             st.setInt(2, schedule.getDeparture());
             st.setInt(3, schedule.getArrival());
-            st.setDate(4, new java.sql.Date(schedule.getDepartureDate().getTime()));
+            st.setTimestamp(4, new java.sql.Timestamp(schedule.getDepartureDate().getTime()));
             st.setDouble(5, schedule.getFee());
             st.setInt(6, schedule.getScheduleID());
             st.executeUpdate();
