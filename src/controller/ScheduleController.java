@@ -146,17 +146,12 @@ public class ScheduleController {
     }
 
     public boolean updateSchedule(Schedule schedule) {
-        String query = "UPDATE schedule SET train_id = ?, departure_station_id =?, arrival_station_id =?, departure_date =?, fee =?" +
-                " WHERE schedule_id = ?";
+        String query = "UPDATE schedule SET departure_date = ? WHERE schedule_id = ?";
         try {
             ConnectionHandler.getInstance().connect();
             PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
-            st.setInt(1, schedule.getTrainID());
-            st.setInt(2, schedule.getDeparture());
-            st.setInt(3, schedule.getArrival());
-            st.setTimestamp(4, new java.sql.Timestamp(schedule.getDepartureDate().getTime()));
-            st.setDouble(5, schedule.getFee());
-            st.setInt(6, schedule.getScheduleID());
+            st.setTimestamp(1, schedule.getDepartureDate());
+            st.setInt(2, schedule.getScheduleID());
             st.executeUpdate();
             return true;
         } catch (Exception e) {
