@@ -1,6 +1,7 @@
 package controller;
 
 import model.classes.*;
+import model.enums.CarriageType;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -129,8 +130,10 @@ public class ScheduleController {
             CarriageController controller = new CarriageController();
             if (rs.next()) {
                 for (Carriage c : controller.getCarriage(schedule.getTrainID())) {
-                    if (!addScheduleCapacity(c.getId(), rs.getInt(1))) {
-                        return false;
+                    if (CarriageType.valueOf(c.getType().toString()).equals(CarriageType.SEATING)) {
+                        if (!addScheduleCapacity(c.getId(), rs.getInt(1))) {
+                            return false;
+                        }
                     }
                 }
             }

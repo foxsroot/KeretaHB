@@ -151,10 +151,21 @@ public class TransactionController {
                 if (carriage == rs.getInt("carriage_id")) {
                     System.out.println("test carriage_id");
                     int occupied = rs.getInt("occupied");
-                    if (occupied < rs.getInt("capacity")) {
+                    System.out.println(rs.getInt("capacity"));
+                    if (occupied + passenger < rs.getInt("capacity")) {
                         System.out.println("test capacity");
-                        rs.updateInt("occupied", occupied + passenger);
-                        rs.updateRow();
+
+                        String updateOccupied = "UPDATE schedule_capacity SET occupied = occupied + ? WHERE schedule_id = ? AND carriage_id = ?";
+
+                        try {
+                            PreparedStatement stmt2 = ConnectionHandler.getInstance().con.prepareStatement(updateOccupied);
+                            stmt2.setInt(1, occupied);
+                            stmt2.setInt(2, schedule_id);
+                            stmt2.setInt(3, carriage);
+                            stmt2.executeUpdate();
+                        } catch (SQLException e) {
+                            return false;
+                        }
                         return true;
                     }
                 }
