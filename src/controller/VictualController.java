@@ -16,7 +16,7 @@ public class VictualController {
         ConnectionHandler.getInstance().connect();
 
         List<Victual> victualList = new ArrayList<>();
-        String query = "SELECT * FROM victual";
+        String query = "SELECT * FROM victual ORDER BY name";
 
         try {
             PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
@@ -51,7 +51,7 @@ public class VictualController {
         ConnectionHandler.getInstance().connect();
 
         HashMap<Victual, Integer> victuals = new HashMap<>();
-        String query = "SELECT vict.*, stck.stock FROM victual vict JOIN stock stck ON vict.victual_id = stck.victual_id WHERE station_id = ?";
+        String query = "SELECT vict.*, stck.stock FROM victual vict JOIN stock stck ON vict.victual_id = stck.victual_id WHERE station_id = ? ORDER BY stck.stock DESC";
 
         try {
             PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
