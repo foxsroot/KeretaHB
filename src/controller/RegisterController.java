@@ -8,7 +8,7 @@ import java.util.Random;
 public class RegisterController {
     public String register(String name, String email, String password, String cellphone) {
         ConnectionHandler.getInstance().connect();
-        String query = "SELECT * FROM passanger WHERE name = ? OR email = ?";
+        String query = "SELECT * FROM passenger WHERE name = ? OR email = ?";
         try {
             PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setString(1, name);
@@ -25,7 +25,6 @@ public class RegisterController {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
         } finally {
             ConnectionHandler.getInstance().disconnect();
         }
@@ -33,21 +32,20 @@ public class RegisterController {
         if (password.length() <= 4) {
             return "Buatlah password minimal 4 karakter!";
         }
-        password = hashingPassword(password);
 
-        String queryInsert = "INSERT INTO passenger VALUES (, ?, ?, ?, ?, ?, ?, ?)";
+        password = new PasswordEncoder().hash(password);
+        ConnectionHandler.getInstance().connect();
+        String queryInsert = "INSERT INTO passenger(email, password, name, cellphone) VALUES (?, ?, ?, ?)";
         try {
             PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(queryInsert);
-            stmt.setInt(1, 1);
-            stmt.setString(2, email);
-            stmt.setString(3, password);
-            stmt.setString(4, name);
-            stmt.setString(5, cellphone);
-            stmt.setDouble(6, 0);
+            stmt.setString(1, email);
+            stmt.setString(2, password);
+            stmt.setString(3, name);
+            stmt.setString(4, cellphone);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            return "false";
+            return "Masukkan semua field!";
         } finally {
             ConnectionHandler.getInstance().disconnect();
         }

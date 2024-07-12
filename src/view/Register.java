@@ -1,5 +1,7 @@
 package view;
 
+import controller.RegisterController;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,7 +12,7 @@ public class Register extends JFrame {
     }
 
     public void initComponents() {
-        this.setSize(400, 410);
+        this.setSize(400, 500);
         this.setResizable(false);
         this.setLayout(null);
         this.setLocationRelativeTo(null);
@@ -23,39 +25,80 @@ public class Register extends JFrame {
 
         JPanel formLogin = new JPanel();
         formLogin.setLayout(null);
-        formLogin.setBounds(44, 111, 300, 150);
+        formLogin.setBounds(44, 80, 300, 300);
 
-        JLabel profileUser = new JLabel("Username/Email:");
-        profileUser.setFont(new Font("calibri", Font.PLAIN, 17));
-        profileUser.setBounds(88, 0, 130, 30);
-        formLogin.add(profileUser);
+        JLabel usernameUser = new JLabel("Username:");
+        usernameUser.setFont(new Font("calibri", Font.PLAIN, 17));
+        usernameUser.setBounds(88, 0, 130, 30);
+        formLogin.add(usernameUser);
 
-        JTextField profileField = new JTextField(255);
-        profileField.setFont(new Font("calibri", Font.PLAIN, 15));
-        profileField.setBounds(0, 33, 296, 30);
-        formLogin.add(profileField);
+        JTextField usernameField = new JTextField(255);
+        usernameField.setFont(new Font("calibri", Font.PLAIN, 15));
+        usernameField.setBounds(0, 33, 296, 30);
+        formLogin.add(usernameField);
+
+        JLabel emailUser = new JLabel("Email:");
+        emailUser.setFont(new Font("calibri", Font.PLAIN, 17));
+        emailUser.setBounds(88, 66, 130, 30);
+        formLogin.add(emailUser);
+
+        JTextField emailField = new JTextField(255);
+        emailField.setFont(new Font("calibri", Font.PLAIN, 15));
+        emailField.setBounds(0, 99, 296, 30);
+        formLogin.add(emailField);
 
         JLabel passwordUser = new JLabel("Password:");
         passwordUser.setFont(new Font("calibri", Font.PLAIN, 17));
-        passwordUser.setBounds(113, 77, 130, 30);
+        passwordUser.setBounds(113, 140, 130, 30);
         formLogin.add(passwordUser);
 
         JTextField passwordField = new JTextField(255);
         passwordField.setFont(new Font("calibri", Font.PLAIN, 15));
-        passwordField.setBounds(0, 110, 296, 30);
+        passwordField.setBounds(0, 170, 296, 30);
         formLogin.add(passwordField);
+
+        JLabel phoneUser = new JLabel("Phone:");
+        phoneUser.setFont(new Font("calibri", Font.PLAIN, 17));
+        phoneUser.setBounds(113, 210, 130, 30);
+        formLogin.add(phoneUser);
+
+        JTextField phoneField = new JTextField(255);
+        phoneField.setFont(new Font("calibri", Font.PLAIN, 15));
+        phoneField.setBounds(0, 240, 296, 30);
+        formLogin.add(phoneField);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(null);
-        buttonPanel.setBounds(86, 300, 350, 100);
+        buttonPanel.setBounds(86, 400, 350, 100);
+
         JButton registerButton = new JButton("Register");
         registerButton.setBounds(0, 0, 100, 40);
         buttonPanel.add(registerButton);
 
+        registerButton.addActionListener(e -> {
+            String hasil = new RegisterController().register(
+                    usernameField.getText(),
+                    emailField.getText(),
+                    passwordField.getText(),
+                    phoneField.getText()
+            );
+            if (hasil.equals("Berhasil melakukan registrasi!")) {
+                usernameField.setText("");
+                emailField.setText("");
+                passwordField.setText("");
+                phoneField.setText("");
+            }
+            JOptionPane.showMessageDialog(null, hasil);
+        });
 
         JButton loginButton = new JButton("Login");
         loginButton.setBounds(110, 0, 100, 40);
         buttonPanel.add(loginButton);
+
+        loginButton.addActionListener(e -> {
+            this.dispose();
+            new Login();
+        });
 
         add(screenTitle);
         add(formLogin);
