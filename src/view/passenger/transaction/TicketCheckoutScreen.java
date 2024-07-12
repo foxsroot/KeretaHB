@@ -1,7 +1,10 @@
 package view.passenger.transaction;
 
+import controller.CarriageController;
 import controller.LoyaltyController;
+import controller.TrainController;
 import controller.TransactionController;
+import model.classes.Carriage;
 import model.classes.Schedule;
 import model.enums.ClassType;
 
@@ -23,6 +26,9 @@ public class TicketCheckoutScreen extends JFrame {
     private int passengerCount = 1;
     private NumberFormat currencyFormat;
     double loyaltyDiscount;
+
+    TrainController controller = new TrainController();
+    CarriageController carriageController = new CarriageController();
 
     public TicketCheckoutScreen(Schedule schedule) {
         this.schedule = schedule;
@@ -110,7 +116,9 @@ public class TicketCheckoutScreen extends JFrame {
         classTypeBox.setBounds(210, 350, 300, 30);
         add(classTypeBox);
 
-        classTypeBox.addActionListener(e -> updatePrices());
+        classTypeBox.addActionListener(e ->
+                updatePrices()
+        );
 
         JSeparator separatorForm = new JSeparator();
         separatorForm.setBounds(50, 400, 800, 2);
@@ -142,10 +150,24 @@ public class TicketCheckoutScreen extends JFrame {
         purchaseButton.addActionListener(e -> {
             int confirm = JOptionPane.showConfirmDialog(null, totalLabel.getText() + " will be deducted from balance, proceed?", "Purchase Confirmation", JOptionPane.YES_NO_OPTION);
 
+            int carriage_id = 0;
+            Carriage[] listCarriage = carriageController.getCarriage(schedule.getTrainID());
+
+            for(Carriage choosedCarriage : listCarriage){
+                if(choosedCarriage.getCarriageClass().equals(ClassType.valueOf(classTypeBox.getSelectedItem().toString()))){
+                    System.out.println("Masuk banggg" + choosedCarriage.getId());
+                    carriage_id = choosedCarriage.getId();
+                    break;
+                }
+            }
+            
             if (confirm == JOptionPane.YES_OPTION) {
                 TransactionController controller = new TransactionController();
-
-                if (controller.updateOccupied(classTypeBox.getSelectedItem().toString(), schedule.getTrainID(), passengerCount)) {
+                System.out.println("test");
+                System.out.println(carriage_id);
+                System.out.println(schedule.getScheduleID());
+                System.out.println(passengerCount);
+                if (controller.updateOccupied(carriage_id, schedule.getScheduleID(), passengerCount)) {
                     if (controller.bookTicket(2, schedule.getScheduleID(), passengerCount, commuteBox.getSelectedItem().toString().equals("YES"), parseTotalPrice(totalLabel.getText()), classTypeBox.getSelectedItem().toString())) {
                         JOptionPane.showMessageDialog(null, "Purchase Completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         dispose();

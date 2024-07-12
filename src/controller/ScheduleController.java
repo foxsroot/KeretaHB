@@ -2,8 +2,7 @@ package controller;
 
 import model.classes.*;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,7 +55,6 @@ public class ScheduleController {
     }
 
     public Schedule getSchedulesById(int schedule_Id) {
-
         String query = "SELECT * FROM schedule WHERE schedule_id = ?";
         try {
             ConnectionHandler.getInstance().connect();
@@ -114,16 +112,40 @@ public class ScheduleController {
         return train_id != null && departureStationID != null && arrivalStationID != null && departureDate != null && fee > 0;
     }
 
-    public boolean addSchedule(Schedule schedule, boolean add) {
-        
-        String query = "";
-        if (add) {
-            query = "INSERT INTO schedule (train_id, departure_station_id, arrival_station_id, departure_date, fee)" +
-                    " VALUES (?,?,?,?,?)";
-        } else {
-            query = "UPDATE schedule SET train_id = ?, departure_station_id =?, arrival_station_id =?, departure_date =?, fee =?" +
-                    " WHERE schedule_id = '" + schedule.getScheduleID() + "'";
+    public boolean addNewSchedule(Schedule schedule) {
+        String query = "INSERT INTO schedule (train_id, departure_station_id, arrival_station_id, departure_date, fee)" +
+                " VALUES (?,?,?,?,?)";
+        try {
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            st.setInt(1, schedule.getTrainID());
+            st.setInt(2, schedule.getDeparture());
+            st.setInt(3, schedule.getArrival());
+            st.setDate(4, new java.sql.Date(schedule.getDepartureDate().getTime()));
+            st.setDouble(5, schedule.getFee());
+            st.executeUpdate();
+            ResultSet rs = st.getGeneratedKeys();
+
+            CarriageController controller = new CarriageController();
+            if (rs.next()) {
+                for (Carriage c : controller.getCarriage(schedule.getTrainID())) {
+                    if (!addScheduleCapacity(c.getId(), rs.getInt(1))) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
         }
+        return false;
+    }
+
+    public boolean updateSchedule(Schedule schedule) {
+        String query = "UPDATE schedule SET train_id = ?, departure_station_id =?, arrival_station_id =?, departure_date =?, fee =?" +
+                " WHERE schedule_id = ?";
         try {
             ConnectionHandler.getInstance().connect();
             PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
@@ -132,6 +154,24 @@ public class ScheduleController {
             st.setInt(3, schedule.getArrival());
             st.setDate(4, new java.sql.Date(schedule.getDepartureDate().getTime()));
             st.setDouble(5, schedule.getFee());
+            st.setInt(6, schedule.getScheduleID());
+            st.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+        return false;
+    }
+
+    private boolean addScheduleCapacity(int carriage_id, int schedule_id) {
+        String capacityQuery = "INSERT INTO schedule_capacity (carriage_id, schedule_id) VALUES (?, ?)";
+        try {
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(capacityQuery);
+            st.setInt(1, carriage_id);
+            st.setInt(2, schedule_id);
             st.executeUpdate();
             return true;
         } catch (Exception e) {

@@ -137,16 +137,22 @@ public class TransactionController {
         return true;
     }
 
-    public boolean updateOccupied(String type, int train_id, int passenger) {
-        String query = "SELECT * FROM carriage WHERE train_id = '" + train_id + "'";
+    public boolean updateOccupied(int carriage, int schedule_id, int passenger) {
+        String query = "SELECT carriage.capacity, carriage.carriage_id, schedule_capacity.occupied FROM schedule_capacity JOIN carriage ON carriage.carriage_id = schedule_capacity.carriage_id WHERE schedule_capacity.schedule_id = ? AND schedule_capacity.carriage_id = ?";
         try {
             ConnectionHandler.getInstance().connect();
             PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            stmt.setInt(1, schedule_id);
+            stmt.setInt(2, carriage);
+
             ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                if (rs.getString("type").equals(type)) {
+            if (rs.next()) {
+                System.out.println("test rs");
+                if (carriage == rs.getInt("carriage_id")) {
+                    System.out.println("test carriage_id");
                     int occupied = rs.getInt("occupied");
                     if (occupied < rs.getInt("capacity")) {
+                        System.out.println("test capacity");
                         rs.updateInt("occupied", occupied + passenger);
                         rs.updateRow();
                         return true;

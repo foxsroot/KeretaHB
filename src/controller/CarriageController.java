@@ -95,15 +95,16 @@ public class CarriageController {
                         .addId(id);
                 carriagesList.add(carriage);
             }
+            Carriage[] carriagesArray = new Carriage[carriagesList.size()];
+            return carriagesList.toArray(carriagesArray);
+
         } catch (Exception e) {
             e.printStackTrace(System.err);
         } finally {
             ConnectionHandler.getInstance().disconnect();
         }
 
-        Carriage[] carriagesArray = new Carriage[carriagesList.size()];
-        carriagesList.toArray(carriagesArray);
-        return carriagesArray;
+        return null;
     }
 
 
