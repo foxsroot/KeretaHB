@@ -8,8 +8,8 @@ import view.Login;
 import javax.swing.*;
 import java.awt.*;
 
-public class Profile extends JFrame {
-	public Profile(int userId) {
+public class AdminProfile extends JFrame {
+	public AdminProfile(int userId) {
 		Admin profileUser = new UserController().getAdmin(userId);
 
 		this.setVisible(true);
@@ -53,7 +53,7 @@ public class Profile extends JFrame {
 
 		editProfile.addActionListener(e -> {
 			this.dispose();
-			new EditProfile(profileUser);
+			new EditAdminProfile(profileUser);
 		});
 
 		JButton changePassword = new JButton("Change Password");
@@ -72,7 +72,7 @@ public class Profile extends JFrame {
 	public static void main(String[] args) {
 		int userId = AuthenticationHelper.getInstance().getUserId();
 		if (userId != 0){
-			new Profile(userId);
+			new AdminProfile(userId);
 		} else {
 			new Login();
 		}

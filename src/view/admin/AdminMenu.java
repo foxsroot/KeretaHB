@@ -1,7 +1,9 @@
 package view.admin;
 
+import controller.AuthenticationHelper;
 import view.admin.loyalty.LoyaltyManagementScreen;
 import view.admin.notification.SendNotificationScreen;
+import view.admin.profile.AdminProfile;
 import view.admin.schedule.MenuSchedule;
 import view.admin.station.MenuStation;
 import view.admin.train.MenuTrain;
@@ -80,6 +82,15 @@ public class AdminMenu extends JFrame {
         victual.addActionListener(e -> {
             this.dispose();
             new MenuVictual();
+        });
+
+        JButton profile = new JButton("Profile");
+        profile.setBounds(0, 250, 860, 40);
+        listMenu.add(profile);
+
+        profile.addActionListener(e -> {
+            this.dispose();
+            new AdminProfile(AuthenticationHelper.getInstance().getUserId());
         });
 
         add(screenTitle);
