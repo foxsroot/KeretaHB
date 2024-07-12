@@ -172,7 +172,10 @@ public class AddEditScheduleScreen extends JFrame {
         exitButton.setBounds(110, 0, 150, 40);
         buttonPanel.add(exitButton);
 
-        exitButton.addActionListener(e -> dispose());
+        exitButton.addActionListener(e -> {
+            new AdminMenu();
+            this.dispose();
+        });
 
         JLabel warningLabel = new JLabel("*Note: All fields must be filled!");
         warningLabel.setFont(new Font("Calibri", Font.BOLD, 13));
@@ -203,10 +206,5 @@ public class AddEditScheduleScreen extends JFrame {
         for (Train train : trains) {
             trainList.addItem(train.getId());
         }
-    }
-
-    public static void main(String[] args) {
-        Schedule schedule = new Schedule(null, null, null, null, 0);
-        new AddEditScheduleScreen(schedule);
     }
 }

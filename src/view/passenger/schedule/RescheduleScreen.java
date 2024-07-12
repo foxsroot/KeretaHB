@@ -7,7 +7,6 @@ import model.classes.Schedule;
 import model.classes.TicketTransaction;
 import view.passenger.transaction.TransactionHistoryScreen;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 

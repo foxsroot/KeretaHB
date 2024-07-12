@@ -62,20 +62,14 @@ public class StationScheduleListScreen extends JFrame {
     private List<Schedule> getSchedulesForStation(String station) {
         // Simulating fetching schedules based on station
         ScheduleController controller = new ScheduleController();
-        switch (station) {
-            case "Bandung":
-                return controller.getListSchedules(1);
-            case "Bekasi":
-                return controller.getListSchedules(2);
-            case "Bogor":
-                return controller.getListSchedules(3);
-            case "Cirebon":
-                return controller.getListSchedules(4);
-            case "Depok":
-                return controller.getListSchedules(5);
-            default:
-                return null;
-        }
+        return switch (station) {
+            case "Bandung" -> controller.getListSchedules(1);
+            case "Bekasi" -> controller.getListSchedules(2);
+            case "Bogor" -> controller.getListSchedules(3);
+            case "Cirebon" -> controller.getListSchedules(4);
+            case "Depok" -> controller.getListSchedules(5);
+            default -> null;
+        };
     }
 
     private JPanel createSchedulePanel(Schedule schedule, int yOffset) {

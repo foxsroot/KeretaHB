@@ -19,7 +19,7 @@ public class AuthenticationController {
                 String email = rs.getString("email");
                 String password = rs.getString("password");
                 if (name.equals(userProfile) || email.equals(userProfile)) {
-                    if (password.equals(userPassword)) {
+                    if (new PasswordEncoder().authenticate(userPassword.toCharArray(), password)) {
                         return new int[]{userId, 0};
                     }
                 }
@@ -39,6 +39,8 @@ public class AuthenticationController {
                 String email = rs.getString("email");
                 String password = rs.getString("password");
                 if (name.equals(userProfile) || email.equals(userProfile)) {
+                    System.out.println(name);
+                    System.out.println(userProfile);
                     if (password.equals(userPassword)) {
                         return new int[]{userId, 1};
                     }
@@ -50,7 +52,7 @@ public class AuthenticationController {
             ConnectionHandler.getInstance().disconnect();
         }
 
-        return new int[]{0, -1};
+        return null;
     }
 
     public boolean logout(int userId) {

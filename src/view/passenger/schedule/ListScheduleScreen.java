@@ -1,9 +1,7 @@
 package view.passenger.schedule;
 
 import controller.ScheduleController;
-import controller.StationController;
 import model.classes.Schedule;
-import view.passenger.schedule.ScheduleDetailScreen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -74,20 +72,14 @@ public class ListScheduleScreen extends JFrame {
 
     private List<Schedule> getSchedulesForStation(String station) {
         ScheduleController scheduleController = new ScheduleController();
-        switch (station) {
-            case "Bandung":
-                return scheduleController.getListSchedules(1);
-            case "Bekasi":
-                return scheduleController.getListSchedules(2);
-            case "Bogor":
-                return scheduleController.getListSchedules(3);
-            case "Cirebon":
-                return scheduleController.getListSchedules(4);
-            case "Depok":
-                return scheduleController.getListSchedules(5);
-            default:
-                return null;
-        }
+        return switch (station) {
+            case "Bandung" -> scheduleController.getListSchedules(1);
+            case "Bekasi" -> scheduleController.getListSchedules(2);
+            case "Bogor" -> scheduleController.getListSchedules(3);
+            case "Cirebon" -> scheduleController.getListSchedules(4);
+            case "Depok" -> scheduleController.getListSchedules(5);
+            default -> null;
+        };
     }
 
     private JPanel createSchedulePanel(Schedule schedule, int yOffset) {

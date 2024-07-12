@@ -100,7 +100,7 @@ public class TrainCarriagesListScreen extends JFrame {
         JButton detailButton = new JButton("View Details");
         detailButton.setBounds(220, 90, 130, 30);
         detailButton.addActionListener(e -> {
-            // Implement view details action here
+            new CarriageDetailScreen(carriage);
         });
         carriagePanel.add(detailButton);
 

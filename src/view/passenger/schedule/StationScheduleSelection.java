@@ -4,6 +4,7 @@ import config.DirectoryConfig;
 import controller.ImageController;
 import controller.StationController;
 import model.classes.Station;
+import view.passenger.PassengerMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,7 +62,8 @@ public class StationScheduleSelection extends JFrame {
         JButton exitButton = new JButton("Exit to Main Menu");
         exitButton.setBounds(20, 600, 150, 30);
         exitButton.addActionListener(e -> {
-            dispose();
+            new PassengerMenu();
+            this.dispose();
         });
 
         add(screenTitle);

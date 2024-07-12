@@ -18,7 +18,7 @@ public class AddEditTrainScreen extends JFrame {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setTitle("Train Form");
 
-        String formTitle = "";
+        String formTitle;
         if (train.getId() != null) {
             formTitle = "Edit Train ID: " + train.getId();
         } else {
@@ -76,7 +76,7 @@ public class AddEditTrainScreen extends JFrame {
                         newTrain.addId(train.getId());
                         if (trainController.addTrain(newTrain, false)) {
                             JOptionPane.showMessageDialog(null, "Train Edited Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                            AdminMenu adminMenu = new AdminMenu();
+                            new AdminMenu();
                             this.dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "All Fields Must Be Filled!", "Input Error!", JOptionPane.WARNING_MESSAGE);
@@ -86,7 +86,7 @@ public class AddEditTrainScreen extends JFrame {
                     else {
                         if (trainController.addTrain(newTrain, true)) {
                             JOptionPane.showMessageDialog(null, "Train Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                            AdminMenu adminMenu = new AdminMenu();
+                            new AdminMenu();
                             this.dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "All Fields Must Be Filled!", "Input Error!", JOptionPane.WARNING_MESSAGE);
@@ -117,6 +117,6 @@ public class AddEditTrainScreen extends JFrame {
 
     public static void main(String[] args) {
         Train train = new Train(null, null, null).addId(null);
-        AddEditTrainScreen addEditTrainScreen = new AddEditTrainScreen(train);
+        new AddEditTrainScreen(train);
     }
 }
