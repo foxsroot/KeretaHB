@@ -163,10 +163,7 @@ public class TicketCheckoutScreen extends JFrame {
             
             if (confirm == JOptionPane.YES_OPTION) {
                 TransactionController controller = new TransactionController();
-                System.out.println("test");
-                System.out.println(carriage_id);
-                System.out.println(schedule.getScheduleID());
-                System.out.println(passengerCount);
+
                 if (controller.updateOccupied(carriage_id, schedule.getScheduleID(), passengerCount)) {
                     if (controller.bookTicket(2, schedule.getScheduleID(), passengerCount, commuteBox.getSelectedItem().toString().equals("YES"), parseTotalPrice(totalLabel.getText()), classTypeBox.getSelectedItem().toString())) {
                         JOptionPane.showMessageDialog(null, "Purchase Completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
