@@ -12,8 +12,9 @@ public class TrainController {
     public int totalTrainCapacity(int train_id) {
         CarriageController carriageController = new CarriageController();
         Carriage[] carriages = carriageController.getCarriage(train_id);
+        System.out.println();
         int totalCapacity = 0;
-        if (carriages[0] != null) {
+        if (carriages != null) {
             for (int i = 0; i < carriages.length; i++) {
                 totalCapacity += carriages[i].getCapacity();
             }

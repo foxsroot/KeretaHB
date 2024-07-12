@@ -144,7 +144,7 @@ public class AddEditScheduleScreen extends JFrame {
                     // Update
                     if (schedule.getScheduleID() != null) {
                         newSchedule.addScheduleID(schedule.getScheduleID());
-                        if (schController.addSchedule(newSchedule, false)) {
+                        if (schController.updateSchedule(newSchedule)) {
                             JOptionPane.showMessageDialog(null, "Schedule Edited Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                             new AdminMenu();
                             this.dispose();
@@ -152,7 +152,7 @@ public class AddEditScheduleScreen extends JFrame {
                             JOptionPane.showMessageDialog(null, "Failed to Edit Schedule!", "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
-                        if (schController.addSchedule(newSchedule, true)) {
+                        if (schController.addNewSchedule(newSchedule)) {
                             JOptionPane.showMessageDialog(null, "New Schedule Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                             new AdminMenu();
                             this.dispose();
