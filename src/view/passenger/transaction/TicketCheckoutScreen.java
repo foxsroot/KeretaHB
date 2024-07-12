@@ -1,9 +1,6 @@
 package view.passenger.transaction;
 
-import controller.CarriageController;
-import controller.LoyaltyController;
-import controller.TrainController;
-import controller.TransactionController;
+import controller.*;
 import model.classes.Carriage;
 import model.classes.Schedule;
 import model.enums.ClassType;
@@ -27,7 +24,6 @@ public class TicketCheckoutScreen extends JFrame {
     private NumberFormat currencyFormat;
     double loyaltyDiscount;
 
-    TrainController controller = new TrainController();
     CarriageController carriageController = new CarriageController();
 
     public TicketCheckoutScreen(Schedule schedule) {
@@ -47,7 +43,7 @@ public class TicketCheckoutScreen extends JFrame {
         this.setTitle("Ticket Checkout");
 
         LoyaltyController loyaltyController = new LoyaltyController();
-        loyaltyDiscount = loyaltyController.getLoyaltyDiscount(loyaltyController.getLoyalty(2)); // Ganti ke singleton yg lg login
+        loyaltyDiscount = loyaltyController.getLoyaltyDiscount(loyaltyController.getLoyalty(AuthenticationHelper.getInstance().getUserId()));
 
         JLabel screenTitle = new JLabel("Ticket Checkout");
         screenTitle.setFont(new Font("Calibri", Font.BOLD, 30));
@@ -155,7 +151,6 @@ public class TicketCheckoutScreen extends JFrame {
 
             for(Carriage choosedCarriage : listCarriage){
                 if(choosedCarriage.getCarriageClass().equals(ClassType.valueOf(classTypeBox.getSelectedItem().toString()))){
-                    System.out.println("Masuk banggg" + choosedCarriage.getId());
                     carriage_id = choosedCarriage.getId();
                     break;
                 }
@@ -165,7 +160,7 @@ public class TicketCheckoutScreen extends JFrame {
                 TransactionController controller = new TransactionController();
 
                 if (controller.updateOccupied(carriage_id, schedule.getScheduleID(), passengerCount)) {
-                    if (controller.bookTicket(2, schedule.getScheduleID(), passengerCount, commuteBox.getSelectedItem().toString().equals("YES"), parseTotalPrice(totalLabel.getText()), classTypeBox.getSelectedItem().toString())) {
+                    if (controller.bookTicket(AuthenticationHelper.getInstance().getUserId(), schedule.getScheduleID(), passengerCount, commuteBox.getSelectedItem().toString().equals("YES"), parseTotalPrice(totalLabel.getText()), classTypeBox.getSelectedItem().toString())) {
                         JOptionPane.showMessageDialog(null, "Purchase Completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
                     }

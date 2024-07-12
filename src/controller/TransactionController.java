@@ -178,14 +178,9 @@ public class TransactionController {
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                System.out.println("test rs");
                 if (carriage == rs.getInt("carriage_id")) {
-                    System.out.println("test carriage_id");
                     int occupied = rs.getInt("occupied");
-                    System.out.println(rs.getInt("capacity"));
                     if (occupied + passenger < rs.getInt("capacity")) {
-                        System.out.println("test capacity");
-
                         String updateOccupied = "UPDATE schedule_capacity SET occupied = occupied + ? WHERE schedule_id = ? AND carriage_id = ?";
 
                         try {
@@ -308,13 +303,13 @@ public class TransactionController {
         return false;
     }
 
-    public boolean allowReschedule(int transactionID) {
+    public boolean allowReschedule(int scheduleID) {
         ConnectionHandler.getInstance().connect();
         String query = "SELECT departure_date FROM schedule WHERE schedule_id = ?";
 
         try {
             PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
-            stmt.setInt(1, transactionID);
+            stmt.setInt(1, scheduleID);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -322,7 +317,7 @@ public class TransactionController {
                 LocalDate departureDate = departureTimestamp.toLocalDateTime().toLocalDate();
                 LocalDate currentDate = LocalDate.now(ZoneId.systemDefault());
 
-                if (!currentDate.equals(departureDate)) {
+                if (currentDate.isBefore(departureDate)) {
                     return true;
                 }
             }
