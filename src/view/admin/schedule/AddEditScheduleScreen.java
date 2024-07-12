@@ -11,6 +11,8 @@ import view.admin.AdminMenu;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
@@ -42,7 +44,7 @@ public class AddEditScheduleScreen extends JFrame {
 
         JPanel formPanel = new JPanel();
         formPanel.setLayout(null);
-        formPanel.setBounds(20, 70, 850, 300);
+        formPanel.setBounds(20, 70, 850, 350);
 
         JLabel departureStation = new JLabel("Departure Station ID");
         departureStation.setFont(new Font("Calibri", Font.PLAIN, 17));
@@ -57,7 +59,6 @@ public class AddEditScheduleScreen extends JFrame {
             departureStationComboBox.setSelectedItem(schedule.getDeparture());
         }
         formPanel.add(departureStationComboBox);
-
 
         JLabel arrivalStation = new JLabel("Arrival Station ID");
         arrivalStation.setFont(new Font("Calibri", Font.PLAIN, 17));
@@ -78,22 +79,40 @@ public class AddEditScheduleScreen extends JFrame {
             loadTrainList(selectedStationID);
         });
 
-        JLabel departureDate = new JLabel("Departure Date");
-        departureDate.setFont(new Font("Calibri", Font.PLAIN, 17));
-        departureDate.setBounds(0, 100, 130, 30);
-        formPanel.add(departureDate);
+        JLabel departureDateLabel = new JLabel("Departure Date");
+        departureDateLabel.setFont(new Font("Calibri", Font.PLAIN, 17));
+        departureDateLabel.setBounds(0, 100, 130, 30);
+        formPanel.add(departureDateLabel);
 
-        JDateChooser departureDateChooser = new JDateChooser(schedule.getDepartureDate());
+        JDateChooser departureDateChooser = new JDateChooser();
+        if (schedule.getDepartureDate() != null) {
+            departureDateChooser.setDate(new Date(schedule.getDepartureDate().getTime()));
+        }
         departureDateChooser.setFont(new Font("Calibri", Font.PLAIN, 17));
         departureDateChooser.setBounds(200, 100, 300, 30);
         formPanel.add(departureDateChooser);
 
+        JLabel departureTimeLabel = new JLabel("Departure Time");
+        departureTimeLabel.setFont(new Font("Calibri", Font.PLAIN, 17));
+        departureTimeLabel.setBounds(0, 150, 130, 30);
+        formPanel.add(departureTimeLabel);
+
+        JSpinner departureTimeSpinner = new JSpinner(new SpinnerDateModel());
+        JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(departureTimeSpinner, "HH:mm");
+        departureTimeSpinner.setEditor(timeEditor);
+        departureTimeSpinner.setFont(new Font("Calibri", Font.PLAIN, 17));
+        departureTimeSpinner.setBounds(200, 150, 300, 30);
+        if (schedule.getDepartureDate() != null) {
+            departureTimeSpinner.setValue(new Date(schedule.getDepartureDate().getTime()));
+        }
+        formPanel.add(departureTimeSpinner);
+
         JLabel trainChooser = new JLabel("Choose Train");
         trainChooser.setFont(new Font("Calibri", Font.PLAIN, 17));
-        trainChooser.setBounds(0, 150, 130, 30);
+        trainChooser.setBounds(0, 200, 130, 30);
         formPanel.add(trainChooser);
 
-        trainList.setBounds(200, 150, 300, 30);
+        trainList.setBounds(200, 200, 300, 30);
         if (schedule.getDeparture() != null) {
             loadTrainList(schedule.getDeparture());
             if (schedule.getTrainID() != null) {
@@ -111,17 +130,17 @@ public class AddEditScheduleScreen extends JFrame {
 
         JLabel fee = new JLabel("Set Fee");
         fee.setFont(new Font("Calibri", Font.PLAIN, 17));
-        fee.setBounds(0, 200, 130, 30);
+        fee.setBounds(0, 250, 130, 30);
         formPanel.add(fee);
 
         JTextField feeField = new JTextField(String.valueOf(schedule.getFee() != 0 ? schedule.getFee() : ""));
         feeField.setFont(new Font("Calibri", Font.PLAIN, 15));
-        feeField.setBounds(200, 200, 300, 30);
+        feeField.setBounds(200, 250, 300, 30);
         formPanel.add(feeField);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(null);
-        buttonPanel.setBounds(50, 400, 800, 50);
+        buttonPanel.setBounds(50, 450, 800, 50);
 
         JButton submitButton = new JButton("Submit Schedule");
         submitButton.setBounds(510, 0, 150, 40);
@@ -135,18 +154,29 @@ public class AddEditScheduleScreen extends JFrame {
                     JOptionPane.showMessageDialog(null, "Arrival Station cannot be the same as Departure Station!", "Input Error!", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-                Date departureDateForm = departureDateChooser.getDate();
+
+                Date departureDate = departureDateChooser.getDate();
+                Date departureTime = (Date) departureTimeSpinner.getValue();
+
+                if (departureDate == null || departureTime == null) {
+                    JOptionPane.showMessageDialog(null, "Please select a valid date and time.", "Input Error!", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                Timestamp departureTimestamp = combineDateAndTime(departureDate, departureTime);
+
                 Integer selectedTrainID = (Integer) trainList.getSelectedItem();
 
-                if (schController.validateScheduleForm(selectedTrainID, departureStationID, arrivalStationID, departureDateForm, Double.parseDouble(feeField.getText()))) {
+                System.out.println(departureTimestamp);
+                if (schController.validateScheduleForm(selectedTrainID, departureStationID, arrivalStationID, departureTimestamp, Double.parseDouble(feeField.getText()))) {
 
-                    Schedule newSchedule = new Schedule(selectedTrainID, departureStationID, arrivalStationID, departureDateForm, Double.parseDouble(feeField.getText()));
+                    Schedule newSchedule = new Schedule(selectedTrainID, departureStationID, arrivalStationID, departureTimestamp, Double.parseDouble(feeField.getText()));
                     // Update
                     if (schedule.getScheduleID() != null) {
                         newSchedule.addScheduleID(schedule.getScheduleID());
                         if (schController.updateSchedule(newSchedule)) {
                             JOptionPane.showMessageDialog(null, "Schedule Edited Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                            new AdminMenu();
+                            new StationScheduleSelection();
                             this.dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "Failed to Edit Schedule!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -154,8 +184,6 @@ public class AddEditScheduleScreen extends JFrame {
                     } else {
                         if (schController.addNewSchedule(newSchedule)) {
                             JOptionPane.showMessageDialog(null, "New Schedule Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                            new AdminMenu();
-                            this.dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "Failed to Add Schedule!", "Error", JOptionPane.ERROR_MESSAGE);
                         }
@@ -206,5 +234,14 @@ public class AddEditScheduleScreen extends JFrame {
         for (Train train : trains) {
             trainList.addItem(train.getId());
         }
+    }
+
+    private Timestamp combineDateAndTime(Date date, Date time) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        String dateStr = dateFormat.format(date);
+        String timeStr = timeFormat.format(time);
+        String dateTimeStr = dateStr + " " + timeStr + ":00";
+        return Timestamp.valueOf(dateTimeStr);
     }
 }
