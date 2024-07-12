@@ -5,6 +5,7 @@ import model.classes.Station;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 public class ListStationScreen extends JFrame {
@@ -28,6 +29,13 @@ public class ListStationScreen extends JFrame {
         JPanel stationPanel = new JPanel();
         stationPanel.setLayout(null);
         stationPanel.setBounds(35, 85, 850, 550);
+
+        JButton exitButton = new JButton("Exit to Main Menu");
+        exitButton.setBounds(20, 620, 200, 30);
+        exitButton.addActionListener(e -> {
+            dispose();
+            new MenuVictual();
+        });
 
         StationController stationController = new StationController();
         List<Station> stations = stationController.getlistStations();
@@ -55,6 +63,7 @@ public class ListStationScreen extends JFrame {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
+        add(exitButton);
         add(scrollPane);
         add(screenTitle);
         revalidate();

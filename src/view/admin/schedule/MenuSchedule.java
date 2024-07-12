@@ -43,13 +43,13 @@ public class MenuSchedule extends JFrame {
 			new RescheduleRequestListScreen();
 		});
 
-		JButton viewScheduleDetail = new JButton("View Schedule Detail");
+		JButton viewScheduleDetail = new JButton("View Schedule List");
 		viewScheduleDetail.setBounds(0, 100, 860, 40);
 		listMenu.add(viewScheduleDetail);
 
 		viewScheduleDetail.addActionListener(e -> {
 			this.dispose();
-			new ScheduleDetailScreen(new Schedule(null, null, null,null, 0));
+			new StationScheduleSelection();
 		});
 
 		JButton back = new JButton("Back");

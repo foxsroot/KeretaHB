@@ -28,7 +28,7 @@ public class MenuStation extends JFrame {
 		listMenu.setLayout(null);
 		listMenu.setBounds(10, 100, 880, 680);
 
-		JButton viewStationSchedule = new JButton("View Station Schedule");
+		JButton viewStationSchedule = new JButton("View Station List");
 		viewStationSchedule.setBounds(0, 0, 860, 40);
 		listMenu.add(viewStationSchedule);
 
@@ -37,17 +37,17 @@ public class MenuStation extends JFrame {
 			new StationListScreen();
 		});
 
-		JButton viewStationDetail = new JButton("View Station Detail");
-		viewStationDetail.setBounds(0, 50, 860, 40);
-		listMenu.add(viewStationDetail);
-
-		viewStationDetail.addActionListener(e -> {
-			this.dispose();
-			new StationDetailScreen(new Station(null, null, null, "", "", null, 0, ""));
-		});
+//		JButton viewStationDetail = new JButton("View Station Detail");
+//		viewStationDetail.setBounds(0, 50, 860, 40);
+//		listMenu.add(viewStationDetail);
+//
+//		viewStationDetail.addActionListener(e -> {
+//			this.dispose();
+//			new StationDetailScreen(new Station(null, null, null, "", "", null, 0, ""));
+//		});
 
 		JButton back = new JButton("Back");
-		back.setBounds(0, 100, 860, 40);
+		back.setBounds(0, 50, 860, 40);
 		listMenu.add(back);
 
 		back.addActionListener(e -> {
