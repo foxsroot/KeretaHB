@@ -2,15 +2,18 @@ package view.passenger.schedule;
 
 import controller.RescheduleController;
 import controller.ScheduleController;
+import controller.StationController;
 import model.classes.Schedule;
 import model.classes.TicketTransaction;
 import view.passenger.transaction.TransactionHistoryScreen;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Objects;
 
 
 public class RescheduleScreen extends JFrame {
@@ -29,27 +32,43 @@ public class RescheduleScreen extends JFrame {
     private void initComponents(TicketTransaction ticket) {
         this.setLayout(null);
 
-        JLabel screenTitle = new JLabel("Reschedule Ticket ID: " + ticket.getSchdeuleID());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy (hh:mm)");
+
+        JLabel screenTitle = new JLabel("Reschedule Ticket");
         screenTitle.setFont(new Font("Calibri", Font.BOLD, 36));
         screenTitle.setBounds(250, 20, 400, 40);
         this.add(screenTitle);
 
-        Schedule sch = scheduleController.getSchedulesById(ticket.getSchdeuleID());
+        Schedule currentSchedule = scheduleController.getSchedulesById(ticket.getScheduleID());
 
-        JLabel departureDateLabel = new JLabel("Departure Date: " + sch.getDepartureDate());
+        JLabel departureDateLabel = new JLabel("Current Departure Date : " + dateFormat.format(currentSchedule.getDepartureDate()));
         departureDateLabel.setFont(new Font("Calibri", Font.PLAIN, 20));
-        departureDateLabel.setBounds(100, 100, 400, 30);
+        departureDateLabel.setBounds(400, 80, 400, 30);
         this.add(departureDateLabel);
+
+        StationController stationController = new StationController();
+
+        JLabel departureStationLabel = new JLabel("Departure Station : " + stationController.getStationNameById(currentSchedule.getDeparture()));
+        departureStationLabel.setFont(new Font("Calibri", Font.PLAIN, 20));
+        departureStationLabel.setBounds(10, 80, 400, 30);
+        this.add(departureStationLabel);
+
+        JLabel arrivalStationLabel = new JLabel("Arrival Station : " + stationController.getStationNameById(currentSchedule.getArrival()));
+        arrivalStationLabel.setFont(new Font("Calibri", Font.PLAIN, 20));
+        arrivalStationLabel.setBounds(10, 120, 400, 30);
+        this.add(arrivalStationLabel);
 
         JPanel scheduleListPanel = new JPanel();
         scheduleListPanel.setLayout(null);
         scheduleListPanel.setBackground(Color.WHITE);
 
-        List<Schedule> schedules = getSchedulesForStation(sch.getDeparture());
+        List<Schedule> schedules = getSchedulesForStation(currentSchedule.getDeparture());
         int yOffset = 10;
         for (Schedule schedule : schedules) {
-            scheduleListPanel.add(createSchedulePanel(ticket, schedule, yOffset));
-            yOffset += 110;
+            if (!Objects.equals(schedule.getScheduleID(), ticket.getScheduleID())) {
+                scheduleListPanel.add(createSchedulePanel(ticket, schedule, yOffset));
+                yOffset += 90;
+            }
         }
 
         scheduleListPanel.setPreferredSize(new Dimension(870, yOffset + 120));
@@ -69,42 +88,32 @@ public class RescheduleScreen extends JFrame {
     }
 
     private JPanel createSchedulePanel(TicketTransaction ticket, Schedule schedule, int yOffset) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy (hh:mm)");
         JPanel schedulePanel = new JPanel();
         schedulePanel.setLayout(null);
-        schedulePanel.setBounds(10, yOffset, 850, 100);
+        schedulePanel.setBounds(10, yOffset, 850, 80);
         schedulePanel.setBackground(Color.WHITE);
 
-        JLabel scheduleId = new JLabel("ID: " + schedule.getScheduleID());
-        scheduleId.setFont(new Font("Calibri", Font.BOLD, 25));
-        scheduleId.setBounds(10, 10, 100, 30);
-        schedulePanel.add(scheduleId);
-
-        JLabel scheduleDetail = new JLabel("Departure Date: " + schedule.getDepartureDate());
+        JLabel scheduleDetail = new JLabel("Departure Date: " + dateFormat.format(schedule.getDepartureDate()));
         scheduleDetail.setFont(new Font("Calibri", Font.PLAIN, 25));
-        scheduleDetail.setBounds(120, 10, 600, 30);
+        scheduleDetail.setBounds(10, 10, 600, 30);
         schedulePanel.add(scheduleDetail);
 
         JButton rescheduleButton = new JButton("Reschedule");
-        rescheduleButton.setBounds(730, 30, 110, 30);
+        rescheduleButton.setBounds(650, 10, 110, 30);
         rescheduleButton.addActionListener(e -> {
-            int choose = JOptionPane.showConfirmDialog(null, "Are you sure want to reschedule to " + schedule.getDepartureDate() + "?", "Confirmation", JOptionPane.YES_NO_OPTION);
+            int choose = JOptionPane.showConfirmDialog(null, "Are you sure want to reschedule to " + dateFormat.format(schedule.getDepartureDate()) + "?\nYou Can Only Reschedule 1 time!", "Confirmation", JOptionPane.YES_NO_OPTION);
             RescheduleController rescheduleController = new RescheduleController();
             if (choose == JOptionPane.YES_OPTION) {
                 if (rescheduleController.requestReschedule(ticket.getTransactionID(), schedule.getScheduleID())){
-                    JOptionPane.showMessageDialog(null, "Reschedule successful!", "Reschedule Success", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Reschedule request will be reviewed by admin!", "Reschedule Success", JOptionPane.INFORMATION_MESSAGE);
                     new TransactionHistoryScreen();
                 }else{
-                    JOptionPane.showMessageDialog(null, "Reschedule failed!", "Reschedule failed", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Reschedule request failed!", "Reschedule failed", JOptionPane.ERROR_MESSAGE);
                 }
             } this.dispose();
         }); schedulePanel.add(rescheduleButton);
 
         return schedulePanel;
-    }
-
-    public static void main(String[] args) {
-        Timestamp date = new Timestamp(100);
-        TicketTransaction ticket = new TicketTransaction(1, date, 4, false, 5, false, 100000);
-        new RescheduleScreen(ticket);
     }
 }

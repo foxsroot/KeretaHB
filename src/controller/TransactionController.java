@@ -1,6 +1,7 @@
 package controller;
 
 import model.classes.*;
+import model.enums.ClassType;
 import model.enums.VictualTransactionStatus;
 
 import java.sql.PreparedStatement;
@@ -10,6 +11,32 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TransactionController {
+    public int checkSeatAvailability(int scheduleID, String classType) {
+        System.out.println("Schedule ID: " + scheduleID);
+        System.out.println("Class Type: " + classType);
+
+        ConnectionHandler.getInstance().connect();
+
+        String query = "SELECT schedule_capacity.occupied, carriage.capacity FROM carriage JOIN schedule_capacity ON carriage.carriage_id = schedule_capacity.carriage_id WHERE schedule_capacity.schedule_id = ? AND carriage.class = ? AND carriage.type = 'SEATING'";
+
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            stmt.setInt(1, scheduleID);
+            stmt.setString(2, classType);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("capacity") - rs.getInt("occupied");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+
+        return -1;
+    }
+
     public boolean claimVictual(int transactionID) {
         ConnectionHandler.getInstance().connect();
 
@@ -65,11 +92,12 @@ public class TransactionController {
 
             while (rs.next()) {
                 transaction.setTransactionID(rs.getInt("transaction_id"));
-                transaction.setSchdeuleID(rs.getInt("schedule_id"));
+                transaction.setScheduleID(rs.getInt("schedule_id"));
                 transaction.setDatePurchase(rs.getTimestamp("purchase_date"));
                 transaction.setPassengers(rs.getInt("passengers"));
                 transaction.setCommute(rs.getBoolean("commute"));
                 transaction.setTotal(rs.getDouble("total"));
+                transaction.setType(ClassType.valueOf(rs.getString("type")));
             }
 
             return transaction;
@@ -80,30 +108,6 @@ public class TransactionController {
             ConnectionHandler.getInstance().disconnect();
         }
     }
-
-    public ArrayList<TicketTransaction> getTicketTransactionList(int userID) {
-        ConnectionHandler.getInstance().connect();
-        ArrayList<TicketTransaction> ticketTransactionList = new ArrayList<>();
-
-        String query = "SELECT * FROM ticket_transaction WHERE userID = ?";
-
-        try {
-            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
-            stmt.setInt(1, userID);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                TicketTransaction transaction = new TicketTransaction(rs.getInt("transaction_id"), rs.getTimestamp("purchase_date"), rs.getInt("passengers"), rs.getBoolean("commute"), rs.getInt("schedule_id"), rs.getBoolean("rescheduled"), rs.getDouble("total"));
-                ticketTransactionList.add(transaction);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            ConnectionHandler.getInstance().disconnect();
-        }
-
-        return ticketTransactionList;
-    }
-
 
     public boolean bookTicket(int userID, int scheduleID, int passengers, boolean commute, double total, String type) {
         if (!deductBalance(userID, total)) {
@@ -176,6 +180,38 @@ public class TransactionController {
             ConnectionHandler.getInstance().disconnect();
         }
         return false;
+    }
+
+    public ArrayList<Transaction> getTicketTransactionList(int userID) {
+        ConnectionHandler.getInstance().connect();
+
+        ArrayList<Transaction> transactionList = new ArrayList<>();
+        String query = "SELECT * FROM ticket_transaction WHERE user_id = ?";
+
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            stmt.setInt(1, userID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                TicketTransaction transaction = new TicketTransaction();
+                transaction.setTransactionID(rs.getInt("transaction_id"));
+                transaction.setScheduleID(rs.getInt("schedule_id"));
+                transaction.setDatePurchase(rs.getTimestamp("purchase_date"));
+                transaction.setPassengers(rs.getInt("passengers"));
+                transaction.setType(ClassType.valueOf(rs.getString("type")));
+                transaction.setCommute(rs.getBoolean("commute"));
+                transaction.setRescheduled(rs.getBoolean("rescheduled"));
+                transaction.setTotal(rs.getDouble("total"));
+                transactionList.add(transaction);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+
+        return transactionList;
     }
 
     public ArrayList<Transaction> getVictualTransactionList(int userID) {
