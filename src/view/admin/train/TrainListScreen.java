@@ -42,9 +42,7 @@ public class TrainListScreen extends JFrame {
         JButton backButton = new JButton("Back to Main Menu");
         backButton.setBounds(30, 630, 250, 30);
         backButton.setFont(new Font("Calibri", Font.BOLD, 16));
-        backButton.addActionListener(e -> {
-            AdminMenu admin = new AdminMenu();
-        });
+        backButton.addActionListener(e -> new AdminMenu());
         add(backButton);
         this.setVisible(true);
     }

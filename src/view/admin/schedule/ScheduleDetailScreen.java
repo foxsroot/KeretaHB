@@ -8,7 +8,9 @@ import view.admin.AdminMenu;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class ScheduleDetailScreen extends JFrame {
 
@@ -48,8 +50,10 @@ public class ScheduleDetailScreen extends JFrame {
         mainPanel.add(createLabel("Departure Date"));
         mainPanel.add(createLabel(": " + departureDate));
 
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+        currencyFormat.setMaximumFractionDigits(0);
         mainPanel.add(createLabel("Fee"));
-        mainPanel.add(createLabel(": Rp" + schedule.getFee()));
+        mainPanel.add(createLabel(": Rp" + currencyFormat.format(schedule.getFee())));
 
         JScrollPane mainScrollPane = new JScrollPane(mainPanel);
 
@@ -65,7 +69,7 @@ public class ScheduleDetailScreen extends JFrame {
         JButton backButton = new JButton("Back to Schedule Selection");
         backButton.setFont(new Font("Calibri", Font.BOLD, 16));
         backButton.addActionListener(e -> {
-            StationScheduleSelection selectStation = new StationScheduleSelection();
+            new StationScheduleSelection();
             this.dispose();
         });
 
@@ -80,7 +84,7 @@ public class ScheduleDetailScreen extends JFrame {
         this.add(buttonPanel, BorderLayout.SOUTH);
 
         editScheduleButton.addActionListener(e -> {
-            AddEditScheduleScreen scheduleEditScreen = new AddEditScheduleScreen(schedule);
+            new AddEditScheduleScreen(schedule);
             this.dispose();
         });
         deleteScheduleButton.addActionListener(e -> {
@@ -89,7 +93,7 @@ public class ScheduleDetailScreen extends JFrame {
             if (confirm == JOptionPane.YES_OPTION) {
                 if (schController.deleteSchedule(schedule)) {
                     JOptionPane.showMessageDialog(null, "Schedule deleted successfully", "Delete Schedule", JOptionPane.INFORMATION_MESSAGE);
-                    AdminMenu adminMenu = new AdminMenu();
+                    new AdminMenu();
                     this.dispose();
                 }
             }

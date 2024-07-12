@@ -49,7 +49,7 @@ public class StationScheduleListScreen extends JFrame {
         backButton.setBounds(30, 630, 250, 30);
         backButton.setFont(new Font("Calibri", Font.BOLD, 16));
         backButton.addActionListener(e -> {
-            StationScheduleSelection selectStation = new StationScheduleSelection();
+            new StationScheduleSelection();
             this.dispose();
         });
 
@@ -96,15 +96,11 @@ public class StationScheduleListScreen extends JFrame {
         JButton viewDetailButton = new JButton("View Detail");
         viewDetailButton.setBounds(730, 30, 110, 30);
         viewDetailButton.addActionListener(e -> {
-            ScheduleDetailScreen scheduleDetailScreen = new ScheduleDetailScreen(schedule);
+            new ScheduleDetailScreen(schedule);
             this.dispose();
         });
         schedulePanel.add(viewDetailButton);
 
         return schedulePanel;
-    }
-
-    public static void main(String[] args) {
-        new StationScheduleListScreen("Bandung");
     }
 }

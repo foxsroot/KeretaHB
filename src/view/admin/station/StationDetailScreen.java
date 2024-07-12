@@ -5,7 +5,9 @@ import model.classes.Victual;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class StationDetailScreen extends JFrame {
 
@@ -29,8 +31,10 @@ public class StationDetailScreen extends JFrame {
         mainPanel.add(createLabel("Location"));
         mainPanel.add(createLabel(": " + station.getLocation()));
 
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+        currencyFormat.setMaximumFractionDigits(0);
         mainPanel.add(createLabel("Income"));
-        mainPanel.add(createLabel(": Rp" + station.getIncome()));
+        mainPanel.add(createLabel(": " + currencyFormat.format((station.getIncome()))));
 
         mainPanel.add(createLabel("Number of Trains"));
         mainPanel.add(createLabel(": " + station.getTrainList().size()));
@@ -57,7 +61,7 @@ public class StationDetailScreen extends JFrame {
         backButton.setFont(new Font("Calibri", Font.BOLD, 16));
         backButton.setPreferredSize(new Dimension(200, 29));
         backButton.addActionListener(e -> {
-            StationListScreen stationListScreen = new StationListScreen();
+            new StationListScreen();
             this.dispose();
         });
 

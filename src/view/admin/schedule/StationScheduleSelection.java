@@ -62,7 +62,7 @@ public class StationScheduleSelection extends JFrame {
         JButton exitButton = new JButton("Exit to Main Menu");
         exitButton.setBounds(20, 600, 150, 30);
         exitButton.addActionListener(e -> {
-            AdminMenu adminMenu = new AdminMenu();
+            new AdminMenu();
             this.dispose();
         });
 

@@ -47,7 +47,7 @@ public class TrainDetailScreen extends JFrame {
         detailPanel.add(createValueLabel(String.valueOf(train.getId())));
 
         detailPanel.add(createLabel("Train Speed"));
-        detailPanel.add(createValueLabel(String.valueOf(train.getSpeed()) + " km/h"));
+        detailPanel.add(createValueLabel(train.getSpeed() + " km/h"));
 
         int capacity = trainController.totalTrainCapacity(train.getId());
         detailPanel.add(createLabel("Seat Capacity"));
@@ -74,7 +74,7 @@ public class TrainDetailScreen extends JFrame {
 
         JButton editCarriageButton = createButton("Edit Carriages");
         editCarriageButton.addActionListener(e -> {
-            AssignRevokeCarriageScreen assignRevokeCarriageScreen = new AssignRevokeCarriageScreen(train);
+            new AssignRevokeCarriageScreen(train);
             this.dispose();
         });
 

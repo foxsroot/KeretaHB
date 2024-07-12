@@ -2,8 +2,6 @@ package view.admin.train;
 
 import controller.CarriageController;
 import model.classes.Carriage;
-import model.enums.CarriageType;
-import model.enums.ClassType;
 
 import javax.swing.*;
 import java.awt.*;

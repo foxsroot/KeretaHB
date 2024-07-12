@@ -4,11 +4,9 @@ import controller.StationController;
 import controller.TrainController;
 import model.classes.Schedule;
 import view.passenger.transaction.TicketCheckoutScreen;
-//import view.passenger.transaction.TicketCheckoutScreen;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 
 public class ScheduleDetailScreen extends JFrame {
