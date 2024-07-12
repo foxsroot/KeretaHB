@@ -1,23 +1,86 @@
 package controller;
 
+import model.classes.*;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 public class UserController {
-    public boolean updateProfile(int userId, String changeProfile, String status, int selectColumn) {
+    public Passenger getUser(int userId) {
         ConnectionHandler.getInstance().connect();
 
-        if (selectColumn == 0) {
+        String query = "SELECT * FROM passenger WHERE user_id = ?";
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                return new Passenger(
+                        rs.getString("name"),
+                        rs.getString("cellphone"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getInt("user_id"),
+                        new TransactionController().getVictualTransactionList(userId),
+                        new WalletController().getWallet(userId),
+                        new LoyaltyController().getLoyalty(userId),
+                        rs.getDouble("total_paid"),
+                        new NotificationController().getNotifications(userId),
+                        new CartController().getCart(userId)
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+        return null;
+    }
+
+    public Admin getAdmin(int userId) {
+        ConnectionHandler.getInstance().connect();
+
+        String query = "SELECT * FROM admin WHERE user_id = ?";
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                return new Admin(
+                        rs.getString("name"),
+                        rs.getString("cellphone"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getInt("user_id")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+        return null;
+    }
+
+    public boolean updateProfile(int userId, String status, String[] changeProfile) {
+        ConnectionHandler.getInstance().connect();
+
+        if (changeProfile[0].isEmpty()) {
             String query = "UPDATE ? SET name = ? WHERE user_id = ?";
 
             try {
                 PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
                 stmt.setString(1, status);
-                stmt.setString(2, changeProfile);
+                stmt.setString(2, changeProfile[0]);
                 stmt.setInt(3, userId);
                 stmt.executeUpdate();
             } catch (SQLException e) {
@@ -27,13 +90,34 @@ public class UserController {
                 ConnectionHandler.getInstance().disconnect();
             }
             return true;
-        } else if (selectColumn == 1) {
+        } else if (changeProfile[1].isEmpty()) {
             String query = "UPDATE ? SET email = ? WHERE user_id = ?";
 
             try {
                 PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
                 stmt.setString(1, status);
-                stmt.setString(2, changeProfile);
+                stmt.setString(2, changeProfile[1]);
+                stmt.setInt(3, userId);
+                stmt.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            } finally {
+                ConnectionHandler.getInstance().disconnect();
+            }
+            return true;
+        } else {
+            String query = "";
+            if (status.equals("admin")) {
+                query = "UPDATE admin SET name = ?, email = ? WHERE user_id = ?";
+            } else {
+                query = "UPDATE passenger SET name = ?, email = ? WHERE user_id = ?";
+            }
+
+            try {
+                PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+                stmt.setString(1, changeProfile[0]);
+                stmt.setString(2, changeProfile[1]);
                 stmt.setInt(3, userId);
                 stmt.executeUpdate();
             } catch (SQLException e) {
@@ -44,7 +128,6 @@ public class UserController {
             }
             return true;
         }
-        return false;
     }
 
     public boolean changePassword(int userId, String newPassword, String status) {
