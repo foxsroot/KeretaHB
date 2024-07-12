@@ -123,10 +123,7 @@ public class EditScheduleScreen extends JFrame {
                 }
 
                 Timestamp departureTimestamp = combineDateAndTime(departureDate, departureTime);
-
-                System.out.println(departureTimestamp);
                 if (schController.validateScheduleForm(schedule.getTrainID(), schedule.getDeparture(), schedule.getArrival(), departureTimestamp, Double.parseDouble(feeField.getText()))) {
-
                     Schedule newSchedule = new Schedule(schedule.getTrainID(), schedule.getDeparture(), schedule.getArrival(), departureTimestamp, Double.parseDouble(feeField.getText()));
                     // Update
                     newSchedule.addScheduleID(schedule.getScheduleID());

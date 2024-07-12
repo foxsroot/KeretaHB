@@ -12,6 +12,6 @@ public class AdminMenu extends JFrame {
 
     public static void main(String[] args) {
         Schedule schedule = new Schedule(null, null, null,null, 0);
-        AddScheduleScreen addScheduleScreen = new AddScheduleScreen(schedule);
+        AddScheduleScreen addScheduleScreen = new AddScheduleScreen();
     }
 }
