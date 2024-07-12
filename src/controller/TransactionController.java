@@ -137,8 +137,9 @@ public class TransactionController {
         return true;
     }
 
-    public boolean updateOccupied(String type, int train_id, int passenger) {
-        String query = "SELECT * FROM carriage WHERE train_id = '" + train_id + "'";
+    public boolean updateOccupied(String type, int schedule_id, int passenger) {
+//        String query = "SELECT * FROM schedule_capacity WHERE train_id = '" + train_id + "'";
+        String query = "SELECT carriage.capacity, schedule_capacity.occupied FROM schedule_capacity JOIN carriage ON carriage.carriage_id = schedule_capacity.carriage_id WHERE schedule_capacity.schedule_id = '" + schedule_id + "'";
         try {
             ConnectionHandler.getInstance().connect();
             PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
