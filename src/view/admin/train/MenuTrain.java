@@ -1,4 +1,5 @@
 package view.admin.train;
+
 import view.admin.AdminMenu;
 
 import javax.swing.*;

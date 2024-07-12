@@ -2,7 +2,6 @@ package view.admin.schedule;
 
 import model.classes.Schedule;
 import view.admin.AdminMenu;
-import view.admin.loyalty.LoyaltyManagementScreen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,13 +24,13 @@ public class MenuSchedule extends JFrame {
 		listMenu.setLayout(null);
 		listMenu.setBounds(10, 100, 880, 680);
 
-		JButton modifySchedule = new JButton("Modify Schedule");
+		JButton modifySchedule = new JButton("Add Schedule");
 		modifySchedule.setBounds(0, 0, 860, 40);
 		listMenu.add(modifySchedule);
 
 		modifySchedule.addActionListener(e -> {
 			this.dispose();
-			new EditScheduleScreen(new Schedule(null, null, null,null, 0));
+			new AddScheduleScreen();
 		});
 
 		JButton viewRescheduleRequest = new JButton("View Reschedule Request");
