@@ -6,6 +6,7 @@ import view.passenger.notification.ListNotificationScreen;
 import view.passenger.profile.ProfileUser;
 import view.passenger.schedule.ListScheduleScreen;
 import view.passenger.transaction.TransactionHistoryScreen;
+import view.passenger.transaction.ViewCartScreen;
 import view.passenger.victual.ListVictualScreen;
 
 import javax.swing.*;
@@ -65,8 +66,17 @@ public class PassengerMenu extends JFrame {
             new TransactionHistoryScreen();
         });
 
+        JButton viewCart = new JButton("View Cart");
+        viewCart.setBounds(0, 200, 860, 40);
+        listMenu.add(viewCart);
+
+        viewCart.addActionListener(e -> {
+            this.dispose();
+	        new ViewCartScreen();
+        });
+
         JButton profile = new JButton("Profile");
-        profile.setBounds(0, 200, 860, 40);
+        profile.setBounds(0, 250, 860, 40);
         listMenu.add(profile);
 
         profile.addActionListener(e -> {
@@ -75,12 +85,20 @@ public class PassengerMenu extends JFrame {
         });
 
         JButton logout = new JButton("Logout");
-        logout.setBounds(0, 250, 860, 40);
+        logout.setBounds(0, 300, 860, 40);
         listMenu.add(logout);
 
         logout.addActionListener(e -> {
             this.dispose();
             new Login();
+        });
+
+        JButton exit = new JButton("Exit");
+        exit.setBounds(0, 350, 860, 40);
+        listMenu.add(exit);
+
+        exit.addActionListener(e -> {
+            this.dispose();
         });
 
         add(screenTitle);

@@ -42,7 +42,7 @@ public class MenuTrain extends JFrame {
 //		});
 
 		JButton viewScheduleDetail = new JButton("Modify Train");
-		viewScheduleDetail.setBounds(0, 100, 860, 40);
+		viewScheduleDetail.setBounds(0, 50, 860, 40);
 		listMenu.add(viewScheduleDetail);
 
 		viewScheduleDetail.addActionListener(e -> {
@@ -60,7 +60,7 @@ public class MenuTrain extends JFrame {
 //		});
 
 		JButton viewTrainList = new JButton("View Train List");
-		viewTrainList.setBounds(0, 200, 860, 40);
+		viewTrainList.setBounds(0, 100, 860, 40);
 		listMenu.add(viewTrainList);
 
 		viewTrainList.addActionListener(e -> {
@@ -69,7 +69,7 @@ public class MenuTrain extends JFrame {
 		});
 
 		JButton back = new JButton("Back");
-		back.setBounds(0, 300, 860, 40);
+		back.setBounds(0, 150, 860, 40);
 		listMenu.add(back);
 
 		back.addActionListener(e -> {
