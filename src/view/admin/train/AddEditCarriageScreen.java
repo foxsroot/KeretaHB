@@ -126,7 +126,7 @@ public class AddEditCarriageScreen extends JFrame {
         buttonPanel.add(exitButton);
 
         exitButton.addActionListener(e -> {
-            new AdminMenu();
+            new MenuTrain();
             this.dispose();
         });
 

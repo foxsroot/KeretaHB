@@ -2,6 +2,7 @@ package view.admin.loyalty;
 
 import controller.LoyaltyController;
 import model.enums.LoyaltyEnum;
+import view.admin.AdminMenu;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -52,6 +53,7 @@ public class LoyaltyManagementScreen extends JFrame {
         exitButton.addActionListener(e -> {
             dispose();
             //balik ke main menu
+            new AdminMenu();
         });
 
         add(loyaltyComboBox);
