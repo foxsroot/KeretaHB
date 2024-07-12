@@ -1,5 +1,6 @@
 package model.classes;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class Schedule {
@@ -7,10 +8,10 @@ public class Schedule {
     Integer train_id;
     Integer departure;
     Integer arrival;
-    Date departureDate;
+    Timestamp departureDate;
     double fee;
 
-    public Schedule(Integer train_id, Integer departure, Integer arrival, Date departureDate, double fee) {
+    public Schedule(Integer train_id, Integer departure, Integer arrival, Timestamp departureDate, double fee) {
         this.train_id = train_id;
         this.departure = departure;
         this.arrival = arrival;
@@ -41,11 +42,11 @@ public class Schedule {
         this.train_id = train_id;
     }
 
-    public Date getDepartureDate() {
+    public Timestamp getDepartureDate() {
         return departureDate;
     }
 
-    public void setDepartureDate(Date departureDate) {
+    public void setDepartureDate(Timestamp departureDate) {
         this.departureDate = departureDate;
     }
 
