@@ -66,7 +66,7 @@ public class RescheduleRequestListScreen extends JFrame {
         String buyerEmail =  transactionController.getTicketBuyerEmail(rescheduleRequest.getTransactionID());
 
         ScheduleController scheduleController = new ScheduleController();
-        Schedule schedule = scheduleController.getSchedulesById(ticketTransaction.getSchdeuleID());
+        Schedule schedule = scheduleController.getSchedulesById(ticketTransaction.getScheduleID());
         Schedule requestedSchedule = scheduleController.getSchedulesById(rescheduleRequest.getRequestedScheduleID());
 
         StationController stationController = new StationController();
@@ -105,6 +105,21 @@ public class RescheduleRequestListScreen extends JFrame {
         requestedDepartureTime.setBounds(300, 60, 300, 30);
         panel.add(requestedDepartureTime);
 
+        int availableSeat = transactionController.checkSeatAvailability(schedule.getScheduleID(), ticketTransaction.getType().toString());
+        System.out.println(availableSeat);
+        String availability = availableSeat - ticketTransaction.getPassengers() >= 0 ? "Seat Available" : "Seat Not Available";
+
+        JLabel seatAvailability = new JLabel(availability);
+
+        if (availability.equals("Seat Available")) {
+            seatAvailability.setForeground(Color.GREEN);
+        } else {
+            seatAvailability.setForeground(Color.RED);
+        }
+
+        seatAvailability.setBounds(300, 90, 300, 30);
+        panel.add(seatAvailability);
+
         JComboBox<RescheduleEnum> response = new JComboBox<>(RescheduleEnum.values());
         response.setBounds(500, 40, 300, 30);
         panel.add(response);
@@ -114,13 +129,17 @@ public class RescheduleRequestListScreen extends JFrame {
         panel.add(sendButton);
 
         sendButton.addActionListener(e -> {
-            int confirm = JOptionPane.showConfirmDialog(null, "Send Selected Response to the Reschedule Request?", "Reschedule Confirmation", JOptionPane.YES_NO_OPTION);
+            if (RescheduleEnum.valueOf(response.getSelectedItem().toString()).equals(RescheduleEnum.SUCCESS) && availability.equals("Seat Not Available")) {
+                JOptionPane.showMessageDialog(null, "Can't Reschedule Because Seat is not available! Please decline this request!", "Can't Reschedule", JOptionPane.WARNING_MESSAGE);
+            } else {
+                int confirm = JOptionPane.showConfirmDialog(null, "Send Selected Response to the Reschedule Request?", "Reschedule Confirmation", JOptionPane.YES_NO_OPTION);
 
-            if (confirm == JOptionPane.YES_OPTION) {
-                RescheduleController rescheduleController = new RescheduleController();
-                if (rescheduleController.respondRescheduleRequest(ticketTransaction.getTransactionID(), buyerEmail, RescheduleEnum.valueOf(response.getSelectedItem().toString()), 1, requestedSchedule.getScheduleID())) {
-                    //admin id ganti ke singleton yg lagi login
-                    JOptionPane.showMessageDialog(null, "Response Submitted!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    RescheduleController rescheduleController = new RescheduleController();
+                    if (rescheduleController.respondRescheduleRequest(ticketTransaction, buyerEmail, RescheduleEnum.valueOf(response.getSelectedItem().toString()), 1, requestedSchedule.getScheduleID())) {
+                        //admin id ganti ke singleton yg lagi login
+                        JOptionPane.showMessageDialog(null, "Response Submitted!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    }
                 }
             }
         });

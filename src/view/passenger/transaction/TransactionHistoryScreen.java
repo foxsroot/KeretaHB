@@ -1,13 +1,18 @@
 package view.passenger.transaction;
 
+import controller.RescheduleController;
+import controller.ScheduleController;
 import controller.StationController;
 import controller.TransactionController;
+import model.classes.Schedule;
 import model.classes.Transaction;
 import model.classes.VictualTransaction;
 import model.classes.TicketTransaction;
+import view.passenger.schedule.RescheduleScreen;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class TransactionHistoryScreen extends JFrame {
@@ -55,7 +60,7 @@ public class TransactionHistoryScreen extends JFrame {
         TransactionController controller = new TransactionController();
         ArrayList<Transaction> transactions = new ArrayList<>();
         ArrayList<Transaction> victualTransactions = controller.getVictualTransactionList(2);
-        ArrayList<Transaction> ticketTransaction = controller.getTransactionList(2);
+        ArrayList<Transaction> ticketTransaction = controller.getTicketTransactionList(2);
 
         transactions.addAll(victualTransactions);
         transactions.addAll(ticketTransaction);
@@ -88,6 +93,7 @@ public class TransactionHistoryScreen extends JFrame {
     private JPanel createOrderPanel(Transaction transaction, int xOffset, int yOffset) {
         JPanel panel = new JPanel();
         panel.setLayout(null);
+        SimpleDateFormat format = new SimpleDateFormat("dd MMMM yyyy (hh:mm)");
 
         if (transaction instanceof VictualTransaction) {
             panel.setBackground(Color.WHITE);
@@ -98,7 +104,7 @@ public class TransactionHistoryScreen extends JFrame {
             panelTitle.setBounds(10, 0, 200, 40);
             panel.add(panelTitle);
 
-            JLabel timeStamp = new JLabel("Purchase Time : " + transaction.getDatePurchase().toString());
+            JLabel timeStamp = new JLabel("Purchase Time : " + new SimpleDateFormat("dd MMMM yyyy (hh:mm:ss)").format(transaction.getDatePurchase()));
             timeStamp.setFont(new Font("calibri", Font.BOLD, 20));
             timeStamp.setBounds(10, 30, 350, 40);
             panel.add(timeStamp);
@@ -138,17 +144,43 @@ public class TransactionHistoryScreen extends JFrame {
             panelTitle.setBounds(10, 0, 200, 40);
             panel.add(panelTitle);
 
-            JLabel timeStamp = new JLabel("Purchase Time : " + transaction.getDatePurchase().toString());
+            JLabel timeStamp = new JLabel("Purchase Time : " + new SimpleDateFormat("dd MMMM yyyy (hh:mm:ss)").format(transaction.getDatePurchase()));
             timeStamp.setFont(new Font("calibri", Font.BOLD, 20));
             timeStamp.setBounds(10, 30, 350, 40);
             panel.add(timeStamp);
 
-            JButton viewDetailsButton = new JButton("View Details");
-            viewDetailsButton.setBounds(10, 110, 350, 40);
-            panel.add(viewDetailsButton);
+            Schedule schedule = new ScheduleController().getSchedulesById(((TicketTransaction) transaction).getScheduleID());
 
-            viewDetailsButton.addActionListener(e -> {
-                // Implement ticket transaction details screen
+            JLabel departureDateLabel = new JLabel("Departure Date : " + format.format(schedule.getDepartureDate()));
+            departureDateLabel.setFont(new Font("calibri", Font.BOLD, 20));
+            departureDateLabel.setBounds(10, 60, 350, 40);
+            panel.add(departureDateLabel);
+
+            StationController stationController = new StationController();
+
+            JLabel departureStationLabel = new JLabel("Departure Station : " + stationController.getStationNameById(schedule.getDeparture()));
+            departureStationLabel.setFont(new Font("calibri", Font.BOLD, 20));
+            departureStationLabel.setBounds(10, 90, 350, 40);
+            panel.add(departureStationLabel);
+
+            JLabel arrivalStationLabel = new JLabel("Arrival Station : " + stationController.getStationNameById(schedule.getArrival()));
+            arrivalStationLabel.setFont(new Font("calibri", Font.BOLD, 20));
+            arrivalStationLabel.setBounds(10, 120, 350, 40);
+            panel.add(arrivalStationLabel);
+
+            JButton rescheduleButton = new JButton("Reschedule");
+            rescheduleButton.setBounds(10, 150, 350, 40);
+            panel.add(rescheduleButton);
+
+            rescheduleButton.addActionListener(e -> {
+                RescheduleController rescheduleController = new RescheduleController();
+
+                if (!rescheduleController.checkRequestReschedule(transaction.getTransactionID())) {
+                    dispose();
+                    new RescheduleScreen((TicketTransaction) transaction);
+                } else {
+                    JOptionPane.showMessageDialog(null, "You have already requested a reschedule. Please wait for admin to review your request!");
+                }
             });
 
             JLabel totalLabel = new JLabel("Total Price");

@@ -7,15 +7,15 @@ import java.sql.Timestamp;
 public class TicketTransaction extends Transaction {
     private int passengers;
     private boolean commute;
-    private Integer schdeuleID;
+    private Integer scheduleID;
     private boolean rescheduled;
     private ClassType type;
 
-    public TicketTransaction(Integer transactionID, Timestamp datePurchase, int passengers, boolean commute, Integer schdeuleID, boolean rescheduled, double total) {
+    public TicketTransaction(Integer transactionID, Timestamp datePurchase, int passengers, boolean commute, Integer scheduleID, boolean rescheduled, double total) {
         super(transactionID, datePurchase, total);
         this.passengers = passengers;
         this.commute = commute;
-        this.schdeuleID = schdeuleID;
+        this.scheduleID = scheduleID;
         this.rescheduled = rescheduled;
     }
 
@@ -39,12 +39,12 @@ public class TicketTransaction extends Transaction {
         this.commute = commute;
     }
 
-    public Integer getSchdeuleID() {
-        return schdeuleID;
+    public Integer getScheduleID() {
+        return scheduleID;
     }
 
-    public void setSchdeuleID(Integer schdeuleID) {
-        this.schdeuleID = schdeuleID;
+    public void setScheduleID(Integer scheduleID) {
+        this.scheduleID = scheduleID;
     }
 
     public boolean isRescheduled() {
