@@ -104,7 +104,10 @@ public class AddEditTrainScreen extends JFrame {
         exitButton.setBounds(110, 0, 150, 40);
         buttonPanel.add(exitButton);
 
-        exitButton.addActionListener(e -> dispose());
+        exitButton.addActionListener(e -> {
+            dispose();
+            new MenuTrain();
+        });
 
         JLabel warningLabel = new JLabel("*Note: All fields must be filled!");
         warningLabel.setFont(new Font("Calibri", Font.BOLD, 13));

@@ -173,7 +173,7 @@ public class AddEditScheduleScreen extends JFrame {
         buttonPanel.add(exitButton);
 
         exitButton.addActionListener(e -> {
-            new AdminMenu();
+            new MenuSchedule();
             this.dispose();
         });
 

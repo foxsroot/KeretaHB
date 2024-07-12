@@ -140,6 +140,7 @@ public class AddVictualScreen extends JFrame {
         exitButton.addActionListener(e -> {
             dispose();
             //balik ke main menu
+            new MenuVictual();
         });
 
         add(screenTitle);
