@@ -31,6 +31,7 @@ public class CartController {
 
             if (rsOtherStation.next()) {
                 clearCart(userId);
+                ConnectionHandler.getInstance().connect();
             }
 
             rsOtherStation.close();

@@ -40,4 +40,24 @@ public class WalletController {
 
         return wallet;
     }
+
+    public boolean topUpBalance(double amount, int user_id) {
+        ConnectionHandler.getInstance().connect();
+
+        String query = "UPDATE wallet SET balance = balance + ? WHERE user_id = ?";
+
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            stmt.setDouble(1, amount);
+            stmt.setInt(2, user_id);
+            stmt.executeQuery();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+
+        return false;
+    }
 }
