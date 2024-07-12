@@ -1,9 +1,11 @@
 package view.passenger.profile;
 
+import controller.AuthenticationController;
 import controller.AuthenticationHelper;
 import controller.UserController;
 import model.classes.Passenger;
 import view.Login;
+import view.passenger.PassengerMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +28,7 @@ public class ProfileUser extends JFrame {
 
 		JPanel formLogin = new JPanel();
 		formLogin.setLayout(null);
-		formLogin.setBounds(44, 111, 300, 700);
+		formLogin.setBounds(44, 111, 700, 200);
 
 		JLabel usernameUser = new JLabel("Username: " + profileUser.getName());
 		usernameUser.setFont(new Font("calibri", Font.PLAIN, 17));
@@ -55,7 +57,7 @@ public class ProfileUser extends JFrame {
 
 		JPanel buttonProfile = new JPanel();
 		buttonProfile.setLayout(null);
-		buttonProfile.setBounds(44, 420, 500, 200);
+		buttonProfile.setBounds(44, 420, 900, 200);
 
 		JButton editProfile = new JButton("Edit Profile");
 		editProfile.setBounds(0, 0, 100, 50);
@@ -70,9 +72,28 @@ public class ProfileUser extends JFrame {
 		changePassword.setBounds(150, 0, 200, 50);
 		buttonProfile.add(changePassword);
 
+		changePassword.addActionListener(e -> {
+			this.dispose();
+			new ChangePasswordUser(profileUser);
+		});
+
 		JButton logout = new JButton("Log Out");
 		logout.setBounds(400, 0, 100, 50);
 		buttonProfile.add(logout);
+
+		logout.addActionListener(e -> {
+			this.dispose();
+			new AuthenticationController().logout();
+		});
+
+		JButton exitProfile = new JButton("Exit Profile");
+		exitProfile.setBounds(550, 0, 100, 50);
+		buttonProfile.add(exitProfile);
+
+		exitProfile.addActionListener(e -> {
+			this.dispose();
+			new PassengerMenu();
+		});
 
 		add(screenTitle);
 		add(formLogin);
@@ -80,6 +101,7 @@ public class ProfileUser extends JFrame {
 	}
 
 	public static void main(String[] args) {
+		AuthenticationHelper.getInstance().setUserId(2);
 		int userId = AuthenticationHelper.getInstance().getUserId();
 		if (userId != 0){
 			new ProfileUser(userId);

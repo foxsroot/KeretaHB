@@ -1,6 +1,7 @@
 package view.admin;
 
 import controller.AuthenticationHelper;
+import view.Login;
 import view.admin.loyalty.LoyaltyManagementScreen;
 import view.admin.notification.SendNotificationScreen;
 import view.admin.profile.AdminProfile;
@@ -91,6 +92,23 @@ public class AdminMenu extends JFrame {
         profile.addActionListener(e -> {
             this.dispose();
             new AdminProfile(AuthenticationHelper.getInstance().getUserId());
+        });
+
+        JButton logout = new JButton("Logout");
+        logout.setBounds(0, 300, 860, 40);
+        listMenu.add(logout);
+
+        logout.addActionListener(e -> {
+            this.dispose();
+            new Login();
+        });
+
+        JButton exit = new JButton("Exit");
+        exit.setBounds(0, 350, 860, 40);
+        listMenu.add(exit);
+
+        exit.addActionListener(e -> {
+            this.dispose();
         });
 
         add(screenTitle);
