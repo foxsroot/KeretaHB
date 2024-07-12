@@ -51,7 +51,7 @@ public class MenuVictual extends JFrame {
 
 		editStockFromStation.addActionListener(e -> {
 			this.dispose();
-			new UpdateStockScreen(null);
+			new ListStationScreen();
 		});
 
 		JButton back = new JButton("Back");

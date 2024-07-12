@@ -35,15 +35,15 @@ public class MenuTrain extends JFrame {
 			this.dispose();
 			new AddEditCarriageScreen(null);
 		});
-
-		JButton viewRescheduleRequest = new JButton("View Carriage Detail");
-		viewRescheduleRequest.setBounds(0, 50, 860, 40);
-		listMenu.add(viewRescheduleRequest);
-
-		viewRescheduleRequest.addActionListener(e -> {
-			this.dispose();
-			new CarriageDetailScreen(null);
-		});
+//
+//		JButton viewRescheduleRequest = new JButton("View Carriage Detail");
+//		viewRescheduleRequest.setBounds(0, 50, 860, 40);
+//		listMenu.add(viewRescheduleRequest);
+//
+//		viewRescheduleRequest.addActionListener(e -> {
+//			this.dispose();
+//			new CarriageDetailScreen(null);
+//		});
 
 		JButton viewScheduleDetail = new JButton("Modify Train");
 		viewScheduleDetail.setBounds(0, 100, 860, 40);
@@ -54,14 +54,14 @@ public class MenuTrain extends JFrame {
 			new AddEditTrainScreen(null);
 		});
 
-		JButton assignRevokeCarriage = new JButton("Assign Revoke Carriage");
-		assignRevokeCarriage.setBounds(0, 150, 860, 40);
-		listMenu.add(assignRevokeCarriage);
-
-		assignRevokeCarriage.addActionListener(e -> {
-			this.dispose();
-			new AssignRevokeCarriageScreen(null);
-		});
+//		JButton assignRevokeCarriage = new JButton("Assign Revoke Carriage");
+//		assignRevokeCarriage.setBounds(0, 150, 860, 40);
+//		listMenu.add(assignRevokeCarriage);
+//
+//		assignRevokeCarriage.addActionListener(e -> {
+//			this.dispose();
+//			new AssignRevokeCarriageScreen(null);
+//		});
 
 		JButton viewTrainList = new JButton("View Train List");
 		viewTrainList.setBounds(0, 200, 860, 40);
@@ -70,15 +70,6 @@ public class MenuTrain extends JFrame {
 		viewTrainList.addActionListener(e -> {
 			this.dispose();
 			new TrainListScreen();
-		});
-
-		JButton viewTrainDetail = new JButton("View Train Detail");
-		viewTrainDetail.setBounds(0, 250, 860, 40);
-		listMenu.add(viewTrainDetail);
-
-		viewTrainDetail.addActionListener(e -> {
-			this.dispose();
-			new TrainDetailScreen(null);
 		});
 
 		JButton back = new JButton("Back");

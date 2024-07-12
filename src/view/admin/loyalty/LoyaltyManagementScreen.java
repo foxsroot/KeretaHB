@@ -110,8 +110,4 @@ public class LoyaltyManagementScreen extends JFrame {
 
         add(formPanel);
     }
-
-    public static void main(String[] args) {
-        new LoyaltyManagementScreen();
-    }
 }

@@ -21,7 +21,7 @@ public class AddEditCarriageScreen extends JFrame {
         this.setTitle("Carriage Form");
 
         String formTitle;
-        if (carriage.getId() != null) {
+        if (carriage != null) {
             formTitle = "Edit Carriage ID: " + carriage.getId();
         } else {
             formTitle = "Add Carriage";
