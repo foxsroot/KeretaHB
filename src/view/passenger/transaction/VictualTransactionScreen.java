@@ -11,7 +11,6 @@ import model.enums.VictualTransactionStatus;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
 
 public class VictualTransactionScreen extends JFrame {
     VictualTransaction transaction;

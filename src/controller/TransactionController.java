@@ -7,6 +7,7 @@ import model.enums.VictualTransactionStatus;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -279,6 +280,22 @@ public class TransactionController {
         }
 
         return false;
+    }
+
+    public boolean updateVictualStatus(int userID) {
+        ConnectionHandler.getInstance().connect();
+        String query = "UPDATE victuals_transaction SET status = 'EXPIRED' WHERE user_id = ? AND status = 'PENDING' AND date <= NOW() - INTERVAL 7 DAY";
+
+        try (PreparedStatement preparedStatement = ConnectionHandler.getInstance().con.prepareStatement(query)) {
+            preparedStatement.setInt(1, userID);
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
     }
 
     public boolean removeTransactionItem(int victualID) {
