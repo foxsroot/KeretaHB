@@ -1,6 +1,7 @@
 package controller;
 
 import model.classes.*;
+import model.enums.ClassType;
 import model.enums.VictualTransactionStatus;
 
 import java.sql.PreparedStatement;
@@ -176,6 +177,38 @@ public class TransactionController {
             ConnectionHandler.getInstance().disconnect();
         }
         return false;
+    }
+
+    public ArrayList<Transaction> getTransactionList(int userID) {
+        ConnectionHandler.getInstance().connect();
+
+        ArrayList<Transaction> transactionList = new ArrayList<>();
+        String query = "SELECT * FROM ticket_transaction WHERE user_id = ?";
+
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            stmt.setInt(1, userID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                TicketTransaction transaction = new TicketTransaction();
+                transaction.setTransactionID(rs.getInt("transaction_id"));
+                transaction.setSchdeuleID(rs.getInt("schedule_id"));
+                transaction.setDatePurchase(rs.getTimestamp("purchase_date"));
+                transaction.setPassengers(rs.getInt("passengers"));
+                transaction.setType(ClassType.valueOf(rs.getString("type")));
+                transaction.setCommute(rs.getBoolean("commute"));
+                transaction.setRescheduled(rs.getBoolean("rescheduled"));
+                transaction.setTotal(rs.getDouble("total"));
+                transactionList.add(transaction);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+
+        return transactionList;
     }
 
     public ArrayList<Transaction> getVictualTransactionList(int userID) {

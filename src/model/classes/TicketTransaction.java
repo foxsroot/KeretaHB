@@ -1,12 +1,15 @@
 package model.classes;
 
+import model.enums.ClassType;
+
 import java.sql.Timestamp;
 
 public class TicketTransaction extends Transaction {
-    int passengers;
-    boolean commute;
-    Integer schdeuleID;
-    boolean rescheduled;
+    private int passengers;
+    private boolean commute;
+    private Integer schdeuleID;
+    private boolean rescheduled;
+    private ClassType type;
 
     public TicketTransaction(Integer transactionID, Timestamp datePurchase, int passengers, boolean commute, Integer schdeuleID, boolean rescheduled, double total) {
         super(transactionID, datePurchase, total);
@@ -50,5 +53,13 @@ public class TicketTransaction extends Transaction {
 
     public void setRescheduled(boolean rescheduled) {
         this.rescheduled = rescheduled;
+    }
+
+    public ClassType getType() {
+        return type;
+    }
+
+    public void setType(ClassType type) {
+        this.type = type;
     }
 }

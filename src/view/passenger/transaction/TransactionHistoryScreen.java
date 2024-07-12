@@ -53,7 +53,12 @@ public class TransactionHistoryScreen extends JFrame {
 
     private void updateTransactionHistory() {
         TransactionController controller = new TransactionController();
-        ArrayList<Transaction> transactions = controller.getVictualTransactionList(2);
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        ArrayList<Transaction> victualTransactions = controller.getVictualTransactionList(2);
+        ArrayList<Transaction> ticketTransaction = controller.getTransactionList(2);
+
+        transactions.addAll(victualTransactions);
+        transactions.addAll(ticketTransaction);
 
         String selectedItem = (String) orderComboBox.getSelectedItem();
         ArrayList<Transaction> filteredTransactions = new ArrayList<>();
@@ -125,7 +130,7 @@ public class TransactionHistoryScreen extends JFrame {
             panel.add(totalAmount);
 
         } else if (transaction instanceof TicketTransaction) {
-            panel.setBackground(Color.LIGHT_GRAY);
+            panel.setBackground(Color.WHITE);
             panel.setBounds(xOffset, yOffset, 750, 200);
 
             JLabel panelTitle = new JLabel("Ticket Transaction");
