@@ -116,7 +116,7 @@ public class TransactionController {
         int stationID = getStationIDByScheduleID(scheduleID);
         StationController stationController = new StationController();
 
-        if (!deductBalance(userID, total) || stationController.addStationIncome(stationID, total)) {
+        if (!deductBalance(userID, total) || !stationController.addStationIncome(stationID, total)) {
             return false;
         }
 
