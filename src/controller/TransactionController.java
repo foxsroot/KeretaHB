@@ -113,7 +113,10 @@ public class TransactionController {
     }
 
     public boolean bookTicket(int userID, int scheduleID, int passengers, boolean commute, double total, String type) {
-        if (!deductBalance(userID, total)) {
+        int stationID = getStationIDByScheduleID(scheduleID);
+        StationController stationController = new StationController();
+
+        if (!deductBalance(userID, total) || stationController.addStationIncome(stationID, total)) {
             return false;
         }
 
@@ -142,6 +145,27 @@ public class TransactionController {
         }
 
         return true;
+    }
+
+    private int getStationIDByScheduleID(int scheduleID) {
+        ConnectionHandler.getInstance().connect();
+        String query = "SELECT departure_station_id FROM schedule WHERE schedule_id = ?";
+
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            stmt.setInt(1, scheduleID);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("departure_station_id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+
+        return -1;
     }
 
     public boolean updateOccupied(int carriage, int schedule_id, int passenger) {

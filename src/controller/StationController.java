@@ -7,6 +7,7 @@ import model.classes.Victual;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +45,26 @@ public class StationController {
             ConnectionHandler.getInstance().disconnect();
         }
         return null;
+    }
+
+    public boolean addStationIncome(int stationID, double total) {
+        ConnectionHandler.getInstance().connect();
+
+        String query = "UPDATE station SET income = income + ? WHERE station_id = ?";
+
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            stmt.setDouble(1, total);
+            stmt.setInt(2, stationID);
+            stmt.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+
+        return true;
     }
 
     public String getStationNameById(Integer station_id) {
