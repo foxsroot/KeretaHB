@@ -7,7 +7,9 @@ import model.enums.VictualTransactionStatus;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -282,17 +284,43 @@ public class TransactionController {
         return false;
     }
 
-    public boolean updateVictualStatus(int userID) {
+    public boolean allowReschedule(int transactionID) {
+        ConnectionHandler.getInstance().connect();
+        String query = "SELECT departure_date FROM schedule WHERE schedule_id = ?";
+
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            stmt.setInt(1, transactionID);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Timestamp departureTimestamp = rs.getTimestamp("departure_date");
+                LocalDate departureDate = departureTimestamp.toLocalDateTime().toLocalDate();
+                LocalDate currentDate = LocalDate.now(ZoneId.systemDefault());
+
+                if (!currentDate.equals(departureDate)) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+
+        return false;
+    }
+
+    public void updateVictualTransactionStatus(int userID) {
         ConnectionHandler.getInstance().connect();
         String query = "UPDATE victuals_transaction SET status = 'EXPIRED' WHERE user_id = ? AND status = 'PENDING' AND date <= NOW() - INTERVAL 7 DAY";
 
-        try (PreparedStatement preparedStatement = ConnectionHandler.getInstance().con.prepareStatement(query)) {
-            preparedStatement.setInt(1, userID);
-            preparedStatement.executeUpdate();
-            return true;
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            stmt.setInt(1, userID);
+            stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
         } finally {
             ConnectionHandler.getInstance().disconnect();
         }

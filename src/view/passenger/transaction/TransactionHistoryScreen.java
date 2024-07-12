@@ -58,7 +58,7 @@ public class TransactionHistoryScreen extends JFrame {
 
     private void updateTransactionHistory() {
         TransactionController controller = new TransactionController();
-        controller.updateVictualStatus(2);
+        controller.updateVictualTransactionStatus(2);
         ArrayList<Transaction> transactions = new ArrayList<>();
         ArrayList<Transaction> victualTransactions = controller.getVictualTransactionList(2);
         ArrayList<Transaction> ticketTransaction = controller.getTicketTransactionList(2);
