@@ -73,7 +73,7 @@ public class LoyaltyManagementScreen extends JFrame {
         NumberFormat format = NumberFormat.getNumberInstance();
         NumberFormatter numberFormatter = new NumberFormatter(format);
         numberFormatter.setValueClass(Double.class);
-        numberFormatter.setAllowsInvalid(false);
+        numberFormatter.setAllowsInvalid(true);
         numberFormatter.setMinimum(0.0);
         numberFormatter.setMaximum(1.0);
 
@@ -83,6 +83,16 @@ public class LoyaltyManagementScreen extends JFrame {
         discountField.setColumns(9);
         discountField.setText(String.valueOf(controller.getLoyaltyDiscount(loyalty)));
         formPanel.add(discountField);
+
+        discountField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                try {
+                    discountField.commitEdit();
+                } catch (java.text.ParseException e) {
+                    discountField.setValue(0.0);
+                }
+            }
+        });
 
         JButton updateButton = new JButton("Update");
         updateButton.setBounds(360, 50, 100, 30);
