@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 12, 2024 at 07:05 AM
+-- Generation Time: Jul 12, 2024 at 06:18 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -281,14 +281,6 @@ CREATE TABLE `reschedule_request` (
   `status` enum('SUCCESS','DENIED','PENDING') DEFAULT 'PENDING'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
---
--- Dumping data for table `reschedule_request`
---
-
-INSERT INTO `reschedule_request` (`reschedule_id`, `transaction_id`, `admin_id`, `requested_schedule_id`, `status`) VALUES
-(1, 1, 1, 4, 'SUCCESS'),
-(2, 1, NULL, 4, 'PENDING');
-
 -- --------------------------------------------------------
 
 --
@@ -309,24 +301,7 @@ CREATE TABLE `schedule` (
 --
 
 INSERT INTO `schedule` (`schedule_id`, `train_id`, `departure_station_id`, `arrival_station_id`, `departure_date`, `fee`) VALUES
-(1, 1, 1, 2, '2024-07-10', 810000),
-(2, 9, 4, 3, '2024-07-11', 900000),
-(3, 3, 1, 4, '2024-07-12', 970000),
-(4, 4, 2, 1, '2024-07-10', 700000),
-(5, 5, 2, 3, '2024-07-11', 900000),
-(6, 6, 2, 4, '2024-07-12', 1000000),
-(7, 7, 3, 1, '2024-07-10', 900000),
-(8, 8, 3, 2, '2024-07-11', 800000),
-(9, 9, 3, 4, '2024-07-12', 1150000),
-(10, 10, 4, 1, '2024-07-10', 970000),
-(11, 11, 4, 2, '2024-07-11', 1000000),
-(12, 12, 4, 3, '2024-07-12', 1200000),
-(13, 13, 5, 1, '2024-07-10', 1100000),
-(14, 14, 5, 2, '2024-07-11', 1200000),
-(15, 15, 5, 3, '2024-07-12', 1300000),
-(16, 1, 1, 3, '2024-07-17', 650000),
-(17, 1, 1, 2, '2024-07-20', 20000),
-(21, 1, 1, 2, '2024-09-01', 50000);
+(22, 1, 1, 2, '2024-07-20', 500000);
 
 -- --------------------------------------------------------
 
@@ -346,78 +321,9 @@ CREATE TABLE `schedule_capacity` (
 --
 
 INSERT INTO `schedule_capacity` (`capacity_id`, `carriage_id`, `schedule_id`, `occupied`) VALUES
-(3, 3, 17, 0),
-(4, 4, 17, 0),
-(5, 5, 17, 0),
-(6, 3, 21, 0),
-(7, 4, 21, 0),
-(8, 5, 21, 0),
-(9, 8, 17, 0),
-(10, 9, 17, 0),
-(11, 10, 17, 0),
-(12, 8, 21, 0),
-(13, 9, 21, 0),
-(14, 10, 21, 0),
-(15, 13, 17, 0),
-(16, 14, 17, 0),
-(17, 15, 17, 0),
-(18, 13, 21, 0),
-(19, 14, 21, 0),
-(20, 15, 21, 0),
-(21, 18, 17, 0),
-(22, 19, 17, 0),
-(23, 20, 17, 0),
-(24, 18, 21, 0),
-(25, 19, 21, 0),
-(26, 20, 21, 0),
-(27, 23, 17, 0),
-(28, 24, 17, 0),
-(29, 25, 17, 0),
-(30, 23, 21, 0),
-(31, 24, 21, 0),
-(32, 25, 21, 0),
-(33, 28, 17, 0),
-(34, 29, 17, 0),
-(35, 30, 17, 0),
-(36, 28, 21, 0),
-(37, 29, 21, 0),
-(38, 30, 21, 0),
-(39, 33, 17, 0),
-(40, 34, 17, 0),
-(41, 35, 17, 0),
-(42, 33, 21, 0),
-(43, 34, 21, 0),
-(44, 35, 21, 0),
-(45, 38, 17, 0),
-(46, 39, 17, 0),
-(47, 40, 17, 0),
-(48, 38, 21, 0),
-(49, 39, 21, 0),
-(50, 40, 21, 0),
-(51, 43, 17, 0),
-(52, 44, 17, 0),
-(53, 45, 17, 0),
-(54, 43, 21, 0),
-(55, 44, 21, 0),
-(56, 45, 21, 0),
-(57, 48, 17, 0),
-(58, 49, 17, 0),
-(59, 50, 17, 0),
-(60, 48, 21, 0),
-(61, 49, 21, 0),
-(62, 50, 21, 0),
-(63, 53, 17, 0),
-(64, 54, 17, 0),
-(65, 55, 17, 0),
-(66, 53, 21, 0),
-(67, 54, 21, 0),
-(68, 55, 21, 0),
-(69, 58, 17, 0),
-(70, 59, 17, 0),
-(71, 60, 17, 0),
-(72, 58, 21, 0),
-(73, 59, 21, 0),
-(74, 60, 21, 0);
+(75, 3, 22, 0),
+(76, 4, 22, 0),
+(77, 5, 22, 0);
 
 -- --------------------------------------------------------
 
@@ -501,21 +407,6 @@ CREATE TABLE `ticket_transaction` (
   `rescheduled` tinyint(1) NOT NULL DEFAULT 0,
   `total` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
---
--- Dumping data for table `ticket_transaction`
---
-
-INSERT INTO `ticket_transaction` (`transaction_id`, `user_id`, `schedule_id`, `purchase_date`, `passengers`, `type`, `commute`, `rescheduled`, `total`) VALUES
-(1, 2, 4, '2024-07-10 03:53:07', 1, 'ECONOMY', 0, 1, 800000),
-(2, 2, 5, '2024-07-10 03:53:07', 2, 'ECONOMY', 1, 0, 3200000),
-(3, 2, 3, '2024-07-10 03:53:07', 4, 'ECONOMY', 0, 0, 1000000),
-(4, 2, 1, '2024-07-10 10:39:53', 5, 'ECONOMY', 1, 0, 4050000),
-(5, 2, 1, '2024-07-10 15:11:52', 3, 'ECONOMY', 1, 0, 4009500),
-(6, 2, 1, '2024-07-10 15:24:30', 2, 'ECONOMY', 1, 0, 2673000),
-(7, 2, 1, '2024-07-10 15:25:46', 2, 'ECONOMY', 1, 0, 2673000),
-(8, 2, 1, '2024-07-10 15:29:39', 1, 'ECONOMY', 1, 0, 1136025),
-(9, 2, 21, '2024-07-12 04:53:42', 4, 'BUSINESS', 1, 0, 420750);
 
 -- --------------------------------------------------------
 
@@ -826,19 +717,19 @@ ALTER TABLE `passenger`
 -- AUTO_INCREMENT for table `reschedule_request`
 --
 ALTER TABLE `reschedule_request`
-  MODIFY `reschedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `reschedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `schedule_capacity`
 --
 ALTER TABLE `schedule_capacity`
-  MODIFY `capacity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `capacity_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT for table `station`
