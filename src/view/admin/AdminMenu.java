@@ -1,7 +1,7 @@
 package view.admin;
 
 import model.classes.Schedule;
-import view.admin.schedule.AddEditScheduleScreen;
+import view.admin.schedule.AddScheduleScreen;
 
 import javax.swing.*;
 
@@ -12,6 +12,6 @@ public class AdminMenu extends JFrame {
 
     public static void main(String[] args) {
         Schedule schedule = new Schedule(null, null, null,null, 0);
-        AddEditScheduleScreen addEditScheduleScreen = new AddEditScheduleScreen(schedule);
+        AddScheduleScreen addScheduleScreen = new AddScheduleScreen(schedule);
     }
 }
