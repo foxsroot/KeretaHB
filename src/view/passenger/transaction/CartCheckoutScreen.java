@@ -1,10 +1,7 @@
 package view.passenger.transaction;
 
 import config.DirectoryConfig;
-import controller.CartController;
-import controller.ImageController;
-import controller.VictualController;
-import controller.WalletController;
+import controller.*;
 import model.classes.*;
 import model.enums.LoyaltyEnum;
 
@@ -13,14 +10,13 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class CartCheckoutScreen extends JFrame {
-    Passenger passenger;
     double total = 0;
 
     public CartCheckoutScreen() {
         CartController controller = new CartController();
         WalletController walletController = new WalletController();
         //ambil passenger yg lg login
-        passenger = new Passenger("John Doe", "1234567890", "john.doe@example.com", "password123", 2, new ArrayList<>(), walletController.getWallet(2), LoyaltyEnum.CLASSIC, 0, new ArrayList<>(), controller.getCart(2));
+//        passenger = new Passenger("John Doe", "1234567890", "john.doe@example.com", "password123", 2, new ArrayList<>(), walletController.getWallet(2), LoyaltyEnum.CLASSIC, 0, new ArrayList<>(), controller.getCart(2));
         initComponents();
         this.setVisible(true);
     }
@@ -42,8 +38,11 @@ public class CartCheckoutScreen extends JFrame {
         JPanel itemPanel = new JPanel();
         itemPanel.setLayout(null);
 
-        for (int victual_id : passenger.getCart().getVictual().keySet()) {
-            itemPanel.add(createVictualPanel(victual_id, passenger.getCart().getVictual().get(victual_id), yOffset));
+        CartController controller = new CartController();
+        Cart cart = controller.getCart(AuthenticationHelper.getInstance().getUserId());
+
+        for (int victual_id : cart.getVictual().keySet()) {
+            itemPanel.add(createVictualPanel(victual_id, cart.getVictual().get(victual_id), yOffset));
             yOffset += 110;
         }
 
@@ -65,9 +64,9 @@ public class CartCheckoutScreen extends JFrame {
         totalLabel.setBounds(20, yOffset + 30, 350, 30);
         itemPanel.add(totalLabel);
 
-        passenger.getCart().setTotalPrice(total);
+        cart.setTotalPrice(total);
 
-        JLabel totalPriceLabel = new JLabel("Rp " + passenger.getCart().getTotalPrice());
+        JLabel totalPriceLabel = new JLabel("Rp " + cart.getTotalPrice());
         totalPriceLabel.setFont(new Font("calibri", Font.BOLD, 30));
         totalPriceLabel.setBounds(600, yOffset + 30, 350, 30);
         itemPanel.add(totalPriceLabel);
@@ -76,13 +75,12 @@ public class CartCheckoutScreen extends JFrame {
         purchaseButton.setBounds(700, 630, 100, 30);
 
         purchaseButton.addActionListener(e -> {
-            int confirm = JOptionPane.showConfirmDialog(null, "Rp " + passenger.getCart().getTotalPrice() + " will be deducted from balance, proceed?", "Purchase Confirmation", JOptionPane.YES_NO_OPTION);
+            int confirm = JOptionPane.showConfirmDialog(null, "Rp " + cart.getTotalPrice() + " will be deducted from balance, proceed?", "Purchase Confirmation", JOptionPane.YES_NO_OPTION);
 
             if (confirm == JOptionPane.YES_OPTION) {
-                CartController controller = new CartController();
-
-                if (controller.verifyStock(passenger.getCart(), passenger.getCart().getStationId())) {
-                    if (controller.checkout(passenger, passenger.getCart().getTotalPrice())) {
+                if (controller.verifyStock(cart, cart.getStationId())) {
+                    UserController userController = new UserController();
+                    if (controller.checkout(userController.getUser(AuthenticationHelper.getInstance().getUserId()), cart.getTotalPrice())) {
                         JOptionPane.showMessageDialog(null, "Purchase Completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
                     } else {
