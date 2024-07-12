@@ -1,7 +1,6 @@
 package view.admin.station;
 
 import controller.StationController;
-import model.classes.Admin;
 import model.classes.Station;
 import view.admin.AdminMenu;
 
@@ -51,7 +50,7 @@ public class StationListScreen extends JFrame {
         backButton.setBounds(30, 630, 250, 30);
         backButton.setFont(new Font("Calibri", Font.BOLD, 16));
         backButton.addActionListener(e -> {
-            AdminMenu adminMenu = new AdminMenu();
+            new AdminMenu();
             this.dispose();
 
         });
@@ -90,7 +89,7 @@ public class StationListScreen extends JFrame {
         JButton viewDetailButton = new JButton("View Detail");
         viewDetailButton.setBounds(730, 30, 110, 30);
         viewDetailButton.addActionListener(e -> {
-            StationDetailScreen stationDetailScreen = new StationDetailScreen(station);
+            new StationDetailScreen(station);
             this.dispose();
         });
         stationPanel.add(viewDetailButton);
