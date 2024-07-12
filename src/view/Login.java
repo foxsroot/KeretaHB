@@ -63,10 +63,10 @@ public class Login extends JFrame {
             String profile = profileField.getText();
             String password = passwordField.getText();
             int[] results = controller.login(profile, password);
-            if (results[1] == -1) {
+            if (results == null) {
                 passwordField.setText(null);
-                String title = "User tidak ditemukan";
-                String message = "Tidak dapat ditemukan username atau email: " + profile;
+                String title = "Login Gagal.";
+                String message = "Silahkan cek kembali username atau password Anda!";
                 JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
             } else {
                 AuthenticationHelper.getInstance().setUserId(results[0]);
@@ -78,8 +78,7 @@ public class Login extends JFrame {
                 if (results[1] == 0) {
                     new PassengerMenu();
                 } else {
-                    AdminMenu adminMenu = new AdminMenu();
-                    adminMenu.setVisible(true);
+                    new AdminMenu();
                 }
             }
         });
@@ -87,6 +86,11 @@ public class Login extends JFrame {
         JButton registerButton = new JButton("Register");
         registerButton.setBounds(110, 0, 100, 40);
         buttonPanel.add(registerButton);
+
+        registerButton.addActionListener(e -> {
+            this.dispose();
+            new Register();
+        });
 
         add(screenTitle);
         add(formLogin);
