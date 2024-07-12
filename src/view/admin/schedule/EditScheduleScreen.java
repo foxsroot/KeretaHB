@@ -17,13 +17,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
-public class AddEditScheduleScreen extends JFrame {
+public class EditScheduleScreen extends JFrame {
     private final StationController stationController = new StationController();
     private final ScheduleController schController = new ScheduleController();
-    private final JComboBox<Integer> trainList = new JComboBox<>();
-    private final TrainController trainController = new TrainController();
 
-    public AddEditScheduleScreen(Schedule schedule) {
+    public EditScheduleScreen(Schedule schedule) {
         this.setSize(900, 700);
         this.setResizable(false);
         this.setLayout(null);
@@ -31,14 +29,7 @@ public class AddEditScheduleScreen extends JFrame {
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setTitle("Schedule Form");
 
-        String formTitle;
-        if (schedule.getScheduleID() != null) {
-            formTitle = "Edit Schedule ID: " + schedule.getScheduleID();
-        } else {
-            formTitle = "Add Schedule";
-        }
-
-        JLabel screenTitle = new JLabel(formTitle);
+        JLabel screenTitle = new JLabel("Edit Schedule ID: " + schedule.getScheduleID());
         screenTitle.setFont(new Font("Calibri", Font.BOLD, 20));
         screenTitle.setBounds(370, 10, 200, 30);
 
@@ -51,33 +42,21 @@ public class AddEditScheduleScreen extends JFrame {
         departureStation.setBounds(0, 0, 150, 30);
         formPanel.add(departureStation);
 
-        JComboBox<Integer> departureStationComboBox = new JComboBox<>();
-        departureStationComboBox.setFont(new Font("Calibri", Font.PLAIN, 15));
-        departureStationComboBox.setBounds(200, 0, 300, 30);
-        loadStationList(departureStationComboBox, 0);
-        if (schedule.getDeparture() != null) {
-            departureStationComboBox.setSelectedItem(schedule.getDeparture());
-        }
-        formPanel.add(departureStationComboBox);
+        JLabel departureStationField = new JLabel(String.valueOf(schedule.getDeparture()));
+        departureStationField.setFont(new Font("Calibri", Font.PLAIN, 15));
+        departureStationField.setBounds(200, 0, 300, 30);
+        formPanel.add(departureStationField);
 
         JLabel arrivalStation = new JLabel("Arrival Station ID");
         arrivalStation.setFont(new Font("Calibri", Font.PLAIN, 17));
         arrivalStation.setBounds(0, 50, 130, 30);
         formPanel.add(arrivalStation);
 
-        JComboBox<Integer> arrivalStationComboBox = new JComboBox<>();
-        arrivalStationComboBox.setFont(new Font("Calibri", Font.PLAIN, 15));
-        arrivalStationComboBox.setBounds(200, 50, 300, 30);
-        if (schedule.getArrival() != null) {
-            arrivalStationComboBox.setSelectedItem(schedule.getArrival());
-        }
-        formPanel.add(arrivalStationComboBox);
+        JLabel arrivalStationField = new JLabel(String.valueOf(schedule.getArrival()));
+        arrivalStationField.setFont(new Font("Calibri", Font.PLAIN, 15));
+        arrivalStationField.setBounds(200, 50, 300, 30);
+        formPanel.add(arrivalStationField);
 
-        departureStationComboBox.addActionListener(e -> {
-            Integer selectedStationID = (Integer) departureStationComboBox.getSelectedItem();
-            loadStationList(arrivalStationComboBox, selectedStationID);
-            loadTrainList(selectedStationID);
-        });
 
         JLabel departureDateLabel = new JLabel("Departure Date");
         departureDateLabel.setFont(new Font("Calibri", Font.PLAIN, 17));
@@ -102,31 +81,18 @@ public class AddEditScheduleScreen extends JFrame {
         departureTimeSpinner.setEditor(timeEditor);
         departureTimeSpinner.setFont(new Font("Calibri", Font.PLAIN, 17));
         departureTimeSpinner.setBounds(200, 150, 300, 30);
-        if (schedule.getDepartureDate() != null) {
-            departureTimeSpinner.setValue(new Date(schedule.getDepartureDate().getTime()));
-        }
+        departureTimeSpinner.setValue(new Date(schedule.getDepartureDate().getTime()));
         formPanel.add(departureTimeSpinner);
 
-        JLabel trainChooser = new JLabel("Choose Train");
-        trainChooser.setFont(new Font("Calibri", Font.PLAIN, 17));
-        trainChooser.setBounds(0, 200, 130, 30);
-        formPanel.add(trainChooser);
+        JLabel trainLabel = new JLabel("Train");
+        trainLabel.setFont(new Font("Calibri", Font.PLAIN, 17));
+        trainLabel.setBounds(0, 200, 130, 30);
+        formPanel.add(trainLabel);
 
-        trainList.setBounds(200, 200, 300, 30);
-        if (schedule.getDeparture() != null) {
-            loadTrainList(schedule.getDeparture());
-            if (schedule.getTrainID() != null) {
-                trainList.setSelectedItem(schedule.getTrainID());
-            }
-        }
-
-        trainList.addActionListener(e -> {
-            if (trainController.totalTrainCapacity((Integer) trainList.getSelectedItem()) == 0) {
-                JOptionPane.showMessageDialog(this, "This train did not have any carriages. Please choose another train.");
-                trainList.setSelectedIndex(-1);
-            }
-        });
-        formPanel.add(trainList);
+        JLabel trainFieldLabel = new JLabel(String.valueOf(schedule.getTrainID()));
+        trainFieldLabel.setFont(new Font("Calibri", Font.PLAIN, 17));
+        trainFieldLabel.setBounds(200, 200, 300, 30);
+        formPanel.add(trainFieldLabel);
 
         JLabel fee = new JLabel("Set Fee");
         fee.setFont(new Font("Calibri", Font.PLAIN, 17));
@@ -148,13 +114,6 @@ public class AddEditScheduleScreen extends JFrame {
 
         submitButton.addActionListener(e -> {
             try {
-                Integer departureStationID = (Integer) departureStationComboBox.getSelectedItem();
-                Integer arrivalStationID = (Integer) arrivalStationComboBox.getSelectedItem();
-                if (departureStationID.equals(arrivalStationID)) {
-                    JOptionPane.showMessageDialog(null, "Arrival Station cannot be the same as Departure Station!", "Input Error!", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-
                 Date departureDate = departureDateChooser.getDate();
                 Date departureTime = (Date) departureTimeSpinner.getValue();
 
@@ -164,29 +123,16 @@ public class AddEditScheduleScreen extends JFrame {
                 }
 
                 Timestamp departureTimestamp = combineDateAndTime(departureDate, departureTime);
-
-                Integer selectedTrainID = (Integer) trainList.getSelectedItem();
-
-                System.out.println(departureTimestamp);
-                if (schController.validateScheduleForm(selectedTrainID, departureStationID, arrivalStationID, departureTimestamp, Double.parseDouble(feeField.getText()))) {
-
-                    Schedule newSchedule = new Schedule(selectedTrainID, departureStationID, arrivalStationID, departureTimestamp, Double.parseDouble(feeField.getText()));
+                if (schController.validateScheduleForm(schedule.getTrainID(), schedule.getDeparture(), schedule.getArrival(), departureTimestamp, Double.parseDouble(feeField.getText()))) {
+                    Schedule newSchedule = new Schedule(schedule.getTrainID(), schedule.getDeparture(), schedule.getArrival(), departureTimestamp, Double.parseDouble(feeField.getText()));
                     // Update
-                    if (schedule.getScheduleID() != null) {
-                        newSchedule.addScheduleID(schedule.getScheduleID());
-                        if (schController.updateSchedule(newSchedule)) {
-                            JOptionPane.showMessageDialog(null, "Schedule Edited Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                            new StationScheduleSelection();
-                            this.dispose();
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Failed to Edit Schedule!", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
+                    newSchedule.addScheduleID(schedule.getScheduleID());
+                    if (schController.updateSchedule(newSchedule)) {
+                        JOptionPane.showMessageDialog(null, "Schedule Edited Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        new StationScheduleSelection();
+                        this.dispose();
                     } else {
-                        if (schController.addNewSchedule(newSchedule)) {
-                            JOptionPane.showMessageDialog(null, "New Schedule Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Failed to Add Schedule!", "Error", JOptionPane.ERROR_MESSAGE);
-                        }
+                        JOptionPane.showMessageDialog(null, "Failed to Edit Schedule!", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "All Fields Must Be Filled!", "Input Error!", JOptionPane.WARNING_MESSAGE);
@@ -201,7 +147,7 @@ public class AddEditScheduleScreen extends JFrame {
         buttonPanel.add(exitButton);
 
         exitButton.addActionListener(e -> {
-            new MenuSchedule();
+            new AdminMenu();
             this.dispose();
         });
 
@@ -218,23 +164,7 @@ public class AddEditScheduleScreen extends JFrame {
         this.setVisible(true);
     }
 
-    private void loadStationList(JComboBox<Integer> comboBox, Integer arrivalID) {
-        comboBox.removeAllItems();
-        ArrayList<Station> stations = (ArrayList<Station>) stationController.getlistStations();
-        for (Station station : stations) {
-            if (!Objects.equals(station.getId(), arrivalID)) {
-                comboBox.addItem(station.getId());
-            }
-        }
-    }
 
-    private void loadTrainList(Integer departureStationId) {
-        trainList.removeAllItems();
-        ArrayList<Train> trains = stationController.getStationById(departureStationId).getTrainList();
-        for (Train train : trains) {
-            trainList.addItem(train.getId());
-        }
-    }
 
     private Timestamp combineDateAndTime(Date date, Date time) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
