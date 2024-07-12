@@ -10,6 +10,15 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 
 public class CartController {
+    public int countTotal(int userId) {
+        int total = 0;
+        Cart userCart = getCart(userId);
+        for (Integer count : userCart.getVictual().keySet()) {
+            total += userCart.getVictual().get(count);
+        }
+        return total;
+    }
+
     public boolean addToCart(int userId, int victualId, int amount, int station_id) {
         ConnectionHandler.getInstance().connect();
 
