@@ -137,8 +137,9 @@ public class CartController {
 
     public boolean checkout(Passenger passenger, double total) {
         int transaction_id = -1;
+        StationController stationController = new StationController();
 
-        if (!deductBalance(passenger, total)) {
+        if (!deductBalance(passenger, total) || !stationController.addStationIncome(passenger.getCart().getStationId(), total)) {
             return false;
         }
 
