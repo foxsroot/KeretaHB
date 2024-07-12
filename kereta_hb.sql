@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 11, 2024 at 04:51 PM
+-- Generation Time: Jul 12, 2024 at 04:13 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -239,7 +239,9 @@ INSERT INTO `notification` (`notification_id`, `recipient_id`, `title`, `message
 (56, 2, 'Notification 50', 'This is the 50th notification', '2024-07-06 03:20:00'),
 (57, 2, 'Notification 51', 'This is the 51st notification', '2024-07-06 03:40:00'),
 (58, 2, 'Victuals Cancelation', 'Hi ---, we have successfully canceled your victual transaction and returned Rp 86000.0 to your wallet.\n\nThank you!', '2024-07-09 05:57:52'),
-(59, 2, 'Reschedule Request Approved', 'Hi there, We are pleased to inform you that your request to reschedule your appointment has been approved', '2024-07-10 18:05:52');
+(59, 2, 'Reschedule Request Approved', 'Hi there, We are pleased to inform you that your request to reschedule your appointment has been approved', '2024-07-10 18:05:52'),
+(60, 2, 'Victuals Cancelation', 'Hi ---, we have successfully canceled your victual transaction and returned Rp 20000.0 to your wallet.\n\nThank you!', '2024-07-11 16:36:39'),
+(61, 2, 'Victuals Cancelation', 'Hi ---, we have successfully canceled your victual transaction and returned Rp 91000.0 to your wallet.\n\nThank you!', '2024-07-11 16:37:17');
 
 -- --------------------------------------------------------
 
@@ -326,6 +328,19 @@ INSERT INTO `schedule` (`schedule_id`, `train_id`, `departure_station_id`, `arri
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `schedule_capacity`
+--
+
+CREATE TABLE `schedule_capacity` (
+  `capacity_id` int(11) NOT NULL,
+  `carriage_id` int(11) NOT NULL,
+  `schedule_id` int(11) NOT NULL,
+  `occupied` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `station`
 --
 
@@ -366,10 +381,10 @@ CREATE TABLE `stock` (
 --
 
 INSERT INTO `stock` (`stock_id`, `victual_id`, `station_id`, `stock`) VALUES
-(13, 9, 1, 85),
+(13, 9, 1, 89),
 (14, 8, 1, 65),
-(15, 14, 1, 58),
-(16, 11, 2, 399),
+(15, 14, 1, 61),
+(16, 11, 2, 400),
 (20, 10, 5, 50),
 (21, 12, 5, 99),
 (22, 9, 5, 500),
@@ -473,16 +488,13 @@ INSERT INTO `transaction_item` (`transaction_item_id`, `transaction_id`, `victua
 (14, 9, 8, 2),
 (15, 9, 9, 1),
 (16, 9, 14, 3),
-(17, 10, 11, 1),
 (18, 11, 14, 5),
 (19, 12, 9, 7),
 (20, 13, NULL, 5),
 (21, 14, 8, 1),
 (22, 14, 9, 3),
 (23, 14, 14, 1),
-(24, 14, NULL, 3),
-(25, 15, 9, 4),
-(26, 15, 14, 3);
+(24, 14, NULL, 3);
 
 -- --------------------------------------------------------
 
@@ -522,21 +534,20 @@ CREATE TABLE `victuals_transaction` (
   `user_id` int(11) NOT NULL,
   `station_id` int(11) NOT NULL,
   `date` timestamp NOT NULL DEFAULT current_timestamp(),
-  `total` double NOT NULL
+  `total` double NOT NULL,
+  `status` enum('EXPIRED','CLAIMED','PENDING') NOT NULL DEFAULT 'PENDING'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `victuals_transaction`
 --
 
-INSERT INTO `victuals_transaction` (`transaction_id`, `user_id`, `station_id`, `date`, `total`) VALUES
-(9, 2, 1, '2024-07-09 09:08:39', 71000),
-(10, 2, 2, '2024-07-09 09:10:13', 20000),
-(11, 2, 1, '2024-07-09 09:10:45', 85000),
-(12, 2, 1, '2024-07-09 09:11:04', 70000),
-(13, 2, 1, '2024-07-09 09:16:56', 25000),
-(14, 2, 1, '2024-07-09 09:17:30', 67000),
-(15, 2, 1, '2024-07-10 14:07:12', 91000);
+INSERT INTO `victuals_transaction` (`transaction_id`, `user_id`, `station_id`, `date`, `total`, `status`) VALUES
+(9, 2, 1, '2024-07-09 09:08:39', 71000, 'CLAIMED'),
+(11, 2, 1, '2024-07-09 09:10:45', 85000, 'PENDING'),
+(12, 2, 1, '2024-07-09 09:11:04', 70000, 'PENDING'),
+(13, 2, 1, '2024-07-09 09:16:56', 25000, 'PENDING'),
+(14, 2, 1, '2024-07-09 09:17:30', 67000, 'PENDING');
 
 -- --------------------------------------------------------
 
@@ -556,7 +567,7 @@ CREATE TABLE `wallet` (
 --
 
 INSERT INTO `wallet` (`wallet_id`, `user_id`, `balance`, `pin`) VALUES
-(1, 2, 72988975, 0);
+(1, 2, 73099975, 0);
 
 --
 -- Indexes for dumped tables
@@ -621,6 +632,14 @@ ALTER TABLE `schedule`
   ADD KEY `train_id` (`train_id`),
   ADD KEY `departure_station_id` (`departure_station_id`),
   ADD KEY `arrival_station_id` (`arrival_station_id`);
+
+--
+-- Indexes for table `schedule_capacity`
+--
+ALTER TABLE `schedule_capacity`
+  ADD PRIMARY KEY (`capacity_id`),
+  ADD KEY `carriage_id` (`carriage_id`),
+  ADD KEY `schedule_id` (`schedule_id`);
 
 --
 -- Indexes for table `station`
@@ -712,7 +731,7 @@ ALTER TABLE `loyalty`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `passenger`
@@ -731,6 +750,12 @@ ALTER TABLE `reschedule_request`
 --
 ALTER TABLE `schedule`
   MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `schedule_capacity`
+--
+ALTER TABLE `schedule_capacity`
+  MODIFY `capacity_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `station`
@@ -825,6 +850,13 @@ ALTER TABLE `schedule`
   ADD CONSTRAINT `schedule_ibfk_1` FOREIGN KEY (`train_id`) REFERENCES `train` (`train_id`),
   ADD CONSTRAINT `schedule_ibfk_2` FOREIGN KEY (`departure_station_id`) REFERENCES `station` (`station_id`),
   ADD CONSTRAINT `schedule_ibfk_3` FOREIGN KEY (`arrival_station_id`) REFERENCES `station` (`station_id`);
+
+--
+-- Constraints for table `schedule_capacity`
+--
+ALTER TABLE `schedule_capacity`
+  ADD CONSTRAINT `schedule_capacity_ibfk_1` FOREIGN KEY (`carriage_id`) REFERENCES `carriage` (`carriage_id`),
+  ADD CONSTRAINT `schedule_capacity_ibfk_2` FOREIGN KEY (`schedule_id`) REFERENCES `schedule` (`schedule_id`);
 
 --
 -- Constraints for table `stock`
