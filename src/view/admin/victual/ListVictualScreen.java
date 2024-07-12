@@ -45,7 +45,7 @@ public class ListVictualScreen extends JFrame {
         exitButton.setBounds(20, 600, 150, 30);
         exitButton.addActionListener(e -> {
             dispose();
-            //back to main menu
+            new MenuVictual();
         });
 
         add(screenTitle);

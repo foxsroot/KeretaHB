@@ -1,6 +1,7 @@
 package view.admin.notification;
 
 import controller.NotificationController;
+import view.admin.AdminMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -90,6 +91,11 @@ public class SendNotificationScreen extends JFrame {
         JButton exitButton = new JButton("Back to Main Menu");
         exitButton.setBounds(110, 0, 150, 40);
         buttonPanel.add(exitButton);
+
+        exitButton.addActionListener(e -> {
+            dispose();
+            new AdminMenu();
+        });
 
         JLabel warningLabel = new JLabel("*Note: All fields must be filled!");
         warningLabel.setFont(new Font("calibri", Font.BOLD, 13));

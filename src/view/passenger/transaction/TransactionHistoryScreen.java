@@ -1,9 +1,6 @@
 package view.passenger.transaction;
 
-import controller.RescheduleController;
-import controller.ScheduleController;
-import controller.StationController;
-import controller.TransactionController;
+import controller.*;
 import model.classes.Schedule;
 import model.classes.Transaction;
 import model.classes.VictualTransaction;
@@ -169,20 +166,30 @@ public class TransactionHistoryScreen extends JFrame {
             arrivalStationLabel.setBounds(10, 120, 350, 40);
             panel.add(arrivalStationLabel);
 
-            JButton rescheduleButton = new JButton("Reschedule");
-            rescheduleButton.setBounds(10, 150, 350, 40);
-            panel.add(rescheduleButton);
+            TransactionController controller = new TransactionController();
 
-            rescheduleButton.addActionListener(e -> {
-                RescheduleController rescheduleController = new RescheduleController();
+            if (controller.allowReschedule(transaction.getTransactionID())) {
+                JButton rescheduleButton = new JButton("Reschedule");
+                rescheduleButton.setBounds(10, 150, 350, 40);
+                panel.add(rescheduleButton);
 
-                if (!rescheduleController.checkRequestReschedule(transaction.getTransactionID())) {
-                    dispose();
-                    new RescheduleScreen((TicketTransaction) transaction);
-                } else {
-                    JOptionPane.showMessageDialog(null, "You have already requested a reschedule. Please wait for admin to review your request!");
-                }
-            });
+                rescheduleButton.addActionListener(e -> {
+                    RescheduleController rescheduleController = new RescheduleController();
+
+                    if (!rescheduleController.checkRequestReschedule(transaction.getTransactionID())) {
+                        dispose();
+                        new RescheduleScreen((TicketTransaction) transaction);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "You have already requested a reschedule. Please wait for admin to review your request!");
+                    }
+                });
+            } else {
+                JLabel rescheduleWarning = new JLabel("You can't reschedule this transaction.");
+                rescheduleWarning.setForeground(Color.RED);
+                rescheduleWarning.setFont(new Font("calibri", Font.BOLD, 20));
+                rescheduleWarning.setBounds(10, 150, 350, 40);
+                panel.add(rescheduleWarning);
+            }
 
             JLabel totalLabel = new JLabel("Total Price");
             totalLabel.setFont(new Font("calibri", Font.BOLD, 20));

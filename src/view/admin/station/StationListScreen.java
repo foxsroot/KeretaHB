@@ -50,7 +50,7 @@ public class StationListScreen extends JFrame {
         backButton.setBounds(30, 630, 250, 30);
         backButton.setFont(new Font("Calibri", Font.BOLD, 16));
         backButton.addActionListener(e -> {
-            new AdminMenu();
+            new MenuStation();
             this.dispose();
 
         });

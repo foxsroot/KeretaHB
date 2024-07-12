@@ -19,7 +19,7 @@ public class AddEditTrainScreen extends JFrame {
         this.setTitle("Train Form");
 
         String formTitle;
-        if (train.getId() != null) {
+        if (train != null) {
             formTitle = "Edit Train ID: " + train.getId();
         } else {
             formTitle = "Add Train";
@@ -40,7 +40,7 @@ public class AddEditTrainScreen extends JFrame {
         trainSpeed.setBounds(0, 0, 150, 30);
         formPanel.add(trainSpeed);
 
-        JTextField trainSpeedField = new JTextField(train.getSpeed() != null ? train.getSpeed().toString() : "");
+        JTextField trainSpeedField = new JTextField(train != null ? train.getSpeed().toString() : "");
         trainSpeedField.setFont(new Font("Calibri", Font.PLAIN, 15));
         trainSpeedField.setBounds(200, 0, 300, 30);
         formPanel.add(trainSpeedField);
@@ -50,7 +50,7 @@ public class AddEditTrainScreen extends JFrame {
         trainStationId.setBounds(0, 50, 130, 30);
         formPanel.add(trainStationId);
 
-        JTextField trainStationIdField = new JTextField(train.getStationId() != null ? train.getStationId().toString() : "");
+        JTextField trainStationIdField = new JTextField(train != null ? train.getStationId().toString() : "");
         trainStationIdField.setFont(new Font("Calibri", Font.PLAIN, 15));
         trainStationIdField.setBounds(200, 50, 300, 30);
         formPanel.add(trainStationIdField);
@@ -104,7 +104,10 @@ public class AddEditTrainScreen extends JFrame {
         exitButton.setBounds(110, 0, 150, 40);
         buttonPanel.add(exitButton);
 
-        exitButton.addActionListener(e -> dispose());
+        exitButton.addActionListener(e -> {
+            dispose();
+            new MenuTrain();
+        });
 
         JLabel warningLabel = new JLabel("*Note: All fields must be filled!");
         warningLabel.setFont(new Font("Calibri", Font.BOLD, 13));

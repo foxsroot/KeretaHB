@@ -1,17 +1,103 @@
 package view.admin;
 
-import model.classes.Schedule;
-import view.admin.schedule.AddScheduleScreen;
+import controller.AuthenticationHelper;
+import view.admin.loyalty.LoyaltyManagementScreen;
+import view.admin.notification.SendNotificationScreen;
+import view.admin.profile.AdminProfile;
+import view.admin.schedule.MenuSchedule;
+import view.admin.station.MenuStation;
+import view.admin.train.MenuTrain;
+import view.admin.victual.MenuVictual;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class AdminMenu extends JFrame {
     public AdminMenu() {
         this.setVisible(true);
+        this.setSize(900, 700);
+        this.setResizable(false);
+        this.setLayout(null);
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.setTitle("Menu");
+
+        JLabel screenTitle = new JLabel("List Menu Admin");
+        screenTitle.setFont(new Font("calibri", Font.BOLD, 40));
+        screenTitle.setBounds(300, 30, 800, 50);
+
+        JPanel listMenu = new JPanel();
+        listMenu.setLayout(null);
+        listMenu.setBounds(10, 100, 880, 680);
+
+        JButton editLoyalty = new JButton("Edit Loyalty");
+        editLoyalty.setBounds(0, 0, 860, 40);
+        listMenu.add(editLoyalty);
+
+        editLoyalty.addActionListener(e -> {
+            this.dispose();
+            new LoyaltyManagementScreen();
+        });
+
+        JButton sendNotification = new JButton("Send Notification");
+        sendNotification.setBounds(0, 50, 860, 40);
+        listMenu.add(sendNotification);
+
+        sendNotification.addActionListener(e -> {
+            this.dispose();
+            new SendNotificationScreen();
+        });
+
+        JButton schedule = new JButton("Schedule");
+        schedule.setBounds(0, 100, 860, 40);
+        listMenu.add(schedule);
+
+        schedule.addActionListener(e -> {
+            this.dispose();
+            new MenuSchedule();
+        });
+
+        JButton station = new JButton("Station");
+        station.setBounds(0, 150, 860, 40);
+        listMenu.add(station);
+
+        station.addActionListener(e -> {
+            this.dispose();
+            new MenuStation();
+        });
+
+        JButton train = new JButton("Train");
+        train.setBounds(0, 200, 860, 40);
+        listMenu.add(train);
+
+        train.addActionListener(e -> {
+            this.dispose();
+            new MenuTrain();
+        });
+
+        JButton victual = new JButton("Victual");
+        victual.setBounds(0, 250, 860, 40);
+        listMenu.add(victual);
+
+        victual.addActionListener(e -> {
+            this.dispose();
+            new MenuVictual();
+        });
+
+        JButton profile = new JButton("Profile");
+        profile.setBounds(0, 250, 860, 40);
+        listMenu.add(profile);
+
+        profile.addActionListener(e -> {
+            this.dispose();
+            new AdminProfile(AuthenticationHelper.getInstance().getUserId());
+        });
+
+        add(screenTitle);
+        add(listMenu);
     }
 
     public static void main(String[] args) {
-        Schedule schedule = new Schedule(null, null, null,null, 0);
-        AddScheduleScreen addScheduleScreen = new AddScheduleScreen();
+        new AdminMenu();
     }
 }

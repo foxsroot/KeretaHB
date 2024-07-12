@@ -6,8 +6,8 @@ import model.classes.Admin;
 import javax.swing.*;
 import java.awt.*;
 
-public class EditProfile extends JFrame {
-	public EditProfile(Admin admin) {
+public class EditAdminProfile extends JFrame {
+	public EditAdminProfile(Admin admin) {
 		this.setVisible(true);
 		this.setSize(500, 300);
 		this.setResizable(false);
@@ -54,13 +54,13 @@ public class EditProfile extends JFrame {
 			} else {
 				JOptionPane.showMessageDialog(null, "Berhasil update profile!");
 				this.dispose();
-				new Profile(admin.getId());
+				new AdminProfile(admin.getId());
 			}
 		});
 
 		cancel.addActionListener(e -> {
 			this.dispose();
-			new Profile(admin.getId());
+			new AdminProfile(admin.getId());
 		});
 
 		add(formProfile);
