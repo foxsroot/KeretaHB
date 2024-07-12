@@ -5,6 +5,7 @@ import model.classes.Schedule;
 import model.classes.Transaction;
 import model.classes.VictualTransaction;
 import model.classes.TicketTransaction;
+import view.passenger.PassengerMenu;
 import view.passenger.schedule.RescheduleScreen;
 
 import javax.swing.*;
@@ -45,6 +46,11 @@ public class TransactionHistoryScreen extends JFrame {
         JButton exitButton = new JButton("Back to Main Menu");
         exitButton.setBounds(50, 600, 150, 40);
         exitButton.addActionListener(e -> dispose());
+
+        exitButton.addActionListener(e -> {
+            dispose();
+            new PassengerMenu();
+        });
 
         add(orderComboBox);
         add(scrollPane);
@@ -203,9 +209,5 @@ public class TransactionHistoryScreen extends JFrame {
         }
 
         return panel;
-    }
-
-    public static void main(String[] args) {
-        new TransactionHistoryScreen();
     }
 }

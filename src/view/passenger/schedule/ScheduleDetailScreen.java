@@ -1,8 +1,10 @@
 package view.passenger.schedule;
 
+import controller.AuthenticationHelper;
 import controller.StationController;
 import controller.TrainController;
 import model.classes.Schedule;
+import view.Login;
 import view.passenger.transaction.TicketCheckoutScreen;
 
 import javax.swing.*;
@@ -57,8 +59,14 @@ public class ScheduleDetailScreen extends JFrame {
         bookTicketButton.setPreferredSize(new Dimension(150, 29));
 
         bookTicketButton.addActionListener(e -> {
-            dispose();
-            new TicketCheckoutScreen(schedule);
+            if (AuthenticationHelper.getInstance().getUserId() == 0) {
+                JOptionPane.showMessageDialog(null, "You Must Login First!");
+                dispose();
+                new Login();
+            } else {
+                dispose();
+                new TicketCheckoutScreen(schedule);
+            }
         });
 
         JPanel buttonPanel = new JPanel();

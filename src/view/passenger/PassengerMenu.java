@@ -2,18 +2,11 @@ package view.passenger;
 
 import controller.AuthenticationHelper;
 import view.Login;
-import view.admin.loyalty.LoyaltyManagementScreen;
-import view.admin.notification.SendNotificationScreen;
-import view.admin.profile.AdminProfile;
-import view.admin.schedule.MenuSchedule;
-import view.admin.station.MenuStation;
-import view.admin.train.MenuTrain;
-import view.admin.victual.ListVictualScreen;
-import view.admin.victual.MenuVictual;
 import view.passenger.notification.ListNotificationScreen;
 import view.passenger.profile.ProfileUser;
-import view.passenger.transaction.TicketCheckoutScreen;
+import view.passenger.schedule.ListScheduleScreen;
 import view.passenger.transaction.TransactionHistoryScreen;
+import view.passenger.victual.ListVictualScreen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +35,7 @@ public class PassengerMenu extends JFrame {
 
         bookTicket.addActionListener(e -> {
             this.dispose();
-            new TicketCheckoutScreen(null);
+            new ListScheduleScreen();
         });
 
         JButton buyVictual = new JButton("Buy Victual");

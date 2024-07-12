@@ -4,6 +4,7 @@ import config.DirectoryConfig;
 import controller.*;
 import model.classes.Station;
 import model.classes.Victual;
+import view.passenger.PassengerMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -74,6 +75,11 @@ public class ListVictualScreen extends JFrame {
 
         JButton exitButton = new JButton("Back to Main Menu");
         exitButton.setBounds(10, 610, 150, 40);
+
+        exitButton.addActionListener(e -> {
+            dispose();
+            new PassengerMenu();
+        });
 
         add(stationList);
         add(stationSelection);
@@ -150,9 +156,5 @@ public class ListVictualScreen extends JFrame {
         });
 
         return victualPanel;
-    }
-
-    public static void main(String[] args) {
-        new ListVictualScreen();
     }
 }

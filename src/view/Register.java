@@ -12,7 +12,7 @@ public class Register extends JFrame {
     }
 
     public void initComponents() {
-        this.setSize(400, 500);
+        this.setSize(400, 600);
         this.setResizable(false);
         this.setLayout(null);
         this.setLocationRelativeTo(null);
@@ -25,11 +25,11 @@ public class Register extends JFrame {
 
         JPanel formLogin = new JPanel();
         formLogin.setLayout(null);
-        formLogin.setBounds(44, 80, 300, 300);
+        formLogin.setBounds(44, 80, 300, 350);
 
         JLabel usernameUser = new JLabel("Username:");
         usernameUser.setFont(new Font("calibri", Font.PLAIN, 17));
-        usernameUser.setBounds(88, 0, 130, 30);
+        usernameUser.setBounds(5, 0, 130, 30);
         formLogin.add(usernameUser);
 
         JTextField usernameField = new JTextField(255);
@@ -39,7 +39,7 @@ public class Register extends JFrame {
 
         JLabel emailUser = new JLabel("Email:");
         emailUser.setFont(new Font("calibri", Font.PLAIN, 17));
-        emailUser.setBounds(88, 66, 130, 30);
+        emailUser.setBounds(5, 66, 130, 30);
         formLogin.add(emailUser);
 
         JTextField emailField = new JTextField(255);
@@ -49,7 +49,7 @@ public class Register extends JFrame {
 
         JLabel passwordUser = new JLabel("Password:");
         passwordUser.setFont(new Font("calibri", Font.PLAIN, 17));
-        passwordUser.setBounds(113, 140, 130, 30);
+        passwordUser.setBounds(5, 140, 130, 30);
         formLogin.add(passwordUser);
 
         JTextField passwordField = new JTextField(255);
@@ -59,7 +59,7 @@ public class Register extends JFrame {
 
         JLabel phoneUser = new JLabel("Phone:");
         phoneUser.setFont(new Font("calibri", Font.PLAIN, 17));
-        phoneUser.setBounds(113, 210, 130, 30);
+        phoneUser.setBounds(5, 210, 130, 30);
         formLogin.add(phoneUser);
 
         JTextField phoneField = new JTextField(255);
@@ -67,9 +67,19 @@ public class Register extends JFrame {
         phoneField.setBounds(0, 240, 296, 30);
         formLogin.add(phoneField);
 
+        JLabel walletPinUser = new JLabel("Wallet Pin:");
+        walletPinUser.setFont(new Font("calibri", Font.PLAIN, 17));
+        walletPinUser.setBounds(5, 280, 130, 30);
+        formLogin.add(walletPinUser);
+
+        JTextField pinField = new JTextField(10);
+        pinField.setFont(new Font("calibri", Font.PLAIN, 15));
+        pinField.setBounds(0, 310, 296, 30);
+        formLogin.add(pinField);
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(null);
-        buttonPanel.setBounds(86, 400, 350, 100);
+        buttonPanel.setBounds(86, 450, 350, 100);
 
         JButton registerButton = new JButton("Register");
         registerButton.setBounds(0, 0, 100, 40);
@@ -80,13 +90,16 @@ public class Register extends JFrame {
                     usernameField.getText(),
                     emailField.getText(),
                     passwordField.getText(),
-                    phoneField.getText()
+                    phoneField.getText(),
+                    pinField.getText()
             );
             if (hasil.equals("Berhasil melakukan registrasi!")) {
                 usernameField.setText("");
                 emailField.setText("");
                 passwordField.setText("");
                 phoneField.setText("");
+                pinField.setText("");
+
             }
             JOptionPane.showMessageDialog(null, hasil);
         });
