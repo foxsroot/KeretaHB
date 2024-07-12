@@ -174,7 +174,7 @@ public class TransactionHistoryScreen extends JFrame {
 
             TransactionController controller = new TransactionController();
 
-            if (controller.allowReschedule(transaction.getTransactionID())) {
+            if (controller.allowReschedule(((TicketTransaction) transaction).getScheduleID())) {
                 JButton rescheduleButton = new JButton("Reschedule");
                 rescheduleButton.setBounds(10, 150, 350, 40);
                 panel.add(rescheduleButton);
