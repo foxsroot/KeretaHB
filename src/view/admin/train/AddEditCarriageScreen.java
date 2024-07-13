@@ -32,10 +32,12 @@ public class AddEditCarriageScreen extends JFrame {
         JLabel screenTitle = new JLabel(formTitle);
         screenTitle.setFont(new Font("Calibri", Font.BOLD, 20));
         screenTitle.setBounds(370, 10, 200, 30);
+        add(screenTitle);
 
         JPanel formPanel = new JPanel();
         formPanel.setLayout(null);
         formPanel.setBounds(20, 70, 850, 300);
+        add(formPanel);
 
         JLabel typeLabel = new JLabel("Type");
         typeLabel.setFont(new Font("Calibri", Font.PLAIN, 17));
@@ -45,7 +47,7 @@ public class AddEditCarriageScreen extends JFrame {
         JComboBox<CarriageType> typeComboBox = new JComboBox<>(CarriageType.values());
         typeComboBox.setFont(new Font("Calibri", Font.PLAIN, 15));
         typeComboBox.setBounds(200, 0, 300, 30);
-        if (carriage.getType() != null) {
+        if (carriage != null && carriage.getType() != null) {
             typeComboBox.setSelectedItem(carriage.getType());
         }
         formPanel.add(typeComboBox);
@@ -55,7 +57,7 @@ public class AddEditCarriageScreen extends JFrame {
         capacityLabel.setBounds(0, 50, 130, 30);
         formPanel.add(capacityLabel);
 
-        JTextField capacityField = new JTextField(String.valueOf(carriage.getCapacity() > 0 ? carriage.getCapacity() : ""));
+        JTextField capacityField = new JTextField(carriage != null && carriage.getCapacity() > 0 ? String.valueOf(carriage.getCapacity()) : "");
         capacityField.setFont(new Font("Calibri", Font.PLAIN, 15));
         capacityField.setBounds(200, 50, 300, 30);
         formPanel.add(capacityField);
@@ -68,7 +70,7 @@ public class AddEditCarriageScreen extends JFrame {
         JComboBox<ClassType> classComboBox = new JComboBox<>(ClassType.values());
         classComboBox.setFont(new Font("Calibri", Font.PLAIN, 15));
         classComboBox.setBounds(200, 100, 300, 30);
-        if (carriage.getCarriageClass() != null) {
+        if (carriage != null && carriage.getCarriageClass() != null) {
             classComboBox.setSelectedItem(carriage.getCarriageClass());
         }
         formPanel.add(classComboBox);
@@ -78,7 +80,7 @@ public class AddEditCarriageScreen extends JFrame {
         baggageAllowanceLabel.setBounds(0, 150, 150, 30);
         formPanel.add(baggageAllowanceLabel);
 
-        JTextField baggageAllowanceField = new JTextField(String.valueOf(carriage.getBaggageAllowance() > 0 ? carriage.getBaggageAllowance() : ""));
+        JTextField baggageAllowanceField = new JTextField(carriage != null && carriage.getBaggageAllowance() > 0 ? String.valueOf(carriage.getBaggageAllowance()) : "");
         baggageAllowanceField.setFont(new Font("Calibri", Font.PLAIN, 15));
         baggageAllowanceField.setBounds(200, 150, 300, 30);
         formPanel.add(baggageAllowanceField);
@@ -86,6 +88,7 @@ public class AddEditCarriageScreen extends JFrame {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(null);
         buttonPanel.setBounds(50, 400, 800, 50);
+        add(buttonPanel);
 
         JButton addButton = new JButton("Save Carriage");
         addButton.setBounds(510, 0, 150, 40);
@@ -100,7 +103,7 @@ public class AddEditCarriageScreen extends JFrame {
 
                 if (carriageController.validateCarriageForm(type, capacity, carriageClass, baggageAllowance)) {
                     Carriage newCarriage = new Carriage(capacity, CarriageType.valueOf(type.toUpperCase()), baggageAllowance, ClassType.valueOf(carriageClass.toUpperCase()));
-                    if (carriage.getId() != null) {
+                    if (carriage != null && carriage.getId() != null) {
                         newCarriage.setId(carriage.getId());
                         if (carriageController.addCarriage(newCarriage, false)) {
                             JOptionPane.showMessageDialog(null, "Carriage Updated Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -136,13 +139,8 @@ public class AddEditCarriageScreen extends JFrame {
         warningLabel.setFont(new Font("Calibri", Font.BOLD, 13));
         warningLabel.setForeground(new Color(255, 0, 10));
         warningLabel.setBounds(50, 500, 170, 30);
-
-        add(screenTitle);
-        add(formPanel);
-        add(buttonPanel);
         add(warningLabel);
 
-        
         int userId = AuthenticationHelper.getInstance().getUserId();
         if (userId == 0) {
             this.dispose();
@@ -153,7 +151,7 @@ public class AddEditCarriageScreen extends JFrame {
     }
 
     public static void main(String[] args) {
-        Carriage carriage = new Carriage(0, null, 0, null);
+        Carriage carriage = null; // Pass null to test adding a new carriage
         AddEditCarriageScreen screen = new AddEditCarriageScreen(carriage);
     }
 }

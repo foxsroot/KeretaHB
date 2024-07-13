@@ -10,6 +10,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CarriageController {
+    // Existing methods
+
+    public boolean deleteCarriage(Carriage carriage) {
+        String query = "DELETE FROM carriage WHERE carriage_id = ?";
+        try {
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
+            st.setInt(1, carriage.getId());
+            st.executeUpdate();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+        return false;
+    }
+
+    // Rest of the existing methods
+
     public boolean revokeCarriageFromTrain(Integer carriageId, Integer trainId) {
         String query = "UPDATE carriage SET train_id = NULL WHERE carriage_id =? AND train_id =?";
         try {
@@ -107,7 +127,6 @@ public class CarriageController {
         return null;
     }
 
-
     public List<Carriage> getUnassignedCarriages() {
         List<Carriage> carriages = new ArrayList<>();
         String query = "SELECT * FROM carriage WHERE train_id IS NULL";
@@ -134,5 +153,4 @@ public class CarriageController {
         }
         return carriages;
     }
-
 }

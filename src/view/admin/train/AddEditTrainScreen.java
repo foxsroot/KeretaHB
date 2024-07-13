@@ -2,6 +2,7 @@ package view.admin.train;
 
 import controller.AuthenticationHelper;
 import controller.TrainController;
+import model.classes.Carriage;
 import model.classes.Train;
 import view.admin.AdminMenu;
 import view.guest.Login;
@@ -42,7 +43,7 @@ public class AddEditTrainScreen extends JFrame {
         trainSpeed.setBounds(0, 0, 150, 30);
         formPanel.add(trainSpeed);
 
-        JTextField trainSpeedField = new JTextField(train != null ? train.getSpeed().toString() : "");
+        JTextField trainSpeedField = new JTextField(train != null ? String.valueOf(train.getSpeed()) : "");
         trainSpeedField.setFont(new Font("Calibri", Font.PLAIN, 15));
         trainSpeedField.setBounds(200, 0, 300, 30);
         formPanel.add(trainSpeedField);
@@ -52,7 +53,7 @@ public class AddEditTrainScreen extends JFrame {
         trainStationId.setBounds(0, 50, 130, 30);
         formPanel.add(trainStationId);
 
-        JTextField trainStationIdField = new JTextField(train != null ? train.getStationId().toString() : "");
+        JTextField trainStationIdField = new JTextField(train != null ? String.valueOf(train.getStationId()) : "");
         trainStationIdField.setFont(new Font("Calibri", Font.PLAIN, 15));
         trainStationIdField.setBounds(200, 50, 300, 30);
         formPanel.add(trainStationIdField);
@@ -62,7 +63,7 @@ public class AddEditTrainScreen extends JFrame {
         buttonPanel.setBounds(50, 400, 800, 50);
         add(buttonPanel);
 
-        JButton submitButton = new JButton("Add Train");
+        JButton submitButton = new JButton(train != null ? "Edit Train" : "Add Train");
         submitButton.setBounds(510, 0, 150, 40);
         buttonPanel.add(submitButton);
 
@@ -70,29 +71,21 @@ public class AddEditTrainScreen extends JFrame {
             try {
                 Integer stationId = Integer.parseInt(trainStationIdField.getText());
                 Integer speed = Integer.parseInt(trainSpeedField.getText());
-                Train newTrain = new Train(stationId, train.getCarriages(), speed);
+                Carriage[] carriages = train != null ? train.getCarriages() : null;
+                Train newTrain = new Train(stationId, carriages, speed);
+                if (train != null) {
+                    newTrain.addId(train.getId());
+                }
 
                 if (trainController.validateTrainForm(stationId, speed)) {
-                    //Edit
-                    if (train.getId() != null) {
-                        newTrain.addId(train.getId());
-                        if (trainController.addTrain(newTrain, false)) {
-                            JOptionPane.showMessageDialog(null, "Train Edited Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                            new AdminMenu();
-                            this.dispose();
-                        } else {
-                            JOptionPane.showMessageDialog(null, "All Fields Must Be Filled!", "Input Error!", JOptionPane.WARNING_MESSAGE);
-                        }
-                    }
-                    //Add
-                    else {
-                        if (trainController.addTrain(newTrain, true)) {
-                            JOptionPane.showMessageDialog(null, "Train Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                            new AdminMenu();
-                            this.dispose();
-                        } else {
-                            JOptionPane.showMessageDialog(null, "All Fields Must Be Filled!", "Input Error!", JOptionPane.WARNING_MESSAGE);
-                        }
+                    // Edit or Add
+                    boolean isAdded = trainController.addTrain(newTrain, train == null);
+                    if (isAdded) {
+                        JOptionPane.showMessageDialog(null, (train != null ? "Train Edited" : "Train Added") + " Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        new AdminMenu();
+                        this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Failed to " + (train != null ? "edit" : "add") + " train!", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 } else {
                     JOptionPane.showMessageDialog(null, "Invalid Input!", "Input Error!", JOptionPane.WARNING_MESSAGE);
@@ -117,7 +110,6 @@ public class AddEditTrainScreen extends JFrame {
         warningLabel.setBounds(50, 500, 170, 30);
         add(warningLabel);
 
-        
         int userId = AuthenticationHelper.getInstance().getUserId();
         if (userId == 0) {
             this.dispose();
@@ -128,7 +120,7 @@ public class AddEditTrainScreen extends JFrame {
     }
 
     public static void main(String[] args) {
-        Train train = new Train(null, null, null).addId(null);
+        Train train = null;
         new AddEditTrainScreen(train);
     }
 }

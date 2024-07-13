@@ -107,7 +107,7 @@ public class StationController {
                 HashMap<Victual, Integer> victual = victualController.listVictual(id);
                 String name = rs.getString("name");
                 String location = rs.getString("location");
-                ArrayList<Train> trains = (ArrayList<Train>) trainController.getTrainsByStationId(id);
+                ArrayList<Train> trains = (ArrayList<Train>) trainController.getTrainByStationId(id);
                 double income = rs.getDouble("income");
                 String picture = rs.getString("picture");
                 station = new Station(id, schedules, victual, name, location, trains, income, picture);
