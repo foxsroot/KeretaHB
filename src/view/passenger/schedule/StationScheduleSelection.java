@@ -1,9 +1,11 @@
 package view.passenger.schedule;
 
 import config.DirectoryConfig;
+import controller.AuthenticationHelper;
 import controller.ImageController;
 import controller.StationController;
 import model.classes.Station;
+import view.guest.Login;
 import view.passenger.PassengerMenu;
 
 import javax.swing.*;
@@ -13,7 +15,13 @@ import java.util.List;
 public class StationScheduleSelection extends JFrame {
     public StationScheduleSelection() {
         initComponents();
-        this.setVisible(true);
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {
@@ -70,7 +78,14 @@ public class StationScheduleSelection extends JFrame {
         add(scrollPane);
         add(exitButton);
 
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private JPanel createStationPanel(Station station, int xOffset, int yOffset) {

@@ -1,9 +1,8 @@
-package view;
+package view.guest;
 
 import controller.AuthenticationController;
 import controller.AuthenticationHelper;
 import view.admin.AdminMenu;
-import view.guest.GuestMenu;
 import view.passenger.PassengerMenu;
 
 import javax.swing.*;

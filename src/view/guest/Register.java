@@ -1,5 +1,6 @@
-package view;
+package view.guest;
 
+import controller.AuthenticationHelper;
 import controller.RegisterController;
 
 import javax.swing.*;

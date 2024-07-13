@@ -1,7 +1,9 @@
 package view.admin.train;
 
+import controller.AuthenticationHelper;
 import model.classes.Train;
 import model.classes.Carriage;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,7 +65,14 @@ public class TrainCarriagesListScreen extends JFrame {
         add(scrollPane);
         add(backButton);
 
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private JPanel createCarriagePanel(Carriage carriage, int xOffset, int yOffset) {

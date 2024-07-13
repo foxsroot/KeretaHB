@@ -1,9 +1,11 @@
 package view.admin.train;
 
+import controller.AuthenticationHelper;
 import controller.StationController;
 import controller.TrainController;
 import model.classes.Train;
 import view.admin.AdminMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +35,14 @@ public class TrainDetailScreen extends JFrame {
         this.setLayout(new BorderLayout());
         this.add(mainScrollPane, BorderLayout.CENTER);
 
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void addTrainDetails(JPanel panel, Train train) {

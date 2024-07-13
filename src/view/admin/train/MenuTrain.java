@@ -1,13 +1,21 @@
 package view.admin.train;
 
+import controller.AuthenticationHelper;
 import view.admin.AdminMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MenuTrain extends JFrame {
 	public MenuTrain() {
-		this.setVisible(true);
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
 		this.setSize(900, 700);
 		this.setResizable(false);
 		this.setLayout(null);

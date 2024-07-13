@@ -1,10 +1,12 @@
 package view.admin.schedule;
 
+import controller.AuthenticationHelper;
 import controller.ScheduleController;
 import controller.StationController;
 import controller.TrainController;
 import model.classes.Schedule;
 import view.admin.AdminMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -99,7 +101,14 @@ public class ScheduleDetailScreen extends JFrame {
             }
         });
 
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private JLabel createLabel(String text) {

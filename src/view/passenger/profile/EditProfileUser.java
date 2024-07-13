@@ -1,14 +1,22 @@
 package view.passenger.profile;
 
+import controller.AuthenticationHelper;
 import controller.UserController;
 import model.classes.Passenger;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class EditProfileUser extends JFrame {
 	public EditProfileUser(Passenger user) {
-		this.setVisible(true);
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
 		this.setSize(500, 300);
 		this.setResizable(false);
 		this.setLayout(null);
@@ -57,7 +65,7 @@ public class EditProfileUser extends JFrame {
 
 		submit.addActionListener(e -> {
 			String username = usernameField.getText();
-			String email = phoneField.getText();
+			String email = emailField.getText();
 			String phone = phoneField.getText();
 			if (!new UserController().updateProfile(user.getId(), new String[]{username, email, phone})) {
 				JOptionPane.showMessageDialog(null, "Gagal mengganti profile.");

@@ -1,9 +1,11 @@
 package view.admin.victual;
 
 import config.DirectoryConfig;
+import controller.AuthenticationHelper;
 import controller.ImageController;
 import controller.VictualController;
 import model.classes.Victual;
+import view.guest.Login;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -19,7 +21,14 @@ public class EditVictualScreen extends JFrame {
         this.victual = victual;
         this.imageFile = new File(DirectoryConfig.VICTUAL_IMAGES + victual.getImage());
         initComponents();
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

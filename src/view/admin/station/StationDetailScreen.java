@@ -1,7 +1,9 @@
 package view.admin.station;
 
+import controller.AuthenticationHelper;
 import model.classes.Station;
 import model.classes.Victual;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -73,7 +75,14 @@ public class StationDetailScreen extends JFrame {
         this.add(mainScrollPane, BorderLayout.CENTER);
         this.add(buttonPanel, BorderLayout.SOUTH);
 
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private JLabel createLabel(String text) {

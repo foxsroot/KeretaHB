@@ -1,7 +1,9 @@
 package view.admin.notification;
 
+import controller.AuthenticationHelper;
 import controller.NotificationController;
 import view.admin.AdminMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,7 +11,14 @@ import java.awt.*;
 public class SendNotificationScreen extends JFrame {
     public SendNotificationScreen() {
         initComponents();
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

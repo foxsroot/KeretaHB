@@ -4,6 +4,7 @@ import config.DirectoryConfig;
 import controller.*;
 import model.classes.*;
 import model.enums.LoyaltyEnum;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +19,13 @@ public class CartCheckoutScreen extends JFrame {
         //ambil passenger yg lg login
 //        passenger = new Passenger("John Doe", "1234567890", "john.doe@example.com", "password123", 2, new ArrayList<>(), walletController.getWallet(2), LoyaltyEnum.CLASSIC, 0, new ArrayList<>(), controller.getCart(2));
         initComponents();
-        this.setVisible(true);
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

@@ -5,6 +5,7 @@ import model.classes.Schedule;
 import model.classes.Transaction;
 import model.classes.VictualTransaction;
 import model.classes.TicketTransaction;
+import view.guest.Login;
 import view.passenger.PassengerMenu;
 import view.passenger.schedule.RescheduleScreen;
 
@@ -19,7 +20,13 @@ public class TransactionHistoryScreen extends JFrame {
 
     public TransactionHistoryScreen() {
         initComponents();
-        this.setVisible(true);
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

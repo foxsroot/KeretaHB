@@ -1,13 +1,11 @@
 package view.passenger.transaction;
 
 import config.DirectoryConfig;
-import controller.ImageController;
-import controller.StationController;
-import controller.TransactionController;
-import controller.VictualController;
+import controller.*;
 import model.classes.Victual;
 import model.classes.VictualTransaction;
 import model.enums.VictualTransactionStatus;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +16,13 @@ public class VictualTransactionScreen extends JFrame {
     public VictualTransactionScreen(VictualTransaction transaction) {
         this.transaction = transaction;
         initComponents();
-        this.setVisible(true);
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

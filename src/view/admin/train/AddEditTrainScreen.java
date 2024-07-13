@@ -1,8 +1,10 @@
 package view.admin.train;
 
+import controller.AuthenticationHelper;
 import controller.TrainController;
 import model.classes.Train;
 import view.admin.AdminMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -115,7 +117,14 @@ public class AddEditTrainScreen extends JFrame {
         warningLabel.setBounds(50, 500, 170, 30);
         add(warningLabel);
 
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     public static void main(String[] args) {

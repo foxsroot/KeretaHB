@@ -3,6 +3,7 @@ package view.passenger.transaction;
 import config.DirectoryConfig;
 import controller.*;
 import model.classes.*;
+import view.guest.Login;
 import view.passenger.PassengerMenu;
 
 import javax.swing.*;
@@ -14,7 +15,13 @@ public class ViewCartScreen extends JFrame {
 
     public ViewCartScreen() {
         initComponents();
-        this.setVisible(true);
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

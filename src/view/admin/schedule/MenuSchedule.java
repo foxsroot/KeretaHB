@@ -1,14 +1,23 @@
 package view.admin.schedule;
 
+import controller.AuthenticationHelper;
 import model.classes.Schedule;
 import view.admin.AdminMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MenuSchedule extends JFrame {
 	public MenuSchedule() {
-		this.setVisible(true);
+		
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
 		this.setSize(900, 700);
 		this.setResizable(false);
 		this.setLayout(null);

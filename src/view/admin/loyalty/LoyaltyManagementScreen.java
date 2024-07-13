@@ -1,8 +1,10 @@
 package view.admin.loyalty;
 
+import controller.AuthenticationHelper;
 import controller.LoyaltyController;
 import model.enums.LoyaltyEnum;
 import view.admin.AdminMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -15,7 +17,14 @@ public class LoyaltyManagementScreen extends JFrame {
 
     public LoyaltyManagementScreen() {
         initComponents();
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

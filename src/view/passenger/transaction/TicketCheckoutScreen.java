@@ -4,6 +4,7 @@ import controller.*;
 import model.classes.Carriage;
 import model.classes.Schedule;
 import model.enums.ClassType;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,7 +32,13 @@ public class TicketCheckoutScreen extends JFrame {
         currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
         currencyFormat.setMaximumFractionDigits(0);
         initComponents();
-        this.setVisible(true);
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

@@ -1,10 +1,12 @@
 package view.admin.train;
 
+import controller.AuthenticationHelper;
 import controller.CarriageController;
 import model.classes.Carriage;
 import model.enums.CarriageType;
 import model.enums.ClassType;
 import view.admin.AdminMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -140,7 +142,14 @@ public class AddEditCarriageScreen extends JFrame {
         add(buttonPanel);
         add(warningLabel);
 
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     public static void main(String[] args) {

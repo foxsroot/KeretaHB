@@ -3,8 +3,7 @@ package view.passenger.notification;
 import controller.AuthenticationHelper;
 import controller.NotificationController;
 import model.classes.Notification;
-import model.classes.Passenger;
-import view.Login;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +23,14 @@ public class ListNotificationScreen extends JFrame {
         userID = AuthenticationHelper.getInstance().getUserId();
         if (userID != 0) {
             initComponents();
+            
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
             this.setVisible(true);
+        }
         } else {
             JOptionPane.showMessageDialog(null, "You haven't logged in!", "Error", JOptionPane.ERROR_MESSAGE);
             dispose();

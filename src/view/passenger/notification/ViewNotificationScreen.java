@@ -1,6 +1,8 @@
 package view.passenger.notification;
 
+import controller.AuthenticationHelper;
 import model.classes.Notification;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +14,14 @@ public class ViewNotificationScreen extends JFrame {
     public ViewNotificationScreen(Notification notification) {
         this.notification = notification;
         initComponents();
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

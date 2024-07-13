@@ -1,6 +1,6 @@
 package controller;
 
-import view.Login;
+import view.guest.Login;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
