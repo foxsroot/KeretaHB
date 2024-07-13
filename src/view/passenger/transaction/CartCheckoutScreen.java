@@ -4,6 +4,7 @@ import config.DirectoryConfig;
 import controller.*;
 import model.classes.*;
 import model.enums.LoyaltyEnum;
+import view.passenger.PassengerMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -88,6 +89,7 @@ public class CartCheckoutScreen extends JFrame {
                         if (controller.checkout(userController.getUser(AuthenticationHelper.getInstance().getUserId()), cart.getTotalPrice())) {
                             JOptionPane.showMessageDialog(null, "Purchase Completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
                             dispose();
+                            new PassengerMenu();
                         } else {
                             JOptionPane.showMessageDialog(null, "Purchase Failed! Please Check your balance and try again", "Failure", JOptionPane.ERROR_MESSAGE);
                         }
@@ -105,7 +107,7 @@ public class CartCheckoutScreen extends JFrame {
 
         exitButton.addActionListener(e -> {
             dispose();
-            //balik ke main menu
+            new PassengerMenu();
         });
 
         add(screenTitle);
