@@ -75,20 +75,28 @@ public class CartCheckoutScreen extends JFrame {
         purchaseButton.setBounds(700, 630, 100, 30);
 
         purchaseButton.addActionListener(e -> {
-            int confirm = JOptionPane.showConfirmDialog(null, "Rp " + cart.getTotalPrice() + " will be deducted from balance, proceed?", "Purchase Confirmation", JOptionPane.YES_NO_OPTION);
+            WalletController walletController = new WalletController();
+            Wallet wallet = walletController.getWallet(AuthenticationHelper.getInstance().getUserId());
+            String walletPin = JOptionPane.showInputDialog(null, "Input your wallet pin", "Wallet Pin Verify", JOptionPane.QUESTION_MESSAGE);
 
-            if (confirm == JOptionPane.YES_OPTION) {
-                if (controller.verifyStock(cart, cart.getStationId())) {
-                    UserController userController = new UserController();
-                    if (controller.checkout(userController.getUser(AuthenticationHelper.getInstance().getUserId()), cart.getTotalPrice())) {
-                        JOptionPane.showMessageDialog(null, "Purchase Completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                        dispose();
+            if (wallet.verifyPin(walletPin)) {
+                int confirm = JOptionPane.showConfirmDialog(null, "Rp " + cart.getTotalPrice() + " will be deducted from balance, proceed?", "Purchase Confirmation", JOptionPane.YES_NO_OPTION);
+
+                if (confirm == JOptionPane.YES_OPTION) {
+                    if (controller.verifyStock(cart, cart.getStationId())) {
+                        UserController userController = new UserController();
+                        if (controller.checkout(userController.getUser(AuthenticationHelper.getInstance().getUserId()), cart.getTotalPrice())) {
+                            JOptionPane.showMessageDialog(null, "Purchase Completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Purchase Failed! Please Check your balance and try again", "Failure", JOptionPane.ERROR_MESSAGE);
+                        }
                     } else {
-                        JOptionPane.showMessageDialog(null, "Purchase Failed! Please Check your balance and try again", "Failure", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Stock in station is less than the quantity you specified. Please clear the cart & try to add items to cart again!", "Failure", JOptionPane.ERROR_MESSAGE);
                     }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Stock in station is less than the quantity you specified. Please clear the cart & try to add items to cart again!", "Failure", JOptionPane.ERROR_MESSAGE);
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Wrong Wallet Pin", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
