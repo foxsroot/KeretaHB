@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 12, 2024 at 08:59 PM
--- Server version: 11.2.1-MariaDB
+-- Generation Time: Jul 13, 2024 at 03:51 AM
+-- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -139,6 +139,15 @@ CREATE TABLE `cart_item` (
   `amount` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Dumping data for table `cart_item`
+--
+
+INSERT INTO `cart_item` (`item_id`, `user_id`, `victual_id`, `station_id`, `amount`) VALUES
+(74, 3, 14, 1, 3),
+(75, 3, 8, 1, 5),
+(76, 3, 9, 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -241,7 +250,8 @@ INSERT INTO `notification` (`notification_id`, `recipient_id`, `title`, `message
 (58, 2, 'Victuals Cancelation', 'Hi ---, we have successfully canceled your victual transaction and returned Rp 86000.0 to your wallet.\n\nThank you!', '2024-07-09 05:57:52'),
 (59, 2, 'Reschedule Request Approved', 'Hi there, We are pleased to inform you that your request to reschedule your appointment has been approved', '2024-07-10 18:05:52'),
 (60, 2, 'Victuals Cancelation', 'Hi ---, we have successfully canceled your victual transaction and returned Rp 20000.0 to your wallet.\n\nThank you!', '2024-07-11 16:36:39'),
-(61, 2, 'Victuals Cancelation', 'Hi ---, we have successfully canceled your victual transaction and returned Rp 91000.0 to your wallet.\n\nThank you!', '2024-07-11 16:37:17');
+(61, 2, 'Victuals Cancelation', 'Hi ---, we have successfully canceled your victual transaction and returned Rp 91000.0 to your wallet.\n\nThank you!', '2024-07-11 16:37:17'),
+(62, 2, 'Victuals Cancelation', 'Hi ---, we have successfully canceled your victual transaction and returned Rp 5000.0 to your wallet.\n\nThank you!', '2024-07-12 19:58:19');
 
 -- --------------------------------------------------------
 
@@ -265,7 +275,9 @@ CREATE TABLE `passenger` (
 --
 
 INSERT INTO `passenger` (`user_id`, `loyalty`, `email`, `password`, `name`, `cellphone`, `total_paid`, `pfp`) VALUES
-(2, 2, 'john.doe@example.com', 'password123', 'John Doe', '1234567890', 4231275, 'john_pfp.png');
+(2, 2, 'john.doe@example.com', 'password123', 'John Doe', '1234567890', 4231275, 'john_pfp.png'),
+(3, 1, 'jochal@gmail.com', '$31$16$350lHzyNydCA0FktRTXq6TYqEzRI393CQyTCL34cps4', 'jochal', '+62888999666', 0, NULL),
+(5, 1, 'juan@ithb.com', '$31$16$fcGZBnOuTj3vuIHa1ZAB0r_9eLgqkIqZoc0iBZgUI4s', 'juan', '+62777888999', 866250, NULL);
 
 -- --------------------------------------------------------
 
@@ -404,9 +416,9 @@ CREATE TABLE `station` (
 --
 
 INSERT INTO `station` (`station_id`, `name`, `location`, `income`, `picture`) VALUES
-(1, 'Bandung Station', 'Bandung, West Java', 800000000, 'bandung_station.jpg'),
-(2, 'Bekasi Station', 'Bekasi, West Java', 731000000, 'bekasi_station.jpg'),
-(3, 'Bogor Station', 'Bogor, West Java', 763000000, 'bogor_station.jpg'),
+(1, 'Bandung Station', 'Bandung, West Java', 800005000, 'bandung_station.jpg'),
+(2, 'Bekasi Station', 'Bekasi, West Java', 731006000, 'bekasi_station.jpg'),
+(3, 'Bogor Station', 'Bogor, West Java', 763866250, 'bogor_station.jpg'),
 (4, 'Cirebon Station', 'Cirebon, West Java', 779000000, 'cirebon_station.jpg'),
 (5, 'Depok Station', 'Depok, West Java', 747000000, 'depok_station.jpg');
 
@@ -437,7 +449,7 @@ INSERT INTO `stock` (`stock_id`, `victual_id`, `station_id`, `stock`) VALUES
 (22, 9, 5, 500),
 (24, 9, 2, 250),
 (25, 10, 2, 300),
-(26, 12, 2, 200),
+(26, 12, 2, 199),
 (27, 14, 2, 50),
 (28, 13, 4, 100),
 (29, 9, 4, 500),
@@ -467,6 +479,13 @@ CREATE TABLE `ticket_transaction` (
   `rescheduled` tinyint(1) NOT NULL DEFAULT 0,
   `total` double NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `ticket_transaction`
+--
+
+INSERT INTO `ticket_transaction` (`transaction_id`, `user_id`, `schedule_id`, `purchase_date`, `passengers`, `type`, `commute`, `rescheduled`, `total`) VALUES
+(10, 5, 27, '2024-07-12 20:04:41', 5, 'BUSINESS', 1, 0, 866250);
 
 -- --------------------------------------------------------
 
@@ -528,7 +547,8 @@ INSERT INTO `transaction_item` (`transaction_item_id`, `transaction_id`, `victua
 (21, 14, 8, 1),
 (22, 14, 9, 3),
 (23, 14, 14, 1),
-(24, 14, NULL, 3);
+(24, 14, NULL, 3),
+(27, 16, 12, 1);
 
 -- --------------------------------------------------------
 
@@ -581,7 +601,8 @@ INSERT INTO `victuals_transaction` (`transaction_id`, `user_id`, `station_id`, `
 (11, 2, 1, '2024-07-09 09:10:45', 85000, 'PENDING'),
 (12, 2, 1, '2024-07-09 09:11:04', 70000, 'PENDING'),
 (13, 2, 1, '2024-07-09 09:16:56', 25000, 'PENDING'),
-(14, 2, 1, '2024-07-09 09:17:30', 67000, 'PENDING');
+(14, 2, 1, '2024-07-09 09:17:30', 67000, 'PENDING'),
+(16, 5, 2, '2024-07-12 19:55:28', 6000, 'CLAIMED');
 
 -- --------------------------------------------------------
 
@@ -592,8 +613,8 @@ INSERT INTO `victuals_transaction` (`transaction_id`, `user_id`, `station_id`, `
 CREATE TABLE `wallet` (
   `wallet_id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
-  `balance` double DEFAULT NULL,
-  `pin` int(10) UNSIGNED DEFAULT NULL
+  `balance` double DEFAULT 0,
+  `pin` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -601,7 +622,8 @@ CREATE TABLE `wallet` (
 --
 
 INSERT INTO `wallet` (`wallet_id`, `user_id`, `balance`, `pin`) VALUES
-(1, 2, 72398725, 0);
+(1, 2, 72403725, '0'),
+(2, 5, 8633750, '1234');
 
 --
 -- Indexes for dumped tables
@@ -753,7 +775,7 @@ ALTER TABLE `carriage`
 -- AUTO_INCREMENT for table `cart_item`
 --
 ALTER TABLE `cart_item`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT for table `loyalty`
@@ -765,13 +787,13 @@ ALTER TABLE `loyalty`
 -- AUTO_INCREMENT for table `notification`
 --
 ALTER TABLE `notification`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `passenger`
 --
 ALTER TABLE `passenger`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `reschedule_request`
@@ -807,7 +829,7 @@ ALTER TABLE `stock`
 -- AUTO_INCREMENT for table `ticket_transaction`
 --
 ALTER TABLE `ticket_transaction`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `train`
@@ -819,7 +841,7 @@ ALTER TABLE `train`
 -- AUTO_INCREMENT for table `transaction_item`
 --
 ALTER TABLE `transaction_item`
-  MODIFY `transaction_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `transaction_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `victual`
@@ -831,13 +853,13 @@ ALTER TABLE `victual`
 -- AUTO_INCREMENT for table `victuals_transaction`
 --
 ALTER TABLE `victuals_transaction`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `wallet`
 --
 ALTER TABLE `wallet`
-  MODIFY `wallet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `wallet_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables
