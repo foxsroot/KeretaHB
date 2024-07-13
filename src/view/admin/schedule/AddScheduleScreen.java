@@ -142,7 +142,6 @@ public class AddScheduleScreen extends JFrame {
 
                 Integer selectedTrainID = (Integer) trainList.getSelectedItem();
 
-                System.out.println(departureTimestamp);
                 if (schController.validateScheduleForm(selectedTrainID, departureStationID, arrivalStationID, departureTimestamp, Double.parseDouble(feeField.getText()))) {
 
                     Schedule newSchedule = new Schedule(selectedTrainID, departureStationID, arrivalStationID, departureTimestamp, Double.parseDouble(feeField.getText()));

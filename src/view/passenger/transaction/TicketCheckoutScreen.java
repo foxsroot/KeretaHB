@@ -4,6 +4,7 @@ import controller.*;
 import model.classes.Carriage;
 import model.classes.Schedule;
 import model.classes.Wallet;
+import model.enums.CarriageType;
 import model.enums.ClassType;
 import view.passenger.PassengerMenu;
 
@@ -156,8 +157,8 @@ public class TicketCheckoutScreen extends JFrame {
                 int carriage_id = 0;
                 Carriage[] listCarriage = carriageController.getCarriage(schedule.getTrainID());
 
-                for(Carriage choosedCarriage : listCarriage){
-                    if(choosedCarriage.getCarriageClass().equals(ClassType.valueOf(classTypeBox.getSelectedItem().toString()))){
+                for (Carriage choosedCarriage : listCarriage) {
+                    if (choosedCarriage.getCarriageClass().equals(ClassType.valueOf(classTypeBox.getSelectedItem().toString())) && choosedCarriage.getType() == CarriageType.SEATING) {
                         carriage_id = choosedCarriage.getId();
                         break;
                     }

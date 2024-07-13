@@ -172,6 +172,9 @@ public class TransactionController {
         String query = "SELECT carriage.capacity, carriage.carriage_id, schedule_capacity.occupied FROM schedule_capacity JOIN carriage ON carriage.carriage_id = schedule_capacity.carriage_id WHERE schedule_capacity.schedule_id = ? AND schedule_capacity.carriage_id = ?";
         try {
             ConnectionHandler.getInstance().connect();
+            System.out.println(carriage);
+            System.out.println(schedule_id);
+            System.out.println(passenger);
             PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
             stmt.setInt(1, schedule_id);
             stmt.setInt(2, carriage);
