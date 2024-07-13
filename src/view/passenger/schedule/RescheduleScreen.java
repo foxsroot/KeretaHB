@@ -28,14 +28,7 @@ public class RescheduleScreen extends JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         initComponents(ticket);
-        
-        int userId = AuthenticationHelper.getInstance().getUserId();
-        if (userId == 0) {
-            this.dispose();
-            new Login();
-        } else {
-            this.setVisible(true);
-        }
+        this.setVisible(true);
     }
 
     private void initComponents(TicketTransaction ticket) {
