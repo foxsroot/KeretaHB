@@ -5,6 +5,7 @@ import view.Login;
 import view.passenger.notification.ListNotificationScreen;
 import view.passenger.profile.ProfileUser;
 import view.passenger.schedule.ListScheduleScreen;
+import view.passenger.schedule.StationScheduleSelection;
 import view.passenger.transaction.TransactionHistoryScreen;
 import view.passenger.transaction.ViewCartScreen;
 import view.passenger.transaction.WalletTopUpScreen;
@@ -37,7 +38,7 @@ public class PassengerMenu extends JFrame {
 
         bookTicket.addActionListener(e -> {
             this.dispose();
-            new ListScheduleScreen();
+            new StationScheduleSelection();
         });
 
         JButton buyVictual = new JButton("Buy Victual");
