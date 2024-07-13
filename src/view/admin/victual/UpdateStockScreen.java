@@ -1,11 +1,13 @@
 package view.admin.victual;
 
 import config.DirectoryConfig;
+import controller.AuthenticationHelper;
 import controller.ImageController;
 import controller.StockController;
 import controller.VictualController;
 import model.classes.Station;
 import model.classes.Victual;
+import view.guest.Login;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -20,7 +22,14 @@ public class UpdateStockScreen extends JFrame {
     public UpdateStockScreen(Station station) {
         this.station = station;
         initComponents();
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

@@ -4,6 +4,7 @@ import config.DirectoryConfig;
 import controller.*;
 import model.classes.Station;
 import model.classes.Victual;
+import view.guest.Login;
 import view.passenger.PassengerMenu;
 
 import javax.swing.*;
@@ -22,7 +23,13 @@ public class ListVictualScreen extends JFrame {
 
     public ListVictualScreen() {
         initComponents();
-        this.setVisible(true);
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

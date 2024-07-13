@@ -1,7 +1,9 @@
 package view.admin.train;
 
+import controller.AuthenticationHelper;
 import controller.CarriageController;
 import model.classes.Carriage;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +26,14 @@ public class CarriageDetailScreen extends JFrame {
         addCarriageDetails(mainPanel, carriage);
 
         this.add(mainPanel);
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void addCarriageDetails(JPanel panel, Carriage carriage) {

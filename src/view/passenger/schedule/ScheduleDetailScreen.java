@@ -4,7 +4,7 @@ import controller.AuthenticationHelper;
 import controller.StationController;
 import controller.TrainController;
 import model.classes.Schedule;
-import view.Login;
+import view.guest.Login;
 import view.passenger.transaction.TicketCheckoutScreen;
 
 import javax.swing.*;
@@ -77,7 +77,14 @@ public class ScheduleDetailScreen extends JFrame {
         this.add(mainScrollPane, BorderLayout.CENTER);
         this.add(buttonPanel, BorderLayout.SOUTH);
 
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private JLabel createLabel(String text) {

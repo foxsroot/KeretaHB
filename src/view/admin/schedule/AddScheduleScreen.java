@@ -1,6 +1,7 @@
 package view.admin.schedule;
 
 import com.toedter.calendar.JDateChooser;
+import controller.AuthenticationHelper;
 import controller.ScheduleController;
 import controller.StationController;
 import controller.TrainController;
@@ -8,6 +9,7 @@ import model.classes.Schedule;
 import model.classes.Station;
 import model.classes.Train;
 import view.admin.AdminMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -180,7 +182,14 @@ public class AddScheduleScreen extends JFrame {
         add(buttonPanel);
         add(warningLabel);
 
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void loadStationList(JComboBox<Integer> comboBox, Integer arrivalID) {

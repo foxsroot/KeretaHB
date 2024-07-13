@@ -1,9 +1,12 @@
 package view.admin.victual;
 
 import config.DirectoryConfig;
+import controller.AuthenticationHelper;
 import controller.ImageController;
 import controller.VictualController;
 import model.classes.Victual;
+import view.admin.AdminMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +17,14 @@ public class ListVictualScreen extends JFrame {
 
     public ListVictualScreen() {
         initComponents();
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

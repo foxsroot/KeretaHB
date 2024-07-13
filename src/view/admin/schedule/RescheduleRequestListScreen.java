@@ -3,6 +3,7 @@ package view.admin.schedule;
 import controller.*;
 import model.classes.*;
 import model.enums.RescheduleEnum;
+import view.guest.Login;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -15,7 +16,14 @@ import java.util.Locale;
 public class RescheduleRequestListScreen extends JFrame {
     public RescheduleRequestListScreen() {
         initComponents();
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

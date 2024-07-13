@@ -1,9 +1,11 @@
 package view.admin.train;
 
+import controller.AuthenticationHelper;
 import controller.StationController;
 import controller.TrainController;
 import model.classes.Train;
 import view.admin.AdminMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,7 +49,15 @@ public class TrainListScreen extends JFrame {
             new MenuTrain();
         });
         add(backButton);
-        this.setVisible(true);
+
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
+
     }
 
     private void displayTrainList(JPanel panel) {
@@ -105,7 +115,6 @@ public class TrainListScreen extends JFrame {
 
     // Testing
     public static void main(String[] args) {
-        TrainListScreen trainListScreen = new TrainListScreen();
-        trainListScreen.setVisible(true);
+        new TrainListScreen();
     }
 }

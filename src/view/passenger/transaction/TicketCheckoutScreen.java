@@ -3,9 +3,8 @@ package view.passenger.transaction;
 import controller.*;
 import model.classes.Carriage;
 import model.classes.Schedule;
-import model.classes.Wallet;
 import model.enums.ClassType;
-import view.passenger.PassengerMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +32,13 @@ public class TicketCheckoutScreen extends JFrame {
         currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
         currencyFormat.setMaximumFractionDigits(0);
         initComponents();
-        this.setVisible(true);
+	    int userId = AuthenticationHelper.getInstance().getUserId();
+	    if (userId == 0) {
+		    this.dispose();
+		    new Login();
+	    } else {
+            this.setVisible(true);
+	    }
     }
 
     private void initComponents() {
@@ -146,38 +151,29 @@ public class TicketCheckoutScreen extends JFrame {
         JButton purchaseButton = new JButton("Purchase");
         purchaseButton.setBounds(700, 630, 100, 30);
         purchaseButton.addActionListener(e -> {
-            WalletController walletController = new WalletController();
-            Wallet wallet = walletController.getWallet(AuthenticationHelper.getInstance().getUserId());
-            String walletPin = JOptionPane.showInputDialog(null, "Input your wallet pin", "Wallet Pin Verify", JOptionPane.QUESTION_MESSAGE);
+            int confirm = JOptionPane.showConfirmDialog(null, totalLabel.getText() + " will be deducted from balance, proceed?", "Purchase Confirmation", JOptionPane.YES_NO_OPTION);
 
-            if (wallet.verifyPin(walletPin)) {
-                int confirm = JOptionPane.showConfirmDialog(null, totalLabel.getText() + " will be deducted from balance, proceed?", "Purchase Confirmation", JOptionPane.YES_NO_OPTION);
+            int carriage_id = 0;
+            Carriage[] listCarriage = carriageController.getCarriage(schedule.getTrainID());
 
-                int carriage_id = 0;
-                Carriage[] listCarriage = carriageController.getCarriage(schedule.getTrainID());
-
-                for(Carriage choosedCarriage : listCarriage){
-                    if(choosedCarriage.getCarriageClass().equals(ClassType.valueOf(classTypeBox.getSelectedItem().toString()))){
-                        carriage_id = choosedCarriage.getId();
-                        break;
-                    }
+            for(Carriage choosedCarriage : listCarriage){
+                if(choosedCarriage.getCarriageClass().equals(ClassType.valueOf(classTypeBox.getSelectedItem().toString()))){
+                    carriage_id = choosedCarriage.getId();
+                    break;
                 }
+            }
+            
+            if (confirm == JOptionPane.YES_OPTION) {
+                TransactionController controller = new TransactionController();
 
-                if (confirm == JOptionPane.YES_OPTION) {
-                    TransactionController controller = new TransactionController();
-
-                    if (controller.updateOccupied(carriage_id, schedule.getScheduleID(), passengerCount)) {
-                        if (controller.bookTicket(AuthenticationHelper.getInstance().getUserId(), schedule.getScheduleID(), passengerCount, commuteBox.getSelectedItem().toString().equals("YES"), parseTotalPrice(totalLabel.getText()), classTypeBox.getSelectedItem().toString())) {
-                            JOptionPane.showMessageDialog(null, "Purchase Completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                            dispose();
-                            new PassengerMenu();
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Failed to book ticket", "Error", JOptionPane.ERROR_MESSAGE);
+                if (controller.updateOccupied(carriage_id, schedule.getScheduleID(), passengerCount)) {
+                    if (controller.bookTicket(AuthenticationHelper.getInstance().getUserId(), schedule.getScheduleID(), passengerCount, commuteBox.getSelectedItem().toString().equals("YES"), parseTotalPrice(totalLabel.getText()), classTypeBox.getSelectedItem().toString())) {
+                        JOptionPane.showMessageDialog(null, "Purchase Completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
                     }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to book ticket", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "Wrong Wallet Pin!", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
         add(purchaseButton);
@@ -186,7 +182,7 @@ public class TicketCheckoutScreen extends JFrame {
         exitButton.setBounds(30, 630, 150, 30);
         exitButton.addActionListener(e -> {
             dispose();
-            new PassengerMenu();
+            // Baliks ke main menu :)
         });
         add(exitButton);
 
