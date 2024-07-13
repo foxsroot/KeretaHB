@@ -2,10 +2,12 @@ package view.passenger.transaction;
 
 import config.DirectoryConfig;
 import controller.*;
+import model.classes.User;
 import model.classes.Victual;
 import model.classes.VictualTransaction;
 import model.enums.VictualTransactionStatus;
 import view.guest.Login;
+import view.passenger.PassengerMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -106,9 +108,11 @@ public class VictualTransactionScreen extends JFrame {
                 int option = JOptionPane.showConfirmDialog(null, "Cancel this transaction?", "Cancel Confirmation", JOptionPane.YES_NO_OPTION);
                 if (option == JOptionPane.YES_OPTION) {
                     TransactionController transactionController = new TransactionController();
-                    if (transactionController.cancelVictualTransaction(transaction, 2, "john.doe@example.com")) { //nanti ganti ke user id beneran (get dari singleton login)
+                    UserController userController = new UserController();
+                    if (transactionController.cancelVictualTransaction(transaction, AuthenticationHelper.getInstance().getUserId(), userController.getEmail(AuthenticationHelper.getInstance().getUserId()))) {
                         JOptionPane.showMessageDialog(null, "Transaction Cancelled & Balance Refunded", "Cancel Success", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
+                        new TransactionHistoryScreen();
                     } else {
                         JOptionPane.showMessageDialog(null, "Failed to Cancel Transaction", "Cancel Failure", JOptionPane.ERROR_MESSAGE);
                     }
@@ -127,6 +131,7 @@ public class VictualTransactionScreen extends JFrame {
                     if (transactionController.claimVictual(transaction.getTransactionID())) {
                         JOptionPane.showMessageDialog(null, "Transaction Claimed", "Claim Success", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
+                        new TransactionHistoryScreen();
                     }
                 }
             });

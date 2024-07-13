@@ -15,13 +15,13 @@ import java.util.List;
 public class StationScheduleSelection extends JFrame {
     public StationScheduleSelection() {
         initComponents();
-        int userId = AuthenticationHelper.getInstance().getUserId();
-        if (userId == 0) {
-            this.dispose();
-            new Login();
-        } else {
-            this.setVisible(true);
-        }
+	    int userId = AuthenticationHelper.getInstance().getUserId();
+	    if (userId == 0) {
+		    this.dispose();
+		    new Login();
+	    } else {
+		    this.setVisible(true);
+	    }
     }
 
     private void initComponents() {
@@ -78,14 +78,7 @@ public class StationScheduleSelection extends JFrame {
         add(scrollPane);
         add(exitButton);
 
-        
-        int userId = AuthenticationHelper.getInstance().getUserId();
-        if (userId == 0) {
-            this.dispose();
-            new Login();
-        } else {
-            this.setVisible(true);
-        }
+        this.setVisible(true);
     }
 
     private JPanel createStationPanel(Station station, int xOffset, int yOffset) {
