@@ -8,8 +8,8 @@ import view.Login;
 import javax.swing.*;
 import java.awt.*;
 
-public class AdminProfile extends JFrame {
-	public AdminProfile(int userId) {
+public class ProfileUser extends JFrame {
+	public ProfileUser(int userId) {
 		Admin profileUser = new UserController().getAdmin(userId);
 
 		this.setVisible(true);
@@ -72,7 +72,7 @@ public class AdminProfile extends JFrame {
 	public static void main(String[] args) {
 		int userId = AuthenticationHelper.getInstance().getUserId();
 		if (userId != 0){
-			new AdminProfile(userId);
+			new ProfileUser(userId);
 		} else {
 			new Login();
 		}
