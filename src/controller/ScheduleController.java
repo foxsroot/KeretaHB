@@ -8,7 +8,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScheduleController {
+    private boolean deleteCapacity(Schedule schedule) {
+        ConnectionHandler.getInstance().connect();
+
+        String query = "DELETE FROM schedule_capacity WHERE schedule_id = ?";
+
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            stmt.setInt(1, schedule.getScheduleID());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+
+        return true;
+    }
+
     public boolean deleteSchedule(Schedule schedule) {
+        if (!deleteCapacity(schedule)) {
+            return  false;
+        }
+
         String query = "DELETE FROM schedule WHERE schedule_id = ?";
 
         try {
