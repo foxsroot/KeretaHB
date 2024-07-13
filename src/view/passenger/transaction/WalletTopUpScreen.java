@@ -1,4 +1,4 @@
-package view.passenger;
+package view.passenger.transaction;
 
 import controller.AuthenticationHelper;
 import controller.WalletController;
