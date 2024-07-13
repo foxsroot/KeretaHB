@@ -71,63 +71,25 @@ public class UserController {
         return null;
     }
 
-    public boolean updateProfile(int userId, String status, String[] changeProfile) {
+    public boolean updateProfile(int userId, String[] changeProfile) {
         ConnectionHandler.getInstance().connect();
 
-        if (changeProfile[0].isEmpty()) {
-            String query = "UPDATE ? SET name = ? WHERE user_id = ?";
+        String query = "UPDATE passenger SET name = ?, email = ?, cellphone = ? WHERE user_id = ?";
 
-            try {
-                PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
-                stmt.setString(1, status);
-                stmt.setString(2, changeProfile[0]);
-                stmt.setInt(3, userId);
-                stmt.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            } finally {
-                ConnectionHandler.getInstance().disconnect();
-            }
-            return true;
-        } else if (changeProfile[1].isEmpty()) {
-            String query = "UPDATE ? SET email = ? WHERE user_id = ?";
-
-            try {
-                PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
-                stmt.setString(1, status);
-                stmt.setString(2, changeProfile[1]);
-                stmt.setInt(3, userId);
-                stmt.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            } finally {
-                ConnectionHandler.getInstance().disconnect();
-            }
-            return true;
-        } else {
-            String query = "";
-            if (status.equals("admin")) {
-                query = "UPDATE admin SET name = ?, email = ? WHERE user_id = ?";
-            } else {
-                query = "UPDATE passenger SET name = ?, email = ? WHERE user_id = ?";
-            }
-
-            try {
-                PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
-                stmt.setString(1, changeProfile[0]);
-                stmt.setString(2, changeProfile[1]);
-                stmt.setInt(3, userId);
-                stmt.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            } finally {
-                ConnectionHandler.getInstance().disconnect();
-            }
-            return true;
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            stmt.setString(1, changeProfile[0]);
+            stmt.setString(2, changeProfile[1]);
+            stmt.setString(3, changeProfile[2]);
+            stmt.setInt(4, userId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
         }
+        return true;
     }
 
     public boolean changePassword(int userId, String userPassword, String newPassword, String status) {

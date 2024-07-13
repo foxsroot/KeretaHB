@@ -53,7 +53,7 @@ public class Login extends JFrame {
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(null);
-        buttonPanel.setBounds(86, 300, 350, 100);
+        buttonPanel.setBounds(43, 300, 350, 100);
 
         JButton loginButton = new JButton("Login");
         loginButton.setBounds(0, 0, 100, 40);
@@ -81,7 +81,7 @@ public class Login extends JFrame {
         });
 
         JButton registerButton = new JButton("Register");
-        registerButton.setBounds(110, 0, 100, 40);
+        registerButton.setBounds(100, 0, 100, 40);
         buttonPanel.add(registerButton);
 
         registerButton.addActionListener(e -> {
@@ -90,7 +90,7 @@ public class Login extends JFrame {
         });
 
         JButton backButton = new JButton("Back");
-        backButton.setBounds(110, 0, 100, 40);
+        backButton.setBounds(200, 0, 100, 40);
         buttonPanel.add(backButton);
 
         backButton.addActionListener(e -> {

@@ -2,7 +2,6 @@ package view.passenger.profile;
 
 import controller.UserController;
 import model.classes.Passenger;
-import view.admin.profile.ProfileUser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,12 +28,12 @@ public class ChangePasswordUser extends JFrame {
 		newPasswordLabel.setBounds(0, 50, 200, 100);
 		formProfile.add(newPasswordLabel);
 
-		JTextField passwordField = new JTextField(user.getName());
+		JTextField passwordField = new JTextField();
 		passwordField.setFont(new Font("calibri", Font.PLAIN, 15));
 		passwordField.setBounds(100, 40, 200, 20);
 		formProfile.add(passwordField);
 
-		JTextField newPasswordField = new JTextField(user.getEmail());
+		JTextField newPasswordField = new JTextField();
 		newPasswordField.setFont(new Font("calibri", Font.PLAIN, 15));
 		newPasswordField.setBounds(100, 90, 200, 20);
 		formProfile.add(newPasswordField);
