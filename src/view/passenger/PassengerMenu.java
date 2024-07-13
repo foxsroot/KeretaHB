@@ -7,6 +7,7 @@ import view.passenger.profile.ProfileUser;
 import view.passenger.schedule.ListScheduleScreen;
 import view.passenger.transaction.TransactionHistoryScreen;
 import view.passenger.transaction.ViewCartScreen;
+import view.passenger.transaction.WalletTopUpScreen;
 import view.passenger.victual.ListVictualScreen;
 
 import javax.swing.*;
@@ -105,6 +106,15 @@ public class PassengerMenu extends JFrame {
 
         exit.addActionListener(e -> {
             this.dispose();
+        });
+
+        JButton topupWallet = new JButton("Top Up Wallet");
+        topupWallet.setBounds(20, 20, 150, 30);
+        add(topupWallet);
+
+        topupWallet.addActionListener(e -> {
+            this.dispose();
+            new WalletTopUpScreen();
         });
 
         add(screenTitle);

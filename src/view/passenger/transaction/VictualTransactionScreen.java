@@ -16,13 +16,13 @@ public class VictualTransactionScreen extends JFrame {
     public VictualTransactionScreen(VictualTransaction transaction) {
         this.transaction = transaction;
         initComponents();
-        int userId = AuthenticationHelper.getInstance().getUserId();
-        if (userId == 0) {
-            this.dispose();
-            new Login();
-        } else {
-            this.setVisible(true);
-        }
+	    int userId = AuthenticationHelper.getInstance().getUserId();
+	    if (userId == 0) {
+		    this.dispose();
+		    new Login();
+	    } else {
+		    this.setVisible(true);
+	    }
     }
 
     private void initComponents() {

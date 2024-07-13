@@ -32,13 +32,13 @@ public class TicketCheckoutScreen extends JFrame {
         currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
         currencyFormat.setMaximumFractionDigits(0);
         initComponents();
-        int userId = AuthenticationHelper.getInstance().getUserId();
-        if (userId == 0) {
-            this.dispose();
-            new Login();
-        } else {
+	    int userId = AuthenticationHelper.getInstance().getUserId();
+	    if (userId == 0) {
+		    this.dispose();
+		    new Login();
+	    } else {
             this.setVisible(true);
-        }
+	    }
     }
 
     private void initComponents() {
