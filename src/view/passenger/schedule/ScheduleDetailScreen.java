@@ -76,15 +76,7 @@ public class ScheduleDetailScreen extends JFrame {
         this.setLayout(new BorderLayout());
         this.add(mainScrollPane, BorderLayout.CENTER);
         this.add(buttonPanel, BorderLayout.SOUTH);
-
-        
-        int userId = AuthenticationHelper.getInstance().getUserId();
-        if (userId == 0) {
-            this.dispose();
-            new Login();
-        } else {
-            this.setVisible(true);
-        }
+        this.setVisible(true);
     }
 
     private JLabel createLabel(String text) {

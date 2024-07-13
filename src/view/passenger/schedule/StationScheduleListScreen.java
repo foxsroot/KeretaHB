@@ -17,13 +17,7 @@ public class StationScheduleListScreen extends JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         initComponents(station);
-        int userId = AuthenticationHelper.getInstance().getUserId();
-        if (userId == 0) {
-            this.dispose();
-            new Login();
-        } else {
-            this.setVisible(true);
-        }
+        this.setVisible(true);
     }
 
     private void initComponents( String station) {
