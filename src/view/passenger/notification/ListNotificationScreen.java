@@ -5,6 +5,7 @@ import controller.NotificationController;
 import model.classes.Notification;
 import model.classes.Passenger;
 import view.Login;
+import view.passenger.PassengerMenu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,11 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class ListNotificationScreen extends JFrame {
-//    Passenger passenger;
     int userID;
 
     public ListNotificationScreen() {
-//        this.passenger = passenger;
         userID = AuthenticationHelper.getInstance().getUserId();
         if (userID != 0) {
             initComponents();
@@ -41,8 +40,6 @@ public class ListNotificationScreen extends JFrame {
         this.setTitle("Notifications");
 
         NotificationController controller = new NotificationController();
-//        passenger.setNotifications(controller.getNotifications(passenger.getId()));
-//        ArrayList<Notification> notifications = passenger.getNotifications();
         ArrayList<Notification> notifications = controller.getNotifications(userID);
 
         JLabel screenTitle = new JLabel("Notification List");
@@ -70,6 +67,11 @@ public class ListNotificationScreen extends JFrame {
 
         JButton exitButton = new JButton("Back to Main Menu");
         exitButton.setBounds(50, 600, 150, 40);
+
+        exitButton.addActionListener(e -> {
+            dispose();
+            new PassengerMenu();
+        });
 
         add(scrollPane);
         add(screenTitle);
@@ -119,10 +121,5 @@ public class ListNotificationScreen extends JFrame {
         });
 
         return notificationPanel;
-    }
-
-    public static void main(String[] args) {
-//        Passenger passenger1 = new Passenger("John Doe", "+6287885827270", "john.doe@example.com", "password123", 2, null, null, null, 0, null, null);
-        new ListNotificationScreen();
     }
 }

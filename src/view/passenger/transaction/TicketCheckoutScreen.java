@@ -170,6 +170,7 @@ public class TicketCheckoutScreen extends JFrame {
                         if (controller.bookTicket(AuthenticationHelper.getInstance().getUserId(), schedule.getScheduleID(), passengerCount, commuteBox.getSelectedItem().toString().equals("YES"), parseTotalPrice(totalLabel.getText()), classTypeBox.getSelectedItem().toString())) {
                             JOptionPane.showMessageDialog(null, "Purchase Completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
                             dispose();
+                            new PassengerMenu();
                         }
                     } else {
                         JOptionPane.showMessageDialog(null, "Failed to book ticket", "Error", JOptionPane.ERROR_MESSAGE);

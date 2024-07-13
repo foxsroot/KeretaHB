@@ -11,6 +11,27 @@ import java.util.List;
 import java.util.Random;
 
 public class UserController {
+    public String getEmail(int userID) {
+        ConnectionHandler.getInstance().connect();
+
+        String query = "SELECT email FROM passenger WHERE user_id = ?";
+
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
+            stmt.setInt(1, userID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("email");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+
+        return null;
+    }
+
     public Passenger getUser(int userId) {
         ConnectionHandler.getInstance().connect();
 
