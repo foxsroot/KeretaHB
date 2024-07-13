@@ -1,14 +1,22 @@
 package view.passenger.profile;
 
+import controller.AuthenticationHelper;
 import controller.UserController;
 import model.classes.Passenger;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ChangePasswordUser extends JFrame {
 	public ChangePasswordUser(Passenger user) {
-		this.setVisible(true);
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
 		this.setSize(500, 300);
 		this.setResizable(false);
 		this.setLayout(null);

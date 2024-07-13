@@ -1,10 +1,13 @@
 package view.passenger.schedule;
 
+import controller.AuthenticationHelper;
 import controller.RescheduleController;
 import controller.ScheduleController;
 import controller.StationController;
 import model.classes.Schedule;
 import model.classes.TicketTransaction;
+import view.admin.victual.ListVictualScreen;
+import view.guest.Login;
 import view.passenger.transaction.TransactionHistoryScreen;
 
 import java.text.SimpleDateFormat;
@@ -25,7 +28,14 @@ public class RescheduleScreen extends JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         initComponents(ticket);
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents(TicketTransaction ticket) {

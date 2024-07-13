@@ -1,10 +1,12 @@
 package view.admin.schedule;
 
 import config.DirectoryConfig;
+import controller.AuthenticationHelper;
 import controller.ImageController;
 import controller.StationController;
 import model.classes.Station;
 import view.admin.AdminMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +15,14 @@ import java.util.List;
 public class StationScheduleSelection extends JFrame {
     public StationScheduleSelection() {
         initComponents();
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

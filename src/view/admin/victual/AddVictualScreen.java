@@ -1,7 +1,9 @@
 package view.admin.victual;
 
+import controller.AuthenticationHelper;
 import controller.ImageController;
 import controller.VictualController;
+import view.guest.Login;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -14,7 +16,14 @@ public class AddVictualScreen extends JFrame {
 
     public AddVictualScreen() {
         initComponents();
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

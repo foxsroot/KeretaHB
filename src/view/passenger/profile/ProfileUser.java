@@ -4,7 +4,7 @@ import controller.AuthenticationController;
 import controller.AuthenticationHelper;
 import controller.UserController;
 import model.classes.Passenger;
-import view.Login;
+import view.guest.Login;
 import view.passenger.PassengerMenu;
 
 import javax.swing.*;
@@ -13,8 +13,7 @@ import java.awt.*;
 public class ProfileUser extends JFrame {
 	public ProfileUser(int userId) {
 		Passenger profileUser = new UserController().getUser(userId);
-
-		this.setVisible(true);
+        this.setVisible(true);
 		this.setSize(900, 700);
 		this.setResizable(false);
 		this.setLayout(null);
@@ -101,7 +100,6 @@ public class ProfileUser extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		AuthenticationHelper.getInstance().setUserId(2);
 		int userId = AuthenticationHelper.getInstance().getUserId();
 		if (userId != 0){
 			new ProfileUser(userId);

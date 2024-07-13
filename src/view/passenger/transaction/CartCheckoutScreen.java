@@ -4,7 +4,7 @@ import config.DirectoryConfig;
 import controller.*;
 import model.classes.*;
 import model.enums.LoyaltyEnum;
-import view.passenger.PassengerMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +19,13 @@ public class CartCheckoutScreen extends JFrame {
         //ambil passenger yg lg login
 //        passenger = new Passenger("John Doe", "1234567890", "john.doe@example.com", "password123", 2, new ArrayList<>(), walletController.getWallet(2), LoyaltyEnum.CLASSIC, 0, new ArrayList<>(), controller.getCart(2));
         initComponents();
-        this.setVisible(true);
+	    int userId = AuthenticationHelper.getInstance().getUserId();
+	    if (userId == 0) {
+		    this.dispose();
+		    new Login();
+	    } else {
+		    this.setVisible(true);
+	    }
     }
 
     private void initComponents() {
@@ -76,29 +82,20 @@ public class CartCheckoutScreen extends JFrame {
         purchaseButton.setBounds(700, 630, 100, 30);
 
         purchaseButton.addActionListener(e -> {
-            WalletController walletController = new WalletController();
-            Wallet wallet = walletController.getWallet(AuthenticationHelper.getInstance().getUserId());
-            String walletPin = JOptionPane.showInputDialog(null, "Input your wallet pin", "Wallet Pin Verify", JOptionPane.QUESTION_MESSAGE);
+            int confirm = JOptionPane.showConfirmDialog(null, "Rp " + cart.getTotalPrice() + " will be deducted from balance, proceed?", "Purchase Confirmation", JOptionPane.YES_NO_OPTION);
 
-            if (wallet.verifyPin(walletPin)) {
-                int confirm = JOptionPane.showConfirmDialog(null, "Rp " + cart.getTotalPrice() + " will be deducted from balance, proceed?", "Purchase Confirmation", JOptionPane.YES_NO_OPTION);
-
-                if (confirm == JOptionPane.YES_OPTION) {
-                    if (controller.verifyStock(cart, cart.getStationId())) {
-                        UserController userController = new UserController();
-                        if (controller.checkout(userController.getUser(AuthenticationHelper.getInstance().getUserId()), cart.getTotalPrice())) {
-                            JOptionPane.showMessageDialog(null, "Purchase Completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                            dispose();
-                            new PassengerMenu();
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Purchase Failed! Please Check your balance and try again", "Failure", JOptionPane.ERROR_MESSAGE);
-                        }
+            if (confirm == JOptionPane.YES_OPTION) {
+                if (controller.verifyStock(cart, cart.getStationId())) {
+                    UserController userController = new UserController();
+                    if (controller.checkout(userController.getUser(AuthenticationHelper.getInstance().getUserId()), cart.getTotalPrice())) {
+                        JOptionPane.showMessageDialog(null, "Purchase Completed!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
                     } else {
-                        JOptionPane.showMessageDialog(null, "Stock in station is less than the quantity you specified. Please clear the cart & try to add items to cart again!", "Failure", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Purchase Failed! Please Check your balance and try again", "Failure", JOptionPane.ERROR_MESSAGE);
                     }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Stock in station is less than the quantity you specified. Please clear the cart & try to add items to cart again!", "Failure", JOptionPane.ERROR_MESSAGE);
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "Wrong Wallet Pin", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -107,7 +104,7 @@ public class CartCheckoutScreen extends JFrame {
 
         exitButton.addActionListener(e -> {
             dispose();
-            new PassengerMenu();
+            //balik ke main menu
         });
 
         add(screenTitle);

@@ -5,7 +5,7 @@ import controller.AuthenticationHelper;
 import controller.ImageController;
 import controller.StationController;
 import model.classes.Station;
-import view.Login;
+import view.guest.Login;
 import view.passenger.PassengerMenu;
 
 import javax.swing.*;
@@ -64,12 +64,8 @@ public class StationScheduleSelection extends JFrame {
         JButton exitButton = new JButton("Exit to Main Menu");
         exitButton.setBounds(20, 600, 150, 30);
         exitButton.addActionListener(e -> {
+            new PassengerMenu();
             this.dispose();
-            if (AuthenticationHelper.getInstance().getUserId() != 0) {
-                new PassengerMenu();
-            } else {
-                new Login();
-            }
         });
 
         add(screenTitle);

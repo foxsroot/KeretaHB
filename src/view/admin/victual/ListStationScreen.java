@@ -1,7 +1,9 @@
 package view.admin.victual;
 
+import controller.AuthenticationHelper;
 import controller.StationController;
 import model.classes.Station;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +13,14 @@ import java.util.List;
 public class ListStationScreen extends JFrame {
     public ListStationScreen() {
         initComponents();
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

@@ -2,20 +2,26 @@ package view.admin;
 
 import controller.AuthenticationController;
 import controller.AuthenticationHelper;
-import view.Login;
 import view.admin.loyalty.LoyaltyManagementScreen;
 import view.admin.notification.SendNotificationScreen;
 import view.admin.schedule.MenuSchedule;
 import view.admin.station.MenuStation;
 import view.admin.train.MenuTrain;
 import view.admin.victual.MenuVictual;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class AdminMenu extends JFrame {
     public AdminMenu() {
-        this.setVisible(true);
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0){
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
         this.setSize(900, 700);
         this.setResizable(false);
         this.setLayout(null);

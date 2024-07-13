@@ -3,6 +3,7 @@ package view.passenger.victual;
 import config.DirectoryConfig;
 import controller.*;
 import model.classes.Victual;
+import view.guest.Login;
 import view.passenger.transaction.CartCheckoutScreen;
 import view.passenger.transaction.ViewCartScreen;
 
@@ -19,7 +20,13 @@ public class ViewVictualScreen extends JFrame {
         this.victual = victual;
         this.stationId = stationId;
         initComponents();
-        this.setVisible(true);
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0){
+            this.dispose();
+            new Login();
+        } else {;
+            setVisible(true);
+        }
     }
 
     private void initComponents() {

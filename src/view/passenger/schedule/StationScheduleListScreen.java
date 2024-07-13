@@ -1,7 +1,9 @@
 package view.passenger.schedule;
 
+import controller.AuthenticationHelper;
 import controller.ScheduleController;
 import model.classes.Schedule;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +17,13 @@ public class StationScheduleListScreen extends JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         initComponents(station);
-        this.setVisible(true);
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents( String station) {

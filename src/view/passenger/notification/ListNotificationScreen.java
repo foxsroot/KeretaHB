@@ -4,7 +4,7 @@ import controller.AuthenticationHelper;
 import controller.NotificationController;
 import model.classes.Notification;
 import model.classes.Passenger;
-import view.Login;
+import view.guest.Login;
 import view.passenger.PassengerMenu;
 
 import javax.swing.*;
@@ -18,16 +18,14 @@ import java.util.ArrayList;
 
 public class ListNotificationScreen extends JFrame {
     int userID;
-
     public ListNotificationScreen() {
+        initComponents();
         userID = AuthenticationHelper.getInstance().getUserId();
-        if (userID != 0) {
-            initComponents();
-            this.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(null, "You haven't logged in!", "Error", JOptionPane.ERROR_MESSAGE);
-            dispose();
+        if (userID == 0) {
+            this.dispose();
             new Login();
+        } else {
+            this.setVisible(true);
         }
     }
 

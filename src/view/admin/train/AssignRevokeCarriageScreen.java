@@ -1,9 +1,11 @@
 package view.admin.train;
 
+import controller.AuthenticationHelper;
 import controller.CarriageController;
 import controller.TrainController;
 import model.classes.Carriage;
 import model.classes.Train;
+import view.guest.Login;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -56,7 +58,14 @@ public class AssignRevokeCarriageScreen extends JFrame {
         });
         add(backButton);
 
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void displayAssignedCarriages(JPanel panel) {

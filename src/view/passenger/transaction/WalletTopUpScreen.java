@@ -3,6 +3,7 @@ package view.passenger.transaction;
 import controller.AuthenticationHelper;
 import controller.WalletController;
 import view.admin.AdminMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
@@ -13,7 +14,13 @@ public class WalletTopUpScreen extends JFrame {
 
     public WalletTopUpScreen() {
         initComponents();
-        this.setVisible(true);
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

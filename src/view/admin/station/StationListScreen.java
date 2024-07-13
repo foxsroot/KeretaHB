@@ -1,8 +1,10 @@
 package view.admin.station;
 
+import controller.AuthenticationHelper;
 import controller.StationController;
 import model.classes.Station;
 import view.admin.AdminMenu;
+import view.guest.Login;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +18,14 @@ public class StationListScreen extends JFrame {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         initComponents();
-        this.setVisible(true);
+        
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
     }
 
     private void initComponents() {

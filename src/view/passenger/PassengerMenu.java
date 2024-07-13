@@ -1,7 +1,7 @@
 package view.passenger;
 
 import controller.AuthenticationHelper;
-import view.Login;
+import view.guest.Login;
 import view.passenger.notification.ListNotificationScreen;
 import view.passenger.profile.ProfileUser;
 import view.passenger.schedule.ListScheduleScreen;
@@ -16,7 +16,13 @@ import java.awt.*;
 
 public class PassengerMenu extends JFrame {
     public PassengerMenu() {
-        this.setVisible(true);
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId == 0) {
+            this.dispose();
+            new Login();
+        } else {
+            this.setVisible(true);
+        }
         this.setSize(900, 700);
         this.setResizable(false);
         this.setLayout(null);
@@ -117,6 +123,11 @@ public class PassengerMenu extends JFrame {
     }
 
     public static void main(String[] args) {
-        new PassengerMenu();
+        int userId = AuthenticationHelper.getInstance().getUserId();
+        if (userId != 0){
+            new PassengerMenu();
+        } else {
+            new Login();
+        }
     }
 }
