@@ -154,11 +154,13 @@ public class TicketCheckoutScreen extends JFrame {
                 int confirm = JOptionPane.showConfirmDialog(null, totalLabel.getText() + " will be deducted from balance, proceed?", "Purchase Confirmation", JOptionPane.YES_NO_OPTION);
 
                 int carriage_id = 0;
-                Carriage[] listCarriage = carriageController.getCarriage(schedule.getTrainID());
+                Carriage[] listCarriage = carriageController.getSeatingCarriage(schedule.getTrainID());
 
                 for(Carriage choosedCarriage : listCarriage){
                     if(choosedCarriage.getCarriageClass().equals(ClassType.valueOf(classTypeBox.getSelectedItem().toString()))){
                         carriage_id = choosedCarriage.getId();
+                        System.out.println(carriage_id);
+                        System.out.println(schedule.getScheduleID());
                         break;
                     }
                 }

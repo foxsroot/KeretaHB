@@ -169,6 +169,8 @@ public class TransactionController {
     }
 
     public boolean updateOccupied(int carriage, int schedule_id, int passenger) {
+        System.out.println("carriage id :" + carriage);
+        System.out.println("schedule_id :" + schedule_id);
         String query = "SELECT carriage.capacity, carriage.carriage_id, schedule_capacity.occupied FROM schedule_capacity JOIN carriage ON carriage.carriage_id = schedule_capacity.carriage_id WHERE schedule_capacity.schedule_id = ? AND schedule_capacity.carriage_id = ?";
         try {
             ConnectionHandler.getInstance().connect();
@@ -178,6 +180,7 @@ public class TransactionController {
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
+                System.out.println("ada sih");
                 if (carriage == rs.getInt("carriage_id")) {
                     int occupied = rs.getInt("occupied");
                     if (occupied + passenger < rs.getInt("capacity")) {
@@ -190,6 +193,7 @@ public class TransactionController {
                             stmt2.setInt(3, carriage);
                             stmt2.executeUpdate();
                         } catch (SQLException e) {
+                            e.printStackTrace();
                             return false;
                         }
                         return true;

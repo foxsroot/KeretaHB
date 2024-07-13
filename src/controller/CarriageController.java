@@ -75,6 +75,38 @@ public class CarriageController {
         return false;
     }
 
+    public Carriage[] getSeatingCarriage(int train_id) {
+        List<Carriage> carriagesList = new ArrayList<>();
+        String query = "SELECT * FROM carriage WHERE train_id = ? AND type = 'SEATING'";
+        try {
+            ConnectionHandler.getInstance().connect();
+            PreparedStatement st = ConnectionHandler.getInstance().con.prepareStatement(query);
+            st.setInt(1, train_id);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Integer id = rs.getInt("carriage_id");
+                String carriageType = rs.getString("type");
+                int capacity = rs.getInt("capacity");
+                String carriageClass = rs.getString("class");
+                Integer baggage = rs.getInt("baggage_allowance");
+
+                Carriage carriage = new Carriage(capacity, CarriageType.valueOf(carriageType), baggage, ClassType.valueOf(carriageClass))
+                        .addTrainId(train_id)
+                        .addId(id);
+                carriagesList.add(carriage);
+            }
+            Carriage[] carriagesArray = new Carriage[carriagesList.size()];
+            return carriagesList.toArray(carriagesArray);
+
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        } finally {
+            ConnectionHandler.getInstance().disconnect();
+        }
+
+        return null;
+    }
+
     public Carriage[] getCarriage(int train_id) {
         List<Carriage> carriagesList = new ArrayList<>();
         String query = "SELECT * FROM carriage WHERE train_id = ?";

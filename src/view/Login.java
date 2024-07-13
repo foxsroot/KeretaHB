@@ -89,7 +89,7 @@ public class Login extends JFrame {
             new Register();
         });
 
-        JButton backButton = new JButton("Back");
+        JButton backButton = new JButton("Guest");
         backButton.setBounds(200, 0, 100, 40);
         buttonPanel.add(backButton);
 
