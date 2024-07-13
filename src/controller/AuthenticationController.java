@@ -1,5 +1,7 @@
 package controller;
 
+import view.Login;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,7 +57,8 @@ public class AuthenticationController {
         return null;
     }
 
-    public boolean logout(int userId) {
-        return true;
+    public void logout() {
+        new AuthenticationHelper().reset();
+        new Login();
     }
 }

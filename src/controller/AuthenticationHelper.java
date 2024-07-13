@@ -3,7 +3,6 @@ package controller;
 public class AuthenticationHelper {
 	private static AuthenticationHelper instance;
 	private int userId;
-	private String userRole;
 
 	public static AuthenticationHelper getInstance() {
 		if (instance == null) {
@@ -24,11 +23,7 @@ public class AuthenticationHelper {
 		this.userId = userId;
 	}
 
-	public String getUserRole() {
-		return userRole;
-	}
-
-	public void setUserRole(String userRole) {
-		this.userRole = userRole;
+	public void reset() {
+	    this.userId = 0;
 	}
 }

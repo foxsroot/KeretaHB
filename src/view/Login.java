@@ -3,6 +3,7 @@ package view;
 import controller.AuthenticationController;
 import controller.AuthenticationHelper;
 import view.admin.AdminMenu;
+import view.guest.GuestMenu;
 import view.passenger.PassengerMenu;
 
 import javax.swing.*;
@@ -70,10 +71,6 @@ public class Login extends JFrame {
                 JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
             } else {
                 AuthenticationHelper.getInstance().setUserId(results[0]);
-                String userRole = null;
-                if (results[0] == 0) userRole = "Passenger";
-                else userRole = "Admin";
-                AuthenticationHelper.getInstance().setUserRole(userRole);
                 this.dispose();
                 if (results[1] == 0) {
                     new PassengerMenu();
@@ -90,6 +87,15 @@ public class Login extends JFrame {
         registerButton.addActionListener(e -> {
             this.dispose();
             new Register();
+        });
+
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(110, 0, 100, 40);
+        buttonPanel.add(backButton);
+
+        backButton.addActionListener(e -> {
+            this.dispose();
+            new GuestMenu();
         });
 
         add(screenTitle);

@@ -2,7 +2,7 @@ package view.passenger.profile;
 
 import controller.UserController;
 import model.classes.Passenger;
-import view.admin.profile.AdminProfile;
+import view.admin.profile.ProfileUser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,13 +55,13 @@ public class EditProfileUser extends JFrame {
 			} else {
 				JOptionPane.showMessageDialog(null, "Berhasil update profile!");
 				this.dispose();
-				new AdminProfile(user.getId());
+				new ProfileUser(user.getId());
 			}
 		});
 
 		cancel.addActionListener(e -> {
 			this.dispose();
-			new AdminProfile(user.getId());
+			new ProfileUser(user.getId());
 		});
 
 		add(formProfile);

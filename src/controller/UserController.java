@@ -130,16 +130,37 @@ public class UserController {
         }
     }
 
-    public boolean changePassword(int userId, String newPassword, String status) {
+    public boolean changePassword(int userId, String userPassword, String newPassword, String status) {
         ConnectionHandler.getInstance().connect();
-        String query = "UPDATE ? SET password = ? WHERE user_id = ?";
-        newPassword = hashingPassword(newPassword);
+
+        String queryGetPassenger = "SELECT password FROM passenger WHERE user_id = ?";
+        try {
+            PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(queryGetPassenger);
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                if (!new PasswordEncoder().authenticate(userPassword.toCharArray(), rs.getString("password"))) {
+                    return false;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        ConnectionHandler.getInstance().connect();
+        String query = "";
+        if (status.equals("passenger")) {
+            query = "UPDATE passenger SET password = ? WHERE user_id = ?";
+        } else {
+            query = "UPDATE admin SET password = ? WHERE user_id = ?";
+        }
+        newPassword = new PasswordEncoder().hash(newPassword);
 
         try {
             PreparedStatement stmt = ConnectionHandler.getInstance().con.prepareStatement(query);
-            stmt.setString(1, status);
-            stmt.setString(2, newPassword);
-            stmt.setInt(3, userId);
+            stmt.setString(1, newPassword);
+            stmt.setInt(2, userId);
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -173,67 +194,5 @@ public class UserController {
             }
         }
         return profileUser;
-    }
-
-    private static String hashingPassword(String password) {
-        Random rand = new Random();
-        int option = rand.nextInt(3);
-        final int MAX_LENGTH = 100;
-        String temp = "";
-
-        if (option == 0) {
-            loop:for (int i = password.length() / 2; i >= 0; i--) {
-                for (int j = 0; j < password.length(); j++) {
-                    if (temp.length() + 1 >= MAX_LENGTH) {
-                        break loop;
-                    }
-                    temp += password.charAt(i);
-                    if (temp.length() + 1 >= MAX_LENGTH) {
-                        break loop;
-                    }
-                    if (j % 2 == 0) {
-                        temp += Character.toUpperCase(password.charAt(j));
-                    }
-                }
-            }
-            temp += "j";
-            return temp;
-        }
-
-        if (option == 1) {
-            loop:for (int i = 0; i < password.length() / 2; i++) {
-                for (int j = password.length() - 1; j >= 0; j--) {
-                    if (temp.length() + 1 >= MAX_LENGTH) {
-                        break loop;
-                    }
-                    temp += password.charAt(i);
-                    if (temp.length() + 1 >= MAX_LENGTH) {
-                        break loop;
-                    }
-                    if (j % (i + 1) == 0) {
-                        temp += Character.toUpperCase(password.charAt(j));
-                    }
-                }
-            }
-            temp += "c";
-            return temp;
-        }
-
-        loop:for (int i = password.length() - 1; i >= 0; i--) {
-            for (int j = password.length() / 2; j >= 0; j--) {
-                if (temp.length() + 1 >= MAX_LENGTH) {
-                    break loop;
-                }
-                temp += password.charAt(j);
-                if (temp.length() + 1 >= MAX_LENGTH) {
-                    break loop;
-                }
-                if (j % (i + 1) == 1) {
-                    temp += Character.toUpperCase(password.charAt(i));
-                }
-            }
-        }
-        temp += "a";
-        return temp;
     }
 }

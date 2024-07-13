@@ -54,13 +54,13 @@ public class EditAdminProfile extends JFrame {
 			} else {
 				JOptionPane.showMessageDialog(null, "Berhasil update profile!");
 				this.dispose();
-				new AdminProfile(admin.getId());
+				new ProfileUser(admin.getId());
 			}
 		});
 
 		cancel.addActionListener(e -> {
 			this.dispose();
-			new AdminProfile(admin.getId());
+			new ProfileUser(admin.getId());
 		});
 
 		add(formProfile);
