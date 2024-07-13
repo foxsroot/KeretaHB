@@ -2,11 +2,9 @@ package view.passenger.transaction;
 
 import config.DirectoryConfig;
 import controller.*;
-import model.classes.User;
 import model.classes.Victual;
 import model.classes.VictualTransaction;
 import model.enums.VictualTransactionStatus;
-import view.passenger.PassengerMenu;
 
 import javax.swing.*;
 import java.awt.*;
