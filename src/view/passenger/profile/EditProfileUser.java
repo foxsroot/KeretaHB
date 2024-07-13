@@ -2,7 +2,6 @@ package view.passenger.profile;
 
 import controller.UserController;
 import model.classes.Passenger;
-import view.admin.profile.ProfileUser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,6 +28,10 @@ public class EditProfileUser extends JFrame {
 		emailLabel.setBounds(0, 50, 200, 100);
 		formProfile.add(emailLabel);
 
+		JLabel phoneLabel = new JLabel("Phone:");
+		phoneLabel.setBounds(0, 100, 200, 100);
+		formProfile.add(phoneLabel);
+
 		JTextField usernameField = new JTextField(user.getName());
 		usernameField.setFont(new Font("calibri", Font.PLAIN, 15));
 		usernameField.setBounds(100, 40, 200, 20);
@@ -39,19 +42,25 @@ public class EditProfileUser extends JFrame {
 		emailField.setBounds(100, 90, 200, 20);
 		formProfile.add(emailField);
 
+		JTextField phoneField = new JTextField(user.getCellphone());
+		phoneField.setFont(new Font("calibri", Font.PLAIN, 15));
+		phoneField.setBounds(100, 140, 200, 20);
+		formProfile.add(phoneField);
+
 		JButton submit = new JButton("Submit");
-		submit.setBounds(0, 120, 100, 20);
+		submit.setBounds(0, 200, 100, 20);
 		formProfile.add(submit);
 
 		JButton cancel = new JButton("Cancel");
-		cancel.setBounds(150, 120, 100, 20);
+		cancel.setBounds(150, 200, 100, 20);
 		formProfile.add(cancel);
 
 		submit.addActionListener(e -> {
 			String username = usernameField.getText();
-			String email = emailField.getText();
-			if (!new UserController().updateProfile(user.getId(), "admin", new String[]{username, email})) {
-				JOptionPane.showMessageDialog(null, "Gagal mengganti profile, silahkan input ulang.");
+			String email = phoneField.getText();
+			String phone = phoneField.getText();
+			if (!new UserController().updateProfile(user.getId(), new String[]{username, email, phone})) {
+				JOptionPane.showMessageDialog(null, "Gagal mengganti profile.");
 			} else {
 				JOptionPane.showMessageDialog(null, "Berhasil update profile!");
 				this.dispose();
